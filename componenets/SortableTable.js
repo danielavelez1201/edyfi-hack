@@ -14,22 +14,16 @@ export default function SortableTable({ people }) {
             textAlign: "left",
           }}
         >
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-          <th>Address</th>
-          <th>Created</th>
-          <th>Balance</th>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Status</th>
         </tr>
         {people.map((x, i) => (
           <Row
             key={Math.random()}
-            first={x.first}
-            last={x.last}
-            email={x.email}
-            location={x.address}
-            lastUpdated={x.created}
-            referral={x.balance}
+            location={x.location}
+            name={x.name}
+            status={x.status}
           />
         ))}
       </table>

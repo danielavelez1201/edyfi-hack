@@ -6,15 +6,18 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [people, setPeople] = useState([]);
 
+
+
   useEffect(() => {
     const fetchData = async () => {
       await fetch(
-        "https://randomapi.com/api/6de6abfedb24f889e0b5f675edc50deb?fmt=raw&sole"
+        "/api/mongo"
       )
         .then((res) => res.json())
         .then(
           (result) => {
             setIsLoaded(true);
+            console.log(result)
             setPeople(result);
           },
           (error) => {
@@ -31,7 +34,7 @@ export default function Home() {
       <div>
         <h1 className="text-3xl font-bold">Home</h1>
       </div>
-      <SortableTable people={people} />
+      {people !== [] && <SortableTable people={people} />}
     </div>
   );
 }

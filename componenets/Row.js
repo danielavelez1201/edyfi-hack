@@ -1,12 +1,9 @@
-export default function Row({ first, last, email, address, created, balance }) {
+export default function Row({ name, location, status }) {
   return (
     <tr className="styled-rows">
-      <td>{first}</td>
-      <td>{last}</td>
-      <td>{email}</td>
-      <td>{address}</td>
-      <td>{created}</td>
-      <td>{balance}</td>
+      <td>{name}</td>
+      <td>{location}</td>
+      <td>{status}</td>
     </tr>
   );
 }
