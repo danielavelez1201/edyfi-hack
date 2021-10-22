@@ -1,0 +1,10 @@
+{
+  "extends": ["next", "next/core-web-vitals", "plugin:prettier/recommended"],
+  "rules": {
+    "quotes": [2, "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
+    "comma-dangle": ["error", "never"],
+    "jsx-quotes": ["error", "prefer-single"],
+    "react/no-unescaped-entities": "off",
+    "react/prop-types": "off"
+  }
+}
