@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import axios from 'axios'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import 'yup-phone'
@@ -6,8 +7,6 @@ import { TextInput } from '../../componenets/TextInput'
 
 export default function Onboarding() {
   const router = useRouter()
-
-  console.log({ query: router.query })
 
   return (
     <div>
@@ -19,7 +18,7 @@ export default function Onboarding() {
           phone: '',
           location: '',
           workingAt: '',
-          referral: true
+          referral: 'yes' // TODO: change to select or checkbox
         }}
         validationSchema={Yup.object({
           firstName: Yup.string().max(40, '^ Must be 40 characters or less').required('^ Required'),
@@ -31,17 +30,17 @@ export default function Onboarding() {
           referral: Yup.string().oneOf(['yes', 'no'])
         })}
         onSubmit={async (values, { setSubmitting }) => {
+          console.log({ values })
           setSubmitting(true)
-          // await fetch()
+          await axios.post('/api/signup', {
+            ...values
+          })
           setSubmitting(false)
         }}
       >
         {(formikProps) => (
           <Form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ margin: '0 20px', textAlign: 'center' }}>
-              {/* {betaSignUpData.data?.betaSignUp}
-                {betaSignUpData.error && betaSignUpData.error.message.replace('GraphQL error: ', '')} */}
-            </div>
+            <div style={{ margin: '0 20px', textAlign: 'center' }}></div>
             <TextInput label='First Name' name='firstName' type='text' placeholder='first name' />
             <TextInput label='Last Name' name='lastName' type='text' placeholder='last name' />
             <TextInput label='Email Address' name='email' type='email' placeholder='email' />
@@ -50,9 +49,13 @@ export default function Onboarding() {
             <TextInput label='Working at' name='workingAt' type='text' placeholder='working at' />
             <TextInput label='referral' name='referral' type='text' placeholder='referral' />
             <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>
-              <div type='submit' disabled={formikProps.isSubmitting || !formikProps.isValid}>
+              <button
+                type='submit'
+                style={{ cursor: 'pointer', backgroundColor: 'orange', padding: '5px' }}
+                disabled={formikProps.isSubmitting || !formikProps.isValid}
+              >
                 {formikProps.isSubmitting ? 'loading...' : 'sign up'}
-              </div>
+              </button>
             </div>
           </Form>
         )}
