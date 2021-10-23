@@ -5,7 +5,7 @@ export default function SortableTable({ people }) {
     <div className="md:flex md:justify-center m-5 overflow-x-auto relative z-40">
       <table
         id="table-element"
-        className="w-full styled-table border-collapse table-auto "
+        className="w-full md:w-4/5 styled-table border-collapse table-fixed"
       >
         <tr
           style={{
@@ -13,6 +13,7 @@ export default function SortableTable({ people }) {
             color: "#ffffff",
             textAlign: "left",
           }}
+          className=""
         >
           <th>Name</th>
           <th>Location</th>
