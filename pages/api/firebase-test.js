@@ -1,5 +1,5 @@
 import db from '../../firebase/clientApp'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, doc } from 'firebase/firestore'
 
 export default async function handler(req, res) {
   const snapshot = await getDocs(collection(db, 'test'))
