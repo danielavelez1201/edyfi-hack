@@ -18,7 +18,7 @@ export default function SortableTable({ people }) {
           <th>Location</th>
           <th>Status</th>
         </tr>
-        {people.map((x, i) => (
+        {people.length > 0 && people.map((x, i) => (
           <Row
             key={Math.random()}
             location={x.location}

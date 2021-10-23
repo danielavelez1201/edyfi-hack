@@ -1,9 +1,10 @@
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection } from 'firebase/firestore';
+import db from '../../firebase/clientApp'
 
+const ref = doc(collection(db, 'users'));
 
 async function handler(req, res) {
-    const ref = doc(db, 'users');
-
+    
     const doc = await getDoc(ref);
 
     if (doc.exists()) {

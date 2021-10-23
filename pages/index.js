@@ -8,7 +8,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetch('/api/mongo')
+      await fetch('/api/getData')
         .then((res) => res.json())
         .then(
           (result) => {
