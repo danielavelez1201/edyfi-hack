@@ -1,4 +1,4 @@
-import SortableTable from '../componenets/SortableTable'
+import SortableTable from '../components/SortableTable'
 import { useState, useEffect } from 'react'
 
 export default function Home() {
@@ -11,10 +11,35 @@ export default function Home() {
       email: "johndoe@gmail.com",
       phone: "123-456-7890",
       location: "New York",
-      workingAt: "Google", // or open to work
-      projects: ['1', "", "Github"], //current projects
-      lastUpdated: "01 Jan 1970 00:00:00 GMT",
-      referral: "Yes", // or no
+      work: "Google", // or open to work
+      role: "Engineer",
+      projects: [{name: 'nft',a: 'https://google.com'}, {name: "meta",a:'https://google.com'}], //current projects
+      refer: true, // or no
+      updated: "October 24",
+    },
+    {
+      id: 1,
+      name: "The Doe",
+      email: "thedoe@gmail.com",
+      phone: "123-456-7891",
+      location: "San Francisco",
+      work: "🔎", // or open to work
+      role: "",
+      projects: [{name: 'web3',a:'https://google.com'}], //current projects
+      refer: false, // or no
+      updated: "October 24",
+    },
+    {
+      id: 2,
+      name: "Big Doe",
+      email: "bigdoe@gmail.com",
+      phone: "123-456-7892",
+      location: "Miami",
+      work: "CompanyName", // or open to work
+      role: "Founder",
+      projects: [], //current projects
+      refer: true, // or no
+      updated: "October 24",
     },
   ]);
 
