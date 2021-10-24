@@ -44,7 +44,7 @@ export default function Onboarding() {
   const charError = 'Must be 40 characters or less'
 
   return (
-    <div className='h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+    <div className='h-full flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       <div class='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
         <Formik
           initialValues={{
