@@ -1,7 +1,6 @@
 import { useField } from 'formik'
 
-export const ProjectInput = ({ errorStyle, newLink, setNewLink, projectAdd, buttonElement}) => {
-
+export const ProjectInput = ({ errorStyle, newLink, setNewLink, projectAdd, buttonElement }) => {
   return (
     <>
       <div className='flex items-center w-full'>
@@ -9,7 +8,7 @@ export const ProjectInput = ({ errorStyle, newLink, setNewLink, projectAdd, butt
           className='mt-2 w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
           value={newLink}
           placeholder='Add a link'
-          onKeyPress={(e) => e.key === "Enter" && e.preventDefault()}
+          onKeyPress={(e) => e.key === 'Enter' && e.preventDefault()}
           onChange={(e) => setNewLink(e.target.value)}
         />
         <button type='button' className='ml-2 h-6 w-6 mb-2' onClick={projectAdd}>
