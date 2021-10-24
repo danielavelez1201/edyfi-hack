@@ -72,7 +72,7 @@ export default function Landing() {
         <h2>
           ➡️
           <a className='text-blue hover:underline ml-3' href='/newCommunity'>
-            Create a new community
+            Create an perennial community.
           </a>
         </h2>
         <h2>
