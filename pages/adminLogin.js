@@ -100,8 +100,10 @@ export default function Landing() {
         </form>
         <br></br>
         <h2>
-          <Link href='/'>
-            <span className='text-blue hover:underline'>Back to member login</span>
+          <Link>
+            <span className='text-blue hover:underline' href='/'>
+              Back to member login
+            </span>
           </Link>
         </h2>
       </div>
