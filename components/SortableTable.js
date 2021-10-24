@@ -18,22 +18,19 @@ export default function SortableTable({ people }) {
           <th>Contact</th>
           <th>Location</th>
           <th>Work</th>
-          <th>Role</th>
-          <th>Projects</th>
           <th>Refer?</th>
           <th>Updated</th>
         </tr>
         {people.length > 0 && people.map((x, i) => (
           <Row
             key={i}
-            name={x.name}
+            firstname={x.firstName}
+            lastname={x.lastName}
             contact={x.email === undefined ? x.phone : x.email}
             location={x.location}
-            work={x.work}
-            role={x.role}
-            projects={x.projects}
-            refer={x.refer}
-            updated={x.updated}
+            work={x.workingAt}
+            refer={x.referral}
+            updated={x.lastUpdated}
           />
         ))}
       </table>

@@ -3,10 +3,11 @@ import axios from 'axios'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import 'yup-phone'
-import { TextInput } from '../../componenets/TextInput'
+import { TextInput } from '../../components/TextInput'
 
 export default function Onboarding() {
   const router = useRouter()
+  const communityId = router.asPath.split('/')[2]
 
   return (
     <div>
@@ -18,7 +19,8 @@ export default function Onboarding() {
           phone: '',
           location: '',
           workingAt: '',
-          referral: 'yes' // TODO: change to select or checkbox
+          referral: 'yes', // TODO: change to select or checkbox
+          communityId: communityId
         }}
         validationSchema={Yup.object({
           firstName: Yup.string().max(40, '^ Must be 40 characters or less').required('^ Required'),
@@ -30,7 +32,6 @@ export default function Onboarding() {
           referral: Yup.string().oneOf(['yes', 'no'])
         })}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log({ values })
           setSubmitting(true)
           await axios.post('/api/signup', {
             ...values
