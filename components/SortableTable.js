@@ -31,7 +31,7 @@ export default function SortableTable({ people }) {
                 phone={x.phone}
                 email={x.email}
                 location={x.location}
-                work={x.workingAt}
+                work={x.work}
                 refer={x.referral}
                 projects={x.projects}
                 role={x.role}

@@ -1,4 +1,5 @@
 export default function Row({ firstname, lastname, email, phone, location, work, refer, projects, role, asks, updated }) {
+
   return (
     <tr className='styled-rows'>
       <td>
@@ -9,7 +10,8 @@ export default function Row({ firstname, lastname, email, phone, location, work,
       </td>
       <td>{location}</td>
       <td>{work}</td>
-      <td>{refer ? '✅' : '❌'}</td>
+      <td>{role}</td>
+      <td className='text-center'>{refer ? '✅' : '❌'}</td>
       <td className='flex flex-col'>
         {projects.map((x, i) => (
           <a key={i} href={x}>
@@ -17,9 +19,8 @@ export default function Row({ firstname, lastname, email, phone, location, work,
           </a>
         ))}
       </td>
-      <td>{role}</td>
       <td>{asks}</td>
-      <td>{updated}</td>
+      <td>{new Date(updated).toLocaleDateString('en-US')}</td>
     </tr>
   )
 }
