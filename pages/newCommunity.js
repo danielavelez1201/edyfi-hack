@@ -24,7 +24,7 @@ export default function NewCommunity() {
   useEffect(() => {
     const auth = getAuth()
     onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
+      if (currentUser !== undefined) {
         setUserLoggedIn(true)
         setUser(currentUser)
       } else {
