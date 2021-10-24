@@ -10,7 +10,8 @@ export default function Onboarding() {
   const communityId = router.asPath.split('/')[2]
 
   return (
-    <div>
+    <div className="h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light">
+    <div class='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
       <Formik
         initialValues={{
           firstName: '',
@@ -40,27 +41,31 @@ export default function Onboarding() {
         }}
       >
         {(formikProps) => (
+
           <Form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <h1 class="text-2xl font-medium text-primary mt-4 mb-12 text-center">🏡 Join as a member of community {communityId}.</h1>
+
             <div style={{ margin: '0 20px', textAlign: 'center' }}></div>
-            <TextInput label='First Name' name='firstName' type='text' placeholder='first name' />
-            <TextInput label='Last Name' name='lastName' type='text' placeholder='last name' />
-            <TextInput label='Email Address' name='email' type='email' placeholder='email' />
-            <TextInput label='Phone' name='phone' type='text' placeholder='phone' />
-            <TextInput label='Location' name='location' type='text' placeholder='location' />
-            <TextInput label='Working at' name='workingAt' type='text' placeholder='working at' />
-            <TextInput label='referral' name='referral' type='text' placeholder='referral' />
+            <TextInput label='First Name' name='firstName' type='text' placeholder='First name' class='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
+            <TextInput label='Last Name' name='lastName' type='text' placeholder='Last name' class='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
+            <TextInput label='Email Address' name='email' type='email' placeholder='Email' class='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
+            <TextInput label='Phone' name='phone' type='text' placeholder='Phone' class='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
+            <TextInput label='Location' name='location' type='text' placeholder='Location' class='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
+            <TextInput label='Working at' name='workingAt' type='text' placeholder='Working at' class='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
+            <TextInput label='referral' name='referral' type='text' placeholder='Referral' class='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
             <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>
               <button
+                class='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
                 type='submit'
-                style={{ cursor: 'pointer', backgroundColor: 'orange', padding: '5px' }}
                 disabled={formikProps.isSubmitting || !formikProps.isValid}
               >
-                {formikProps.isSubmitting ? 'loading...' : 'sign up'}
+                {formikProps.isSubmitting ? 'loading...' : 'Join community'}
               </button>
             </div>
           </Form>
         )}
       </Formik>
     </div>
+  </div>
   )
 }

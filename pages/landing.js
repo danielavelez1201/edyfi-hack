@@ -34,25 +34,25 @@ export default function Landing() {
                     })
                 }
                 else {
-                    setError("Community doesn't exist or password is incorrect")
+                    setError("Community doesn't exist or password is incorrect.")
                 }
             })
         
     }
 
     return (
-        <div className="h-screen flex bg-gray">
-            <div class='w-full max-w-md m-auto bg-white rounded-lg border border-primaryBorder shadow-default py-10 px-16'>
+        <div className="h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light">
+            <div class='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
                 <h1 class="text-2xl font-medium text-primary mt-4 mb-12 text-center">Welcome to Loop. </h1>
-                <h1>View your community.</h1>
+                <h1 class="text-xl font-medium mt-4 text-center">Log into your community.</h1>
                 <br></br>
                 <form onSubmit={onSubmit}>
-                    <input class="w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4" type="text" name="communityId" placeholder ="Community Id" onChange={updateFormData}/>
+                    <input class="w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4" type="text" name="communityId" placeholder ="Community Id" onChange={updateFormData}/>
                     <br>
                     </br>
-                    <input class="w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4" type="text" name="communityToken" placeholder="Token" onChange={updateFormData}/>
+                    <input class="w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4" type="text" name="communityToken" placeholder="Token" onChange={updateFormData}/>
                     <br></br>
-                    <button class="bg-green py-2 px-4 text-sm text-white rounded border border-green focus:outline-none focus:border-green-dark"> 
+                    <button class="bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover "> 
                     Log in
                     </button>
                     <br></br>
@@ -60,7 +60,7 @@ export default function Landing() {
                 </form>
                 <br>
                 </br>
-                <h2>Or, <a href="/newCommunity">create a new community</a></h2>
+                <h2>Or, <a class="text-blue" href="/newCommunity">create a new community</a>.</h2>
             </div>
         </div>
     )
