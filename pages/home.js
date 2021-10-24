@@ -31,8 +31,7 @@ export default function Home() {
   }
 
   async function sendBumps() {
-    await fetch('api/textBumps')
-      .then((res) => res.json())
+    await fetch('api/textBumps').then((res) => res.json())
   }
 
   function copy(e) {
@@ -52,21 +51,20 @@ export default function Home() {
     setCommunityId(router.query.communityId)
     setToken(router.query.token)
     const fetchData = async () => {
-      await fetch('api/getData', {method: 'POST', headers: {'communityId': communityId}})
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result)
-        if (result.length === 0) {
-          setLoading(false);
-        }
-        else {
-          const auth = checkAuth(result[0].token)
-          if (auth) {
-            setUserList(result);
-            setLoading(false);
+      await fetch('api/getData', { method: 'POST', headers: { communityId: communityId } })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result)
+          if (result.length === 0) {
+            setLoading(false)
+          } else {
+            const auth = checkAuth(result[0].token)
+            if (auth) {
+              setUserList(result)
+              setLoading(false)
+            }
           }
-        }
-      });
+        })
     }
     fetchData()
   }, [])
@@ -119,13 +117,13 @@ export default function Home() {
 
   return (
     <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
-      <div class='w-full m-auto mx-20 my-10 bg-white rounded-lg drop-shadow py-10 px-16'>
+      <div className='w-full m-auto mx-20 my-10 bg-white rounded-lg drop-shadow py-10 px-16'>
         <div className='w-full h-full flex flex-col justify-center items-center'>
           <div className='mt-12 '>
             <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
             <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
             {userList.length !== 0 && !loading && (
-              <div onClick={copy} className='-ml-2 flex bg-gray-light rounded py-5 px-2'>
+              <div onClick={copy} className='-ml-2 flex rounded py-5 px-2'>
                 <Image src='/copy.png' width='20px' height='25px' />
                 <input
                   type='text'

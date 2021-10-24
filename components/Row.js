@@ -1,5 +1,16 @@
-export default function Row({ firstname, lastname, email, phone, location, work, refer, projects, role, asks, updated }) {
-
+export default function Row({
+  firstname,
+  lastname,
+  email,
+  phone,
+  location,
+  work,
+  refer,
+  projects,
+  role,
+  asks,
+  updated
+}) {
   return (
     <tr className='styled-rows'>
       <td>

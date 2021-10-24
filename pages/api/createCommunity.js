@@ -8,7 +8,7 @@ async function handler(req, res) {
       communityToken: req.body.formData.communityToken,
       userId: req.headers.userid,
       lastUpdated: Date.now()
-    });
+    })
 
     console.log('Document written with ID: ', docRef.id)
     res.status(200).json({ msg: 'success' })

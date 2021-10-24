@@ -18,7 +18,7 @@ export default function Onboarding() {
   const [newProject, setNewProject] = useState('')
   const [buttonElement, setButtonElement] = useState('')
   const [refer, setRefer] = useState(false)
-  const [error, setError] = useState('')  
+  const [error, setError] = useState('')
 
   function projectAdd() {
     if (projects.includes(newProject)) {
@@ -44,7 +44,7 @@ export default function Onboarding() {
 
   return (
     <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
-      <div class='w-full max-w-md m-auto bg-white rounded-lg drop-shadow pt-10 pb-5 px-16'>
+      <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow pt-10 pb-5 px-16'>
         <div>
           <Formik
             initialValues={{
@@ -68,7 +68,7 @@ export default function Onboarding() {
               phone: Yup.string().phone('Enter a valid phone including +country code').required(requiredError),
               location: Yup.string().max(40, charError).required(requiredError),
               work: Yup.string().max(40, charError).required(requiredError),
-              role: Yup.string().max(40, charError).required(requiredError),
+              role: Yup.string().max(40, charError).required(requiredError)
             })}
             onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true)
@@ -84,12 +84,11 @@ export default function Onboarding() {
                   console.log(res)
                   setError('')
                   if (res.status === 200) {
-                    console.log("OK!")
                     setSubmitting(true)
                     console.log(hashcode(values.token))
                     router.push({
                       pathname: '/home',
-                      query: { communityId: communityId, token: hashcode(values.token)}
+                      query: { communityId: communityId, token: hashcode(values.token) }
                     })
                   }
                   setSubmitting(false)

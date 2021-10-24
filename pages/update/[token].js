@@ -11,7 +11,6 @@ import { hashcode } from '../api/helpers'
 
 export default function Onboarding() {
     const [user, setUser] = useState()
-    const router = useRouter()
     const { token } = router.query
   const communityId = router.asPath.split('/')[2]
 
