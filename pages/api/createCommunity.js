@@ -4,7 +4,9 @@ import { collection, addDoc } from 'firebase/firestore'
 async function handler(req, res) {
   try {
     const docRef = await addDoc(collection(db, 'communities'), {
-      ...req.body,
+      communityId: req.body.formData.communityId,
+      communityToken: req.body.formData.communityToken,
+      userId: req.headers.userid,
       lastUpdated: Date.now()
     });
 
