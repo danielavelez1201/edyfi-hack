@@ -1,6 +1,8 @@
 import SortableTable from '../components/SortableTable'
 import { useState, useEffect } from 'react'
 import { LogInstance } from 'twilio/lib/rest/serverless/v1/service/environment/log';
+import user  from '../firebase/clientApp'
+import route from 'next/router'
 
 export default function Home() {
   const [userList, setUserList] = useState([]);
@@ -19,10 +21,6 @@ export default function Home() {
     }
     fetchData();
   }
-
-  useEffect(() => {
-    
-  }, [])
 
   return (
     
