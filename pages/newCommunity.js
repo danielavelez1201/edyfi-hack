@@ -4,6 +4,7 @@ import { signInWithGoogle, user } from '../firebase/clientApp'
 import { useRouter } from 'next/router'
 import Google from '../img/Google.png'
 import Image from 'next/image'
+import Link from 'next/link'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react/cjs/react.development'
 import { hashcode } from './api/helpers'
@@ -100,9 +101,11 @@ export default function NewCommunity() {
         </form>
         <br></br>
         <h2>
-          <a className='text-blue' href='/'>
-            Back to login
-          </a>
+          <Link>
+            <span className='text-blue' href='/'>
+              Back to login
+            </span>
+          </Link>
         </h2>
       </div>
     </div>

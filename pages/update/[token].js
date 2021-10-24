@@ -10,13 +10,12 @@ import { TextArea } from '../../components/TextArea'
 
 export default function Onboarding() {
   const router = useRouter()
-    const [user, setUser] = useState()
-    const { token } = router.query
+  const [user, setUser] = useState()
+  const { token } = router.query
   const communityId = router.asPath.split('/')[2]
 
   useEffect(() => {
     if (!router.isReady) return
-    console.log({ query: router.query })
     axios.post('/api/getUpdateRequest', { token: router.query.token }).then((res) => {
       console.log({ res })
       setUser(res.data.user)
@@ -55,21 +54,21 @@ export default function Onboarding() {
   return (
     <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       {user && (
-        <div class='w-full max-w-md m-auto bg-white rounded-lg drop-shadow pt-10 pb-5 px-16'>
+        <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow pt-10 pb-5 px-16'>
           <div>
             <Formik
               initialValues={{
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                location: '',
-                work: '',
-                role: '',
-                projects: [],
-                refer: '',
-                asks: '',
-                token: '',
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phone: user.phone,
+                location: user.locationn,
+                work: user.workingAt,
+                role: user.role,
+                projects: [...user.projects],
+                refer: user.refer,
+                asks: user.asks,
+                token: user.token,
                 communityId: communityId
               }}
               validationSchema={Yup.object({
