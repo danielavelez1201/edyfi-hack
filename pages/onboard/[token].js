@@ -53,7 +53,7 @@ export default function Onboarding() {
             work: '',
             role: '',
             projects: [],
-            refer: '', // TODO: change to select or checkbox
+            refer: '',
             asks: '',
             communityId: communityId
           }}
@@ -68,11 +68,15 @@ export default function Onboarding() {
             refer: Yup.string().oneOf(['yes', 'no'])
           })}
           onSubmit={async (values, { setSubmitting }) => {
+            console.log({ ...values, projects: projects, refer: refer })
             setSubmitting(true)
             await axios.post('/api/signup', {
-              ...values
+              ...values,
+              projects: projects,
+              refer: refer
             })
             setSubmitting(false)
+            router.push(`/home?communityId=${communityId}`)
           }}
         >
           {(formikProps) => (
@@ -154,11 +158,15 @@ export default function Onboarding() {
               </div>
               <div className='mr-auto'>
                 {projects.map((project) => (
-                  <a href={project} className='underline'>
+                  <a key={project} href={project} className='underline'>
                     {project}
-                    <button className='ml-1' onClick={() => removeProject(project)}>
+                    {/* <button
+                      type='button'
+                      className='ml-1'
+                      onClick={(e) => e.key === 'Enter' && e.preventDefault() && removeProject(project)}
+                    >
                       ❌
-                    </button>
+                    </button> */}
                     <br />
                   </a>
                 ))}
