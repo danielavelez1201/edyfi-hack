@@ -1,16 +1,18 @@
 import SortableTable from '../components/SortableTable'
 import { useState, useEffect } from 'react'
 import { LogInstance } from 'twilio/lib/rest/serverless/v1/service/environment/log';
+import { useRouter } from 'next/router'
 
 export default function Home() {
   const [userList, setUserList] = useState([]);
   console.log(userList)
 
-  function login(e) {
-    e.preventDefault();
-    const communityId = e.target[0].value.toString()
+  const router = useRouter();
+  console.log(router.query.communityId)
+
+  useEffect(() => {
     const fetchData = async () => {
-      await fetch('api/getData', {method: 'POST', headers: {'communityId': communityId}})
+      await fetch('api/getData', {method: 'POST', headers: {'communityId': router.query.communityId}})
       .then((res) => res.json())
       .then((result) => {
         console.log(result)
@@ -18,22 +20,13 @@ export default function Home() {
       });
     }
     fetchData();
-  }
-
-  useEffect(() => {
-    
   }, [])
 
   return (
-    
     <div className="w-full h-full flex flex-col justify-center items-center">
       <div className="mt-12">
         <h1 className="text-3xl font-bold">Home</h1>
       </div>
-      {userList.length === 0 && (<form onSubmit={login}>
-        <input type="text" name="communityId" />
-        <input type="submit" value="Submit" placeholder="Community id"/>
-    </form>)}
       {userList.length >0 && <SortableTable people={userList} />}
     </div>
   )

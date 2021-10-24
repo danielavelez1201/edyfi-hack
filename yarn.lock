@@ -976,7 +976,7 @@
   dependencies:
     "retry" "0.12.0"
 
-"autoprefixer@^10.0.2", "autoprefixer@^10.3.1":
+"autoprefixer@^10.0.2", "autoprefixer@^10.3.7":
   "integrity" "sha512-EmGpu0nnQVmMhX8ROoJ7Mx8mKYPlcUHuxkwrRYEYMz85lu7H09v8w6R1P0JPdn/hKU32GjpLBFEOuIlDWCRWvg=="
   "resolved" "https://registry.npmjs.org/autoprefixer/-/autoprefixer-10.3.7.tgz"
   "version" "10.3.7"
@@ -4208,7 +4208,7 @@
   "resolved" "https://registry.npmjs.org/postcss-value-parser/-/postcss-value-parser-4.1.0.tgz"
   "version" "4.1.0"
 
-"postcss@^8.0.9", "postcss@^8.1.0", "postcss@^8.1.6", "postcss@^8.2.1", "postcss@^8.2.14", "postcss@^8.3.6":
+"postcss@^8.0.9", "postcss@^8.1.0", "postcss@^8.1.6", "postcss@^8.2.1", "postcss@^8.2.14", "postcss@^8.3.11":
   "integrity" "sha512-hCmlUAIlUiav8Xdqw3Io4LcpA1DOt7h3LSTAC4G6JGHFFaWzI6qvFt9oilvl8BmkbBRX1IhM90ZAmpk68zccQA=="
   "resolved" "https://registry.npmjs.org/postcss/-/postcss-8.3.11.tgz"
   "version" "8.3.11"
@@ -5252,7 +5252,7 @@
     "uuidv4" "3.0.1"
     "ws" "6.2.0"
 
-"tailwindcss@^2.2.7":
+"tailwindcss@^2.2.17":
   "integrity" "sha512-WgRpn+Pxn7eWqlruxnxEbL9ByVRWi3iC10z4b6dW0zSdnkPVC4hPMSWLQkkW8GCyBIv/vbJ0bxIi9dVrl4CfoA=="
   "resolved" "https://registry.npmjs.org/tailwindcss/-/tailwindcss-2.2.17.tgz"
   "version" "2.2.17"
