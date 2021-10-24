@@ -11,7 +11,6 @@ import { TextArea } from '../../components/TextArea'
 export default function Onboarding() {
   const router = useRouter()
     const [user, setUser] = useState()
-    const router = useRouter()
     const { token } = router.query
   const communityId = router.asPath.split('/')[2]
 
