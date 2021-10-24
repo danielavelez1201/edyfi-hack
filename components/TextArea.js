@@ -5,7 +5,7 @@ export const TextArea = ({ label, errorStyle, ...props }) => {
 
   return (
     <>
-      <textarea wrap='soft' style={{resize: 'none', height: '100px'}} {...field} {...props} />
+      <textarea wrap='soft' style={{ resize: 'none', height: '100px' }} {...field} {...props} />
       {meta.touched && meta.error ? (
         <div
           style={
