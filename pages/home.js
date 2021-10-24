@@ -46,16 +46,21 @@ export default function Home() {
     setCommunityId(router.query.communityId)
     setToken(router.query.token)
     const fetchData = async () => {
-      await fetch('api/getData', { method: 'POST', headers: { communityId: communityId } })
-        .then((res) => res.json())
-        .then((result) => {
-          console.log(result)
+      await fetch('api/getData', {method: 'POST', headers: {'communityId': communityId}})
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result)
+        if (result.length === 0) {
+          setLoading(false);
+        }
+        else {
           const auth = checkAuth(result[0].token)
           if (auth) {
-            setUserList(result)
-            setLoading(false)
+            setUserList(result);
+            setLoading(false);
           }
-        })
+        }
+      });
     }
     fetchData()
   }, [])
@@ -67,6 +72,17 @@ export default function Home() {
           <div className='mt-12 '>
             <h1 className='text-2xl font-bold text-gray'>{communityId} </h1>
             <h1 className='text-3xl font-bold text'>Members</h1>
+            {userList.length !== 0 && !loading && (<div onClick={copy} className='bg-gray-light rounded px-5 py-5'>
+                <Image src='/copy.png' width='20px' height='25px' />
+                <input
+                  type='text'
+                  disabled={true}
+                  id='link'
+                  value={onboardLink}
+                  placeholder={onboardLink}
+                  className='text-blue w-full font-bold w-auto items-center justify-center'
+                ></input>
+              </div>)}
           </div>
           <br></br>
           {userList.length > 0 && <SortableTable people={userList} />}

@@ -54,7 +54,7 @@ export default function Landing() {
                 if (res.ok) {
                     router.push({
                         pathname: '/home',
-                        query: {communityId: formData.communityId}
+                        query: {communityId: formData.communityId, token: hashcode(formData.communityToken)}
                     })
                 }
                 else {
@@ -71,6 +71,9 @@ export default function Landing() {
                 <br></br>
                 <form onSubmit={onSubmit}>
                     <input class="w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4" type="text" name="communityId" placeholder ="Community Id" onChange={updateFormData}/>
+                    <br>
+                    </br>
+                    <input class="w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4" type="text" name="communityToken" placeholder ="Community Token" onChange={updateFormData}/>
                     <br>
                     </br>
                     <button
