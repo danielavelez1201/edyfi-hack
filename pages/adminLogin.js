@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import Google from '../img/Google.png'
 import Image from 'next/image'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; 
+import { hashcode } from './api/helpers';
 
 export default function Landing() {
 

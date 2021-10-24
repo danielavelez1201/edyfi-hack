@@ -6,6 +6,7 @@ import Google from '../img/Google.png'
 import Image from 'next/image'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; 
 import { useEffect } from 'react/cjs/react.development';
+import { hashcode } from './api/helpers';
 
 
 export default function NewCommunity() {

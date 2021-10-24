@@ -1,6 +1,7 @@
 import router from 'next/router';
 import { useState } from 'react';
 import 'tailwindcss/tailwind.css'
+import { hashcode } from './api/helpers';
 
 
 export default function Landing() {
@@ -30,7 +31,7 @@ export default function Landing() {
                 if (res.ok) {
                     router.push({
                         pathname: '/home',
-                        query: {communityId: formData.communityId}
+                        query: {communityId: formData.communityId, token: hashcode(formData.communityToken)}
                     })
                 }
                 else {

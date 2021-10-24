@@ -5,14 +5,31 @@ import { useRouter } from 'next/router'
 import user  from '../firebase/clientApp'
 import route from 'next/router'
 import Image from 'next/image'
+import { useLocalStorage } from 'react-use'
+import { hashcode } from './api/helpers';
+
 
 export default function Home() {
-  const [userList, setUserList] = useState([]);
-  console.log(userList)
-
   const router = useRouter();
-  console.log(router.query.communityId)
-  const onboardLink = "www.loop.com/onboard/" + router.query.communityId
+  const [userList, setUserList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [communityId, setCommunityId] = useLocalStorage('communityId', router.query.communityId)
+  const [token, setToken] = useLocalStorage('token', router.query.token)
+
+  console.log(communityId)
+  const onboardLink = "www.loop.com/onboard/" + communityId
+
+  function checkAuth(dataToken) {
+    console.log(hashcode(dataToken), token)
+    if (hashcode(dataToken) !== token) {
+      router.push({
+        pathname: '/'
+    })
+    }
+    else {
+      return true
+    }
+  }
 
   function copy(e) {
      /* Get the text field */
@@ -28,12 +45,18 @@ export default function Home() {
   }
 
   useEffect(() => {
+    setCommunityId(router.query.communityId);
+    setToken(router.query.token);
     const fetchData = async () => {
-      await fetch('api/getData', {method: 'POST', headers: {'communityId': router.query.communityId}})
+      await fetch('api/getData', {method: 'POST', headers: {'communityId': communityId}})
       .then((res) => res.json())
       .then((result) => {
         console.log(result)
-        setUserList(result);
+        const auth = checkAuth(result[0].token)
+        if (auth) {
+          setUserList(result);
+          setLoading(false);
+        }
       });
     }
     fetchData();
@@ -44,11 +67,12 @@ export default function Home() {
     <div class='w-full m-auto ml-10 mr-10 bg-white rounded-lg drop-shadow py-10 px-16'>
     <div className="w-full h-full flex flex-col justify-center items-center">
       <div className="mt-12 ">
-      <h1 className="text-2xl font-bold text-gray">{router.query.communityId} </h1><h1 className="text-3xl font-bold text">Members</h1>
+      <h1 className="text-2xl font-bold text-gray">{communityId} </h1><h1 className="text-3xl font-bold text">Members</h1>
       </div>
       <br></br>
       {userList.length >0 && <SortableTable people={userList} />}
-      {userList.length === 0 && <div><h1 className="text-2l">✨ Let's get some members added! Send your members the magic link:</h1>
+      {userList.length === 0 && !loading && <div><h1 className="text-2l">✨ Let's get some members added! Send your members the magic link:</h1>
+      {loading && <h1>Just a sec...</h1>}
       <br></br>
       <div onClick={copy} className="bg-gray-light rounded px-5 py-5">
       <Image src="/copy.png" width="33px" height="40px"/>

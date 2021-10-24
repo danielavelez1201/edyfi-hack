@@ -15,7 +15,7 @@ async function handler(req, res) {
   const community = await getDocs(q);
  
   if (community.docs.length === 0) {
-      res.status(401).json("Community does not exist")
+      res.status(401).json("This onboarding link is invalid")
   }
   const q1 = await getDocs(query(collection(db, 'users'), where("email", "==", req.body.email), where("communityId", "==", communityId)));
   const q2 = await getDocs(query(collection(db, 'users'), where("phone", "==", req.body.phone), where("communityId", "==", communityId)));
