@@ -41,8 +41,10 @@ export default function Landing() {
   return (
     <div className='h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
-        <h1 className='text-2xl font-medium text-primary mt-4 mb-12 text-center'>Welcome to Loop. </h1>
-        <h1 className='text-xl font-medium mt-4 text-center'>Log into your community.</h1>
+        <h1 className='text-2xl font-medium text-primary mt-4 mb-12 text-center'>
+          Welcome to Loop. <h3 className='text-gray text-sm'>Creating perennial communities.</h3>{' '}
+        </h1>
+        {/* <h1 className='font-medium mt-4 text-center'>Log in</h1> */}
         <br></br>
         <form onSubmit={onSubmit}>
           <input
@@ -78,7 +80,7 @@ export default function Landing() {
         <h2>
           ➡️
           <a className='text-blue hover:underline ml-3' href='/adminLogin'>
-            Log in as an admin{' '}
+            Log in as admin{' '}
           </a>
         </h2>
       </div>
