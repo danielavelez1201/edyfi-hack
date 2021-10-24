@@ -17,6 +17,7 @@ export default function Onboarding() {
   const [newProject, setNewProject] = useState('')
   const [buttonElement, setButtonElement] = useState('')
   const [refer, setRefer] = useState(null)
+  const [error, setError] = useState('')  
 
   function projectAdd() {
     if (projects.includes(newProject)) {
@@ -41,8 +42,9 @@ export default function Onboarding() {
   const charError = 'Must be 40 characters or less'
 
   return (
-    <div className='h-full flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light py-12'>
-      <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
+    <div className='h-full flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+      <div class='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
+        <div>
         <Formik
           initialValues={{
             firstName: '',
@@ -55,6 +57,7 @@ export default function Onboarding() {
             projects: [],
             refer: '',
             asks: '',
+            token: '',
             communityId: communityId
           }}
           validationSchema={Yup.object({
@@ -68,14 +71,28 @@ export default function Onboarding() {
             refer: Yup.string().oneOf(['yes', 'no'])
           })}
           onSubmit={async (values, { setSubmitting }) => {
-            console.log({ ...values, projects: projects, refer: refer })
-            setSubmitting(true)
+            console.log("submitted")
             await axios.post('/api/signup', {
               ...values,
+              headers: {communityId: communityId},
               projects: projects,
               refer: refer
-            })
-            setSubmitting(false)
+            }).then((res) => {
+              console.log(res)
+              setError("")
+              if (res.status === 200) {
+                setSubmitting(true)
+                router.push({
+                    pathname: '/home',
+                    query: {communityId: communityId}
+                })
+            }
+            setSubmitting(false)}).catch((error) => {
+              if (error.response) {
+                console.log(error.response.data);
+                setError(error.response.data)
+              }
+             })
             router.push(`/home?communityId=${communityId}`)
           }}
         >
@@ -196,6 +213,8 @@ export default function Onboarding() {
                 placeholder='Any asks?'
                 className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
               />
+              <TextInput label='Refer' name='refer' type='text' placeholder='refer' class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'/>
+              <TextInput label='Token' name='token' type="text" className ="w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4" placeholder="community token"/>
               <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>
                 <button
                   className='bg-blue py-2 px-4 text-white rounded-full font-medium mt-4  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
@@ -204,10 +223,16 @@ export default function Onboarding() {
                 >
                   {formikProps.isSubmitting ? 'loading...' : 'Join community'}
                 </button>
+                <br></br>
+                <br></br>
+                <h1 className="text-red">{error}</h1>
               </div>
             </Form>
           )}
         </Formik>
+        </div>
+        <div>
+        </div>
       </div>
     </div>
   )
