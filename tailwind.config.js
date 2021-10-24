@@ -64,12 +64,6 @@ module.exports = {
             '3xl': '0 35px 35px rgba(0, 0, 0, 0.25)',
           }
       },
-      backgroundColor: {
-        primary: '#466CEA'
-      },
-      textColor: {
-        primary: '#466CEA'
-      }
     },
   variants: {
     extend: {}

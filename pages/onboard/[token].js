@@ -85,24 +85,24 @@ export default function Onboarding() {
               </h1>
 
               <div style={{ margin: '0 20px', textAlign: 'center' }}></div>
-              <TextInput label='First Name' name='firstName' type='text' placeholder='first name' />
-              <TextInput label='Last Name' name='lastName' type='text' placeholder='last name' />
-              <TextInput label='Email Address' name='email' type='email' placeholder='email' />
-              <TextInput label='Phone' name='phone' type='text' placeholder='phone' />
-              <TextInput label='Location' name='location' type='text' placeholder='location' />
-              <TextInput label='Work' name='work' type='text' placeholder='work' />
-              <TextInput label='Role' name='role' type='role' placeholder='role' />
+              <TextInput label='First Name' name='firstName' type='text' placeholder='first name' class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'/>
+              <TextInput label='Last Name' name='lastName' type='text' placeholder='last name'class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
+              <TextInput label='Email Address' name='email' type='email' placeholder='email' class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'/>
+              <TextInput label='Phone' name='phone' type='text' placeholder='phone' class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'/>
+              <TextInput label='Location' name='location' type='text' placeholder='location'class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
+              <TextInput label='Work' name='work' type='text' placeholder='work' class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'/>
+              <TextInput label='Role' name='role' type='role' placeholder='role'class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4' />
               <div className='mt-2'>
                 {projects.map((project) => (
                   <div className='flex'>
-                    <TextInput label='Project Name' name='projectName' type='text' placeholder='name' />
-                    <TextInput label='Project Link' name='projectLink' type='text' placeholder='link' />
+                    <TextInput label='Project Name' name='projectName' type='text' placeholder='name' class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'/>
+                    <TextInput label='Project Link' name='projectLink' type='text' placeholder='link' class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'/>
                   </div>
                 ))}
               </div>
               <div className='my-1 ml-1 '>
                 {addProject ? (
-                  <button className='shadow px-2 py-1' onClick={addCard}>
+                  <button className='bg-blue py-2 px-4 text-sm text-white rounded focus:outline-none focus:border-green-dark hover:bg-blue-hover' onClick={addCard}>
                     Add a project
                   </button>
                 ) : (
@@ -123,7 +123,7 @@ export default function Onboarding() {
                   </>
                 )}
               </div>
-              <TextInput label='Refer' name='refer' type='text' placeholder='refer' />
+              <TextInput label='Refer' name='refer' type='text' placeholder='refer' class='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'/>
               <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>
                 <button
                   class='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
