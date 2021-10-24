@@ -36,13 +36,13 @@ async function handler(req, res) {
       })
 
       // Send signup text
-      await client.messages
-        .create({
-          body: "You've signed up for Loop! We'll send you updates about other group members and what they're up to.",
-          from: '+15593541895',
-          to: req.body.phone
-        })
-        .then((message) => console.log(message.sid))
+      // await client.messages
+      //   .create({
+      //     body: "You've signed up for Loop! We'll send you updates about other group members and what they're up to.",
+      //     from: '+15593541895',
+      //     to: req.body.phone
+      //   })
+      //   .then((message) => console.log(message.sid))
 
       console.log('Document written with ID: ', docRef.id)
       res.status(200).json({ msg: 'success' })
