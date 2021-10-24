@@ -17,7 +17,7 @@ export default function Onboarding() {
   const [newProject, setNewProject] = useState('')
   const [buttonElement, setButtonElement] = useState('')
   const [refer, setRefer] = useState(null)
-  const [error, setError] = useState('')
+  const [error, setError] = useState('')  
 
   function projectAdd() {
     if (projects.includes(newProject)) {
@@ -55,7 +55,7 @@ export default function Onboarding() {
             work: '',
             role: '',
             projects: [],
-            refer: '', // TODO: change to select or checkbox
+            refer: '',
             asks: '',
             token: '',
             communityId: communityId
@@ -74,7 +74,9 @@ export default function Onboarding() {
             console.log("submitted")
             await axios.post('/api/signup', {
               ...values,
-              headers: {communityId: communityId}
+              headers: {communityId: communityId},
+              projects: projects,
+              refer: refer
             }).then((res) => {
               console.log(res)
               setError("")
@@ -91,6 +93,7 @@ export default function Onboarding() {
                 setError(error.response.data)
               }
              })
+            router.push(`/home?communityId=${communityId}`)
           }}
         >
           {(formikProps) => (
@@ -172,11 +175,15 @@ export default function Onboarding() {
               </div>
               <div className='mr-auto'>
                 {projects.map((project) => (
-                  <a href={project} className='underline'>
+                  <a key={project} href={project} className='underline'>
                     {project}
-                    <button className='ml-1' onClick={() => removeProject(project)}>
+                    {/* <button
+                      type='button'
+                      className='ml-1'
+                      onClick={(e) => e.key === 'Enter' && e.preventDefault() && removeProject(project)}
+                    >
                       ❌
-                    </button>
+                    </button> */}
                     <br />
                   </a>
                 ))}
