@@ -1,7 +1,17 @@
-export default function Row({ firstname, lastname, contact, location, work, role, refer, updated }) {
+import axios from 'axios'
+
+export default function Row({ firstname, lastname, email, contact, location, work, role, refer, updated, rest }) {
+  const createUpdateRequest = () => {
+    axios.post('/api/createUpdateRequest', { email })
+  }
+
+  console.log({ rest })
+
   return (
-    <tr className="styled-rows">
-      <td>{firstname} {lastname}</td>
+    <tr className='styled-rows'>
+      <td>
+        {firstname} {lastname}
+      </td>
       <td>{contact}</td>
       <td>{location}</td>
       <td>{work}</td>
@@ -10,8 +20,11 @@ export default function Row({ firstname, lastname, contact, location, work, role
           {x.name}
         </a>))}
       </td> */}
-      <td>{refer === "yes" ? '✅' : '❌'}</td>
-      <td>{updated}</td>
+      <td>{refer === 'yes' ? '✅' : '❌'}</td>
+      <td>-</td>
+      <td>
+        <button onClick={createUpdateRequest}>edit</button>
+      </td>
     </tr>
-  );
+  )
 }

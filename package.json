@@ -23,6 +23,7 @@
     "react-firebaseui": "^5.0.2",
     "tailwind": "^4.0.0",
     "twilio": "^3.70.0",
+    "uuid": "^8.3.2",
     "yup": "^0.32.11",
     "yup-phone": "^1.2.19"
   },
