@@ -29,6 +29,11 @@ export default function Home() {
     }
   }
 
+  async function sendBumps() {
+    await fetch('api/textBumps')
+      .then((res) => res.json())
+  }
+
   function copy(e) {
     /* Get the text field */
     var copyText = document.getElementById('link')
@@ -85,6 +90,9 @@ export default function Home() {
               </div>)}
           </div>
           <br></br>
+          <button onClick={(() => sendBumps())} class="bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover "> 
+                    Broadcast text bumps
+                    </button>
           {userList.length > 0 && <SortableTable people={userList} />}
           {userList.length === 0 && !loading && (
             <div>

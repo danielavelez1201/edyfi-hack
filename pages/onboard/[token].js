@@ -92,7 +92,7 @@ export default function Onboarding() {
                     setSubmitting(true)
                     router.push({
                       pathname: '/home',
-                      query: { communityId: communityId }
+                      query: { communityId: communityId, communityToken: }
                     })
                   }
                   setSubmitting(false)
