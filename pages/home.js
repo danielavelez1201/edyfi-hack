@@ -7,6 +7,7 @@ import route from 'next/router'
 import Image from 'next/image'
 import { useLocalStorage } from 'react-use'
 import { hashcode } from './api/helpers'
+import SortBy from '../components/SortBy'
 
 export default function Home() {
   const router = useRouter()
@@ -16,7 +17,7 @@ export default function Home() {
   const [token, setToken] = useLocalStorage('token', router.query.token)
 
   console.log(communityId)
-  const onboardLink = 'www.loop.com/onboard/' + communityId
+  const onboardLink = `www.keeploop.io/onboard/${communityId}`
 
   function checkAuth(dataToken) {
     console.log(hashcode(dataToken), token)
@@ -68,15 +69,61 @@ export default function Home() {
     fetchData()
   }, [])
 
+  function handleName() {
+    setDataCopy(dataCopy.slice().sort((a, b) => a.firstName.localeCompare(b.firstName)))
+  }
+
+  function handleContact() {
+    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+  }
+
+  function handleLocation() {
+    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+  }
+
+  function handleWork() {
+    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+  }
+
+  function handleRole() {
+    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+  }
+
+  function handleReferral() {
+    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+  }
+
+  function handleUpdated() {
+    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+  }
+  
+  const handleSortByChange = (option) => {
+    if (option.value === 'name') {
+      handleName()
+    } else if (option.value === 'contact') {
+      handleContact()
+    } else if (option.value === 'location') {
+      handleLocation()
+    } else if (option.value === 'work') {
+      handleWork()
+    } else if (option.value === 'role') {
+      handleRole()
+    } else if (option.value === 'referral') {
+      handleReferral()
+    } else if (option.value === 'updated') {
+      handleUpdated()
+    }
+  }
+
   return (
     <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       <div className='w-full m-auto mx-20 my-10 bg-white rounded-lg drop-shadow py-10 px-16'>
         <div className='w-full h-full flex flex-col justify-center items-center'>
           <div className='mt-12 '>
-            <h1 className='text-2xl font-bold text-gray'>{communityId} </h1>
-            <h1 className='text-3xl font-bold text'>Members</h1>
+            <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
+            <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
             {userList.length !== 0 && !loading && (
-              <div onClick={copy} className='bg-gray-light rounded px-5 py-5'>
+              <div onClick={copy} className='-ml-2 flex rounded py-5 px-2'>
                 <Image src='/copy.png' width='20px' height='25px' />
                 <input
                   type='text'
@@ -84,18 +131,23 @@ export default function Home() {
                   id='link'
                   value={onboardLink}
                   placeholder={onboardLink}
-                  className='text-blue w-full font-bold w-auto items-center justify-center'
+                  className='text-blue ml-2 w-96 font-bold items-center text-center'
                 ></input>
               </div>
             )}
           </div>
           <br></br>
-          <button
-            onClick={() => sendBumps()}
-            className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-          >
-            Broadcast text bumps
-          </button>
+          <div className="flex items-center">
+            <button
+              onClick={() => sendBumps()}
+              class='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+            >
+              Send text to all members
+            </button>
+            <div className='mr-4' style={{ width: 175 }}>
+              <SortBy onChange={handleSortByChange} />
+            </div>
+          </div>
           {userList.length > 0 && <SortableTable people={userList} />}
           {userList.length === 0 && !loading && (
             <div>

@@ -7,6 +7,7 @@ import 'yup-phone'
 import { TextInput } from '../../components/TextInput'
 import { ProjectInput } from '../../components/ProjectInput'
 import { TextArea } from '../../components/TextArea'
+import { hashcode } from '../api/helpers'
 
 export default function Onboarding() {
   const router = useRouter()
@@ -21,6 +22,8 @@ export default function Onboarding() {
       setUser(res.data.user)
     })
   }, [router.query, router.isReady])
+
+  console.log(user)
 
   const [addProject, setAddProject] = useState(true)
   const [projects, setProjects] = useState(user.projects)
@@ -98,7 +101,7 @@ export default function Onboarding() {
                       setSubmitting(true)
                       router.push({
                         pathname: '/home',
-                        query: { communityId: communityId }
+                        query: { communityId: communityId, communityToken: hashcode(values.token) }
                       })
                     }
                     setSubmitting(false)
