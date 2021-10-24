@@ -1,6 +1,7 @@
 const crypto = require('crypto')
 
 export function hashcode(input) {
+    console.log("hashcode")
     let md5Bytes = crypto.createHash('md5').update(input).digest();
     md5Bytes[6]  &= 0x0f;  /* clear version        */
     md5Bytes[6]  |= 0x30;  /* set to version 3     */
