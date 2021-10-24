@@ -1,11 +1,11 @@
 import { useField } from 'formik'
 
-export const TextInput = ({ label, errorStyle, ...props }) => {
+export const TextArea = ({ label, errorStyle, ...props }) => {
   const [field, meta] = useField(props)
 
   return (
     <>
-      <input {...field} {...props} />
+      <textarea wrap='soft' style={{resize: 'none', height: '100px'}} {...field} {...props} />
       {meta.touched && meta.error ? (
         <div
           style={
