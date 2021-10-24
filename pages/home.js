@@ -123,7 +123,7 @@ export default function Home() {
             <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
             <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
             {userList.length !== 0 && !loading && (
-              <div onClick={copy} className='-ml-2 flex rounded py-5 px-2'>
+              <div onClick={copy} className='-ml-2 flex bg-gray-light rounded py-5 px-2'>
                 <Image src='/copy.png' width='20px' height='25px' />
                 <input
                   type='text'
