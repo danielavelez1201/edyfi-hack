@@ -4,8 +4,8 @@ import db from '../../firebase/clientApp'
 
 
 async function handler(req, res) {
-
-    const q = query(collection(db, 'users'), where("communityId", "==", "sample"));
+    console.log(req.headers)
+    const q = query(collection(db, 'users'), where("communityId", "==", req.headers.communityid));
     
     const users = await getDocs(q);
     const userList = [];
