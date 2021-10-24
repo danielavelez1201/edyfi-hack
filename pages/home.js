@@ -52,10 +52,15 @@ export default function Home() {
       .then((res) => res.json())
       .then((result) => {
         console.log(result)
-        const auth = checkAuth(result[0].token)
-        if (auth) {
-          setUserList(result);
+        if (result.length === 0) {
           setLoading(false);
+        }
+        else {
+          const auth = checkAuth(result[0].token)
+          if (auth) {
+            setUserList(result);
+            setLoading(false);
+          }
         }
       });
     }

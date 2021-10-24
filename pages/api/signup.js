@@ -31,6 +31,7 @@ async function handler(req, res) {
       try {
         const docRef = await addDoc(collection(db, 'users'), {
           ...req.body,
+          communityId: communityId,
           lastUpdated: Date.now()
         });
 

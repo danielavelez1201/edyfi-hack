@@ -10,7 +10,7 @@ import { hashcode } from './api/helpers';
 
 
 export default function NewCommunity() {
-
+    const router = useRouter();
     const [formData, setFormData] = useState({})
     const [userLoggedIn, setUserLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
@@ -45,7 +45,7 @@ export default function NewCommunity() {
             if (res.ok) {
             router.push({
                 pathname: '/home',
-                query: {communityId: formData.communityId}
+                query: {communityId: formData.communityId, token: hashcode(formData.communityToken)}
             })
             }
             else {
