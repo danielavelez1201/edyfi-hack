@@ -4,6 +4,7 @@ import { LogInstance } from 'twilio/lib/rest/serverless/v1/service/environment/l
 import { useRouter } from 'next/router'
 import user  from '../firebase/clientApp'
 import route from 'next/router'
+import Image from 'next/image'
 
 export default function Home() {
   const [userList, setUserList] = useState([]);
@@ -11,6 +12,20 @@ export default function Home() {
 
   const router = useRouter();
   console.log(router.query.communityId)
+  const onboardLink = "www.loop.com/onboard/" + router.query.communityId
+
+  function copy(e) {
+     /* Get the text field */
+    var copyText = document.getElementById('link')
+    console.log(copyText)
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+    /* Copy the text inside the text field */
+    navigator.clipboard.writeText(copyText.value);
+    /* Alert the copied text */
+    alert("Copied the text: " + copyText.value);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,10 +43,19 @@ export default function Home() {
     <div className="h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light">
     <div class='w-full m-auto ml-10 mr-10 bg-white rounded-lg drop-shadow py-10 px-16'>
     <div className="w-full h-full flex flex-col justify-center items-center">
-      <div className="mt-12 justify-left">
+      <div className="mt-12 ">
       <h1 className="text-2xl font-bold text-gray">{router.query.communityId} </h1><h1 className="text-3xl font-bold text">Members</h1>
       </div>
+      <br></br>
       {userList.length >0 && <SortableTable people={userList} />}
+      {userList.length === 0 && <div><h1 className="text-2l">✨ Let's get some members added! Send your members the magic link:</h1>
+      <br></br>
+      <div onClick={copy} className="bg-gray-light rounded px-5 py-5">
+      <Image src="/copy.png" width="33px" height="40px"/>
+      <input type="text" disabled={true} id="link" value={onboardLink} placeholder={onboardLink} className="text-blue w-full font-bold w-auto items-center justify-center"></input>
+      </div>
+      </div>}
+
     </div>
     </div>
     </div>

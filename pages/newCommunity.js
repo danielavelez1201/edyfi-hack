@@ -39,7 +39,17 @@ export default function NewCommunity() {
     async function onSubmit(e) {
         e.preventDefault();
         console.log("user id", user.uid)
-        await fetch('api/createCommunity', {method: 'POST',  headers: { 'Content-Type': 'application/json', 'userId': user.uid}, body: JSON.stringify({ formData })}).then((res) => res.json())
+        await fetch('api/createCommunity', {method: 'POST',  headers: { 'Content-Type': 'application/json', 'userId': user.uid}, body: JSON.stringify({ formData })})
+        .then((res) =>{
+            if (res.ok) {
+            router.push({
+                pathname: '/home',
+                query: {communityId: formData.communityId}
+            })
+            }
+            else {
+                console.log("Error")
+            }})
     }
 
     return (
@@ -74,7 +84,7 @@ export default function NewCommunity() {
             </form>
             <br>
             </br>
-            <h2><a class="text-blue" href="/landing">Back to login</a></h2>
+            <h2><a class="text-blue" href="/">Back to login</a></h2>
         </div>
     </div>)
 }
