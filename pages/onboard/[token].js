@@ -102,7 +102,7 @@ export default function Onboarding() {
               </div>
               <div className='my-1 ml-1 '>
                 {addProject ? (
-                  <button className='bg-blue py-2 px-4 text-sm text-white rounded focus:outline-none focus:border-green-dark hover:bg-blue-hover' onClick={addCard}>
+                  <button className='bg-cyan py-2 px-4 text-sm text-white rounded focus:outline-none focus:border-green-dark hover:bg-blue-hover' onClick={addCard}>
                     Add a project
                   </button>
                 ) : (

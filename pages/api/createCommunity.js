@@ -5,6 +5,7 @@ async function handler(req, res) {
   try {
     const docRef = await addDoc(collection(db, 'communities'), {
       ...req.body,
+      userId: req.headers.userid,
       lastUpdated: Date.now()
     });
 
