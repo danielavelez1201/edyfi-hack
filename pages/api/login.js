@@ -11,7 +11,7 @@ async function handler(req, res) {
     if (community.docs.length === 0) {
         res.status(401).json("Community does not exist")
     }
-    if (community.docs[0].data().password === req.body.formData.communityToken) {
+    if (community.docs[0].data().communityToken === req.body.formData.communityToken) {
         res.status(200).json("Login successful")
     }
     else {
