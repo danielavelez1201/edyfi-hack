@@ -70,13 +70,7 @@ export default function Onboarding() {
               role: Yup.string().max(40, charError).required(requiredError),
             })}
             onSubmit={async (values, { setSubmitting }) => {
-              console.log({
-                ...values,
-                headers: { communityId: communityId },
-                projects: projects,
-                refer: refer,
-                updated: new Date().toLocaleString().split(',')[0]
-              })
+              setSubmitting(true)
               await axios
                 .post('/api/signup', {
                   ...values,
