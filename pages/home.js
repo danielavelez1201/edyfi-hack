@@ -25,11 +25,15 @@ export default function Home() {
   }, [])
 
   return (
+    <div className="h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light">
+    <div class='w-full m-auto ml-10 mr-10 bg-white rounded-lg drop-shadow py-10 px-16'>
     <div className="w-full h-full flex flex-col justify-center items-center">
-      <div className="mt-12">
-        <h1 className="text-3xl font-bold">Home</h1>
+      <div className="mt-12 justify-left">
+      <h1 className="text-2xl font-bold text-gray">{router.query.communityId} </h1><h1 className="text-3xl font-bold text">Members</h1>
       </div>
       {userList.length >0 && <SortableTable people={userList} />}
+    </div>
+    </div>
     </div>
   )
 }
