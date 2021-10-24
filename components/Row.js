@@ -21,7 +21,8 @@ export default function Row({
       </td>
       <td>{location}</td>
       <td>{work}</td>
-      <td>{refer ? '✅' : '❌'}</td>
+      <td>{role}</td>
+      <td className='text-center'>{refer ? '✅' : '❌'}</td>
       <td className='flex flex-col'>
         {projects.map((x, i) => (
           <a key={i} href={x}>
@@ -29,9 +30,8 @@ export default function Row({
           </a>
         ))}
       </td>
-      <td>{role}</td>
       <td>{asks}</td>
-      <td>{updated}</td>
+      <td>{new Date(updated).toLocaleDateString('en-US')}</td>
     </tr>
   )
 }

@@ -7,9 +7,9 @@ import 'yup-phone'
 import { TextInput } from '../../components/TextInput'
 import { ProjectInput } from '../../components/ProjectInput'
 import { TextArea } from '../../components/TextArea'
+import { hashcode } from '../api/helpers'
 
 export default function Onboarding() {
-  const router = useRouter()
     const [user, setUser] = useState()
     const { token } = router.query
   const communityId = router.asPath.split('/')[2]
@@ -22,6 +22,8 @@ export default function Onboarding() {
       setUser(res.data.user)
     })
   }, [router.query, router.isReady])
+
+  console.log(user)
 
   const [addProject, setAddProject] = useState(true)
   const [projects, setProjects] = useState(user.projects)
@@ -59,17 +61,16 @@ export default function Onboarding() {
           <div>
             <Formik
               initialValues={{
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                location: '',
-                work: '',
-                role: '',
-                projects: [],
-                refer: '',
-                asks: '',
-                token: '',
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phone: user.phone,
+                location: user.location,
+                work: user.work,
+                role: user.work,
+                projects: user.projects,
+                refer: user.refer,
+                asks: user.asks,
                 communityId: communityId
               }}
               validationSchema={Yup.object({
@@ -99,7 +100,7 @@ export default function Onboarding() {
                       setSubmitting(true)
                       router.push({
                         pathname: '/home',
-                        query: { communityId: communityId }
+                        query: { communityId: communityId, communityToken: hashcode(values.token) }
                       })
                     }
                     setSubmitting(false)
