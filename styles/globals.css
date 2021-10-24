@@ -2,6 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: overlay;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  opacity: 0.75;
+}
+::-webkit-scrollbar-thumb {
+  background: #606060;
+  border: solid 4px transparent;
+  background-clip: padding-box;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #000;
+  border: solid 4px transparent;
+  width: 16px;
+  background-clip: padding-box;
+}
+/* https://upload.wikimedia.org/wikipedia/commons/8/89/HD_transparent_picture.png */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .styled-table {
   margin: 25px 0;
   font-size: 0.9em;
@@ -11,17 +41,17 @@
 
 .styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+  padding: 12px 15px;
 }
 
 .styled-rows {
-    border-bottom: thin solid #dddddd;
+  border-bottom: thin solid #dddddd;
 }
 
 .styled-table tr:nth-of-type(even) {
-    background-color: #fafafa;
+  background-color: #fafafa;
 }
 
 .styled-table tr:last-of-type {
-    border-bottom: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 }
