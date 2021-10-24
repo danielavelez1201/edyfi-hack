@@ -144,7 +144,7 @@ export default function Home() {
             >
               Send text to all members
             </button>
-            <div className='mr-4' style={{ width: 175 }}>
+            <div className='mr-4 z-50' style={{ width: 175 }}>
               <SortBy onChange={handleSortByChange} />
             </div>
           </div>
