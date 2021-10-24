@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import router from 'next/router'
 import { useState, useEffect } from 'react'
 import 'tailwindcss/tailwind.css'
@@ -5,6 +6,7 @@ import { signInWithGoogle, user } from '../firebase/clientApp'
 import { useRouter } from 'next/router'
 import Google from '../img/Google.png'
 import Image from 'next/image'
+import Link from 'next/link'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { hashcode } from './api/helpers'
 
@@ -98,9 +100,9 @@ export default function Landing() {
         </form>
         <br></br>
         <h2>
-          <a className='text-blue hover:underline' href='/'>
-            Back to member login
-          </a>
+          <Link href='/'>
+            <span className='text-blue hover:underline'>Back to member login</span>
+          </Link>
         </h2>
       </div>
     </div>

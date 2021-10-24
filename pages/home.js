@@ -96,7 +96,7 @@ export default function Home() {
   function handleUpdated() {
     setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
   }
-  
+
   const handleSortByChange = (option) => {
     if (option.value === 'name') {
       handleName()
@@ -137,10 +137,10 @@ export default function Home() {
             )}
           </div>
           <br></br>
-          <div className="flex items-center">
+          <div className='flex items-center'>
             <button
               onClick={() => sendBumps()}
-              class='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+              className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
             >
               Send text to all members
             </button>
