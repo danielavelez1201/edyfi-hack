@@ -38,19 +38,20 @@ export default function NewCommunity() {
     
     const googleTextStyle = userLoggedIn ? 'text-center ml-5 text-cyan' : 'text-center ml-5';
     async function onSubmit(e) {
-        e.preventDefault();
-        console.log("user id", user.uid)
-        await fetch('api/createCommunity', {method: 'POST',  headers: { 'Content-Type': 'application/json', 'userId': user.uid}, body: JSON.stringify({ formData })})
-        .then((res) =>{
-            if (res.ok) {
-            router.push({
-                pathname: '/home',
-                query: {communityId: formData.communityId, token: hashcode(formData.communityToken)}
-            })
-            }
-            else {
-                console.log("Error")
-            }})
+        if (userLoggedIn) {
+            e.preventDefault();
+            await fetch('api/createCommunity', {method: 'POST',  headers: { 'Content-Type': 'application/json', 'userId': user.uid}, body: JSON.stringify({ formData })})
+            .then((res) =>{
+                if (res.ok) {
+                router.push({
+                    pathname: '/home',
+                    query: {communityId: formData.communityId, token: hashcode(formData.communityToken)}
+                })
+                }
+                else {
+                    console.log("Error")
+                }})
+        }
     }
 
     return (
