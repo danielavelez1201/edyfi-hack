@@ -16,7 +16,7 @@ export default function Home() {
   const [token, setToken] = useLocalStorage('token', router.query.token)
 
   console.log(communityId)
-  const onboardLink = 'www.loop.com/onboard/' + communityId
+  const onboardLink = 'www.keeploop.io/' + communityId
 
   function checkAuth(dataToken) {
     console.log(hashcode(dataToken), token)
