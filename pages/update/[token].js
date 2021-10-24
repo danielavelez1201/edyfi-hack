@@ -25,31 +25,31 @@ export default function Onboarding() {
 
   console.log(user)
 
-  const [addProject, setAddProject] = useState(true)
-  const [projects, setProjects] = useState(user.projects)
-  const [newProject, setNewProject] = useState('')
-  const [buttonElement, setButtonElement] = useState('')
-  const [refer, setRefer] = useState(user.refer)
-  const [error, setError] = useState('')
+  // const [addProject, setAddProject] = useState(true)
+  // // const [projects, setProjects] = useState(user.projects)
+  // const [newProject, setNewProject] = useState('')
+  // const [buttonElement, setButtonElement] = useState('')
+  // // const [refer, setRefer] = useState(user.refer)
+  // const [error, setError] = useState('')
 
-  function projectAdd() {
-    if (projects.includes(newProject)) {
-      setButtonElement('Project already exists!')
-    } else if (newProject === '') {
-      setButtonElement('Enter a project')
-    } else {
-      setProjects([...projects, newProject])
-      setButtonElement('')
-    }
-  }
+  // function projectAdd() {
+  //   if (projects.includes(newProject)) {
+  //     setButtonElement('Project already exists!')
+  //   } else if (newProject === '') {
+  //     setButtonElement('Enter a project')
+  //   } else {
+  //     setProjects([...projects, newProject])
+  //     setButtonElement('')
+  //   }
+  // }
 
-  function addCard() {
-    setAddProject(false)
-  }
+  // function addCard() {
+  //   setAddProject(false)
+  // }
 
-  function removeProject(project) {
-    setProjects(projects.filter((c) => c !== project))
-  }
+  // function removeProject(project) {
+  //   setProjects(projects.filter((c) => c !== project))
+  // }
 
   const requiredError = 'Required'
   const charError = 'Must be 40 characters or less'
