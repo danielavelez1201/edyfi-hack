@@ -9,25 +9,22 @@ async function handler(req, res) {
     const queryUser = query(collection(db, 'users'), where('email', '==', req.body.email))
 
     const userDoc = await getDocs(queryUser)
+    // console.log({ userDoc: userDoc.data() })
 
-    userDoc.forEach((doc) => {
-      console.log({ doc: doc.data() })
-    })
+    const userDocs = []
+    userDoc.forEach((doc) => userDocs.push(doc.data()))
 
-    console.log({ userDoc })
-
-    if (userDoc.length !== 0) {
-      // console
+    if (userDocs.length === 0) {
+      res.status(500)
     }
 
-    // docs.forEach((doc) => {
-    //   console.log({ doc: doc.data() })
-    // })
+    const docRef = await addDoc(collection(db, 'updateRequests'), {
+      ...userDocs[0],
+      token
+    })
 
-    // const docRef = await addDoc(collection(db, 'users'), {
-    //   ...req.body,
-    //   lastUpdated: Date.now()
-    // })
+    // TODO: send email or text message
+    console.log({ updateRequestToken: token })
 
     console.log('Document written with ID: ', docRef.id)
     res.status(200).json({ msg: 'success' })
