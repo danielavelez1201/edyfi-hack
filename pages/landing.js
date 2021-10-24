@@ -29,7 +29,7 @@ export default function Landing() {
             .then((res) => {
                 if (res.ok) {
                     router.push({
-                        pathname: '/Home',
+                        pathname: '/home',
                         query: {communityId: formData.communityId}
                     })
                 }
@@ -41,7 +41,7 @@ export default function Landing() {
     }
 
     return (
-        <div className="h-screen flex bg-indigo">
+        <div className="h-screen flex bg-gray">
             <div class='w-full max-w-md m-auto bg-white rounded-lg border border-primaryBorder shadow-default py-10 px-16'>
                 <h1 class="text-2xl font-medium text-primary mt-4 mb-12 text-center">Welcome to Loop. </h1>
                 <h1>View your community.</h1>
