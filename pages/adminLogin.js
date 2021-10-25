@@ -40,7 +40,7 @@ export default function Landing() {
 
   async function onSubmit(e) {
     e.preventDefault()
-    console.log("SUBMIT")
+    console.log('SUBMIT')
     await fetch('api/adminLogin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', userId: user.uid },
@@ -52,7 +52,7 @@ export default function Landing() {
           query: { communityId: formData.communityId, token: hashcode(formData.communityToken) }
         })
       } else {
-        setError("Community doesn't exist or password is incorrect.")
+        setError("Community doesn't exist or token is incorrect.")
       }
     })
   }
@@ -88,12 +88,15 @@ export default function Landing() {
             {!userLoggedIn && <div className={googleTextStyle}>Connect your Google account</div>}
           </button>
           <br></br>
-          <button
-            onClick={onSubmit}
-            className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-          >
-            Log in
-          </button>
+          {userLoggedIn && (
+            <button
+              onClick={onSubmit}
+              className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+            >
+              Log in
+            </button>
+          )}
+
           <br></br>
           <br></br>
           <h1 className='text-red'>{error}</h1>

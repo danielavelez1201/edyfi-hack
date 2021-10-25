@@ -9,8 +9,7 @@ async function handler(req, res) {
   console.log(community.docs)
   if (community.docs.length === 0) {
     res.status(401).json('Community does not exist')
-  }
-  if (community.docs[0].data().userId === req.headers.userid) {
+  } else if (community.docs[0].data().userId === req.headers.userid) {
     res.status(200).json('Login successful')
   } else {
     res.status(401).json('Access denied')

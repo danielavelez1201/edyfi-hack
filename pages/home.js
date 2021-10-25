@@ -9,12 +9,27 @@ import { useLocalStorage } from 'react-use'
 import { hashcode } from './api/helpers'
 import SortBy from '../components/SortBy'
 
+const Message = ({ variant, children }) => {
+  // the alert is displayed by default
+  const [alert, setAlert] = useState(true)
+
+  useEffect(() => {
+    // when the component is mounted, the alert is displayed for 3 seconds
+    setTimeout(() => {
+      setAlert(false)
+    }, 3000)
+  }, [])
+
+  return <div className='alert alert-${variant}'>{children}</div>
+}
+
 export default function Home() {
   const router = useRouter()
   const [userList, setUserList] = useState([])
   const [loading, setLoading] = useState(true)
   const [communityId, setCommunityId] = useLocalStorage('communityId', router.query.communityId)
   const [token, setToken] = useLocalStorage('token', router.query.token)
+  const [copied, setCopied] = useState(false)
 
   console.log(communityId)
   const onboardLink = `www.keeploop.io/onboard/${communityId}`
@@ -35,16 +50,8 @@ export default function Home() {
   }
 
   function copy(e) {
-    /* Get the text field */
-    var copyText = document.getElementById('link')
-    console.log(copyText)
-    /* Select the text field */
-    copyText.select()
-    copyText.setSelectionRange(0, 99999) /* For mobile devices */
-    /* Copy the text inside the text field */
-    navigator.clipboard.writeText(copyText.value)
-    /* Alert the copied text */
-    alert('Copied the text: ' + copyText.value)
+    navigator.clipboard.writeText(onboardLink).then(() => alert('Copied'))
+    setCopied(true)
   }
 
   useEffect(() => {
@@ -148,6 +155,7 @@ export default function Home() {
               <SortBy onChange={handleSortByChange} />
             </div>
           </div>
+          <br></br>
           {userList.length > 0 && <SortableTable people={userList} />}
           {userList.length === 0 && !loading && (
             <div>
@@ -155,15 +163,11 @@ export default function Home() {
               {loading && <h1>Just a sec...</h1>}
               <br></br>
               <div onClick={copy} className='bg-gray-light rounded px-5 py-5'>
-                <Image src='/copy.png' width='33px' height='40px' />
-                <input
-                  type='text'
-                  disabled={true}
-                  id='link'
-                  value={onboardLink}
-                  placeholder={onboardLink}
-                  className='text-blue w-full font-bold w-auto items-center justify-center'
-                ></input>
+                <div className='flex items-center'>
+                  <h1 className='text-blue font-bold mr-5'>{onboardLink}</h1>
+                  <Image src='/copy.png' width='20px' height='25px' />
+                  {copied && <Message />}
+                </div>
               </div>
             </div>
           )}
