@@ -67,7 +67,7 @@ export default function Onboarding() {
     //             email: user.email,
     //             phone: user.phone,
     //             location: user.locationn,
-    //             work: user.workingAt,
+    //             work: user.work,
     //             role: user.role,
     //             projects: [...user.projects],
     //             refer: user.refer,

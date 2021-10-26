@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/link-passhref */
-/* eslint-disable @next/next/no-html-link-for-pages */
 import router from 'next/router'
 import { useState, useEffect } from 'react'
 import 'tailwindcss/tailwind.css'

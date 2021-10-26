@@ -20,7 +20,7 @@ const Message = ({ variant, children }) => {
     }, 3000)
   }, [])
 
-  return <div className='alert alert-${variant}'>{children}</div>
+  return <div className={`alert alert-${variant}`}>{children}</div>
 }
 
 export default function Home() {
@@ -32,7 +32,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false)
 
   console.log(communityId)
-  const onboardLink = `www.keeploop.io/onboard/${communityId}`
+  const onboardLink = `keeploop.io/onboard/${communityId}`
 
   function checkAuth(dataToken) {
     console.log(hashcode(dataToken), token)
@@ -94,7 +94,7 @@ export default function Home() {
 
   function handleWork() {
     const dataCopy = [...userList]
-    setUserList(dataCopy.slice().sort((a, b) => a.workingAt.localeCompare(b.workingAt)))
+    setUserList(dataCopy.slice().sort((a, b) => a.work.localeCompare(b.work)))
   }
 
   function handleRole() {

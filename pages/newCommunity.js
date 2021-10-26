@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/link-passhref */
 import { useState, useEffect } from 'react'
-import firebase from 'firebase/app'
 import { signInWithGoogle, user } from '../firebase/clientApp'
 import { useRouter } from 'next/router'
 import Google from '../img/Google.png'
@@ -101,8 +99,8 @@ export default function NewCommunity() {
         </form>
         <br></br>
         <h2>
-          <Link href='/'>
-            <span className='text-blue'>Back to login</span>
+          <Link href='/' passHref>
+            <a className='text-blue'>Back to login</a>
           </Link>
         </h2>
       </div>
