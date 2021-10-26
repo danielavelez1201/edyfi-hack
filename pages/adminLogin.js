@@ -67,7 +67,7 @@ export default function Landing() {
         <br></br>
         <form onSubmit={onSubmit}>
           <input
-            className='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+            className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
             type='text'
             name='communityId'
             placeholder='Community Id'
@@ -75,7 +75,7 @@ export default function Landing() {
           />
           <br></br>
           <input
-            className='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+            className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
             type='text'
             name='communityToken'
             placeholder='Community Token'
@@ -83,15 +83,15 @@ export default function Landing() {
           />
           <br></br>
           <button
-            className='focus:outline-none flex items-center  h-9 justify-left  rounded-xl p-5 border-black border border-cyan'
+            className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
             onClick={signInWithGoogle}
           >
-            <Image height={24} width={24} src={Google} />
+            <Image alt="don't be evil" height={24} width={24} src={Google} />
             {userLoggedIn && <div className={googleTextStyle}>Google account connected!</div>}
             {!userLoggedIn && <div className={googleTextStyle}>Connect your Google account</div>}
           </button>
           <br></br>
-          <button className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '>
+          <button className='bg-blue py-2 px-4 text-sm text-white rounded focus:outline-none focus:border-green-dark hover:bg-blue-hover'>
             Log in
           </button>
           <br></br>
@@ -100,8 +100,8 @@ export default function Landing() {
         </form>
         <br></br>
         <h2>
-          <Link href='/'>
-            <span className='text-blue hover:underline'>Back to member login</span>
+          <Link href='/' passHref>
+            <a className='text-blue hover:underline'>Back to member login</a>
           </Link>
         </h2>
       </div>

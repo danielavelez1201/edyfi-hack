@@ -11,7 +11,7 @@ const firebaseApp = initializeApp({
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 })
 
-const db = getFirestore(firebaseApp)
+export const db = getFirestore(firebaseApp)
 
 export default db
 
@@ -20,6 +20,7 @@ const provider = new GoogleAuthProvider()
 provider.setCustomParameters({ prompt: 'select_account' })
 
 const auth = getAuth()
+
 export const signInWithGoogle = () =>
   signInWithPopup(auth, provider)
     .then((result) => {
@@ -40,4 +41,5 @@ export const signInWithGoogle = () =>
       const credential = GoogleAuthProvider.credentialFromError(error)
       // ...
     })
+
 export const user = auth.currentUser

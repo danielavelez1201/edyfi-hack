@@ -26,10 +26,10 @@ export default function Onboarding() {
   console.log(user)
 
   const [addProject, setAddProject] = useState(true)
-  const [projects, setProjects] = useState(user.projects)
+  // const [projects, setProjects] = useState(user.projects)
   const [newProject, setNewProject] = useState('')
   const [buttonElement, setButtonElement] = useState('')
-  const [refer, setRefer] = useState(user.refer)
+  // const [refer, setRefer] = useState(user.refer)
   const [error, setError] = useState('')
 
   function projectAdd() {

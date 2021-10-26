@@ -60,6 +60,7 @@ export default function Home() {
           } else {
             const auth = checkAuth(result[0].token)
             if (auth) {
+              console.log({ afterFetch: true, userList })
               setUserList(result)
               setLoading(false)
             }
@@ -70,31 +71,38 @@ export default function Home() {
   }, [])
 
   function handleName() {
-    setDataCopy(dataCopy.slice().sort((a, b) => a.firstName.localeCompare(b.firstName)))
+    const dataCopy = [...userList]
+    setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
   }
 
   function handleContact() {
-    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+    const dataCopy = [...userList]
+    setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
   }
 
   function handleLocation() {
-    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+    const dataCopy = [...userList]
+    setUserList(dataCopy.slice().sort((a, b) => a.location.localeCompare(b.location)))
   }
 
   function handleWork() {
-    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+    const dataCopy = [...userList]
+    setUserList(dataCopy.slice().sort((a, b) => a.workingAt.localeCompare(b.workingAt)))
   }
 
   function handleRole() {
-    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+    const dataCopy = [...userList]
+    setUserList(dataCopy.slice().sort((a, b) => a.role.localeCompare(b.role)))
   }
 
   function handleReferral() {
-    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+    const dataCopy = [...userList]
+    setUserList(dataCopy.slice().sort((a, b) => a.refer.localeCompare(b.refer)))
   }
 
   function handleUpdated() {
-    setDataCopy(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+    const dataCopy = [...userList]
+    setUserList(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
   }
 
   const handleSortByChange = (option) => {
@@ -144,8 +152,8 @@ export default function Home() {
             >
               Send text to all members
             </button>
-            <div className='mr-4 z-50' style={{ width: 175 }}>
-              <SortBy onChange={handleSortByChange} />
+            <div className='mr-4' style={{ width: 175 }}>
+              <SortBy style={{ zIndex: '99' }} onChange={handleSortByChange} />
             </div>
           </div>
           {userList.length > 0 && <SortableTable people={userList} />}

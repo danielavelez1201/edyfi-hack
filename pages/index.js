@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
+import 'tailwindcss/tailwind.css'
 import router from 'next/router'
 import { useState } from 'react'
-import 'tailwindcss/tailwind.css'
 import { hashcode } from './api/helpers'
+import Link from 'next/link'
 
 export default function Landing() {
   const [formData, setFormData] = useState({})
@@ -73,15 +73,15 @@ export default function Landing() {
         <br></br>
         <h2>
           ➡️
-          <a className='text-blue hover:underline ml-3' href='/newCommunity'>
-            Create a new community
-          </a>
+          <Link href='/newCommunity' passHref>
+            <a className='text-blue hover:underline ml-3'>Create a new community</a>
+          </Link>
         </h2>
         <h2>
           ➡️
-          <a className='text-blue hover:underline ml-3' href='/adminLogin'>
-            Log in as admin{' '}
-          </a>
+          <Link href='/adminLogin' passHref>
+            <a className='text-blue hover:underline ml-3'>Log in as admin </a>
+          </Link>
         </h2>
       </div>
     </div>
