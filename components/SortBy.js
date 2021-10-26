@@ -11,9 +11,22 @@ export default function SortBy({ onChange }) {
     { value: 'referral', label: 'Referral' },
     { value: 'updated', label: 'Updated' }
   ]
-  const [obj, setObj] = useState('')
+  const [obj, setObj] = useState({ value: 'contact', label: 'Contact' })
 
   return (
-    <Select defaultValue={options[1]} placeholder='Sort By' options={options} onChange={onChange} value={obj.value} />
+    <Select
+      styles={{
+        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+        menu: (provided) => ({ ...provided, zIndex: 9999 })
+      }}
+      defaultValue={options[1]}
+      placeholder='Sort By'
+      options={options}
+      onChange={(e) => {
+        onChange(e)
+        setObj(e)
+      }}
+      value={obj}
+    />
   )
 }

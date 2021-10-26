@@ -32,7 +32,7 @@ export default function SortableTable({ people }) {
                 email={x.email}
                 location={x.location}
                 work={x.work}
-                refer={x.referral}
+                refer={x.refer}
                 projects={x.projects}
                 role={x.role}
                 asks={x.asks}

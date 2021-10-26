@@ -26,6 +26,7 @@ const Message = ({ variant, children }) => {
 export default function Home() {
   const router = useRouter()
   const [userList, setUserList] = useState([])
+  const [originalData, setOriginalData] = useState([])
   const [loading, setLoading] = useState(true)
   const [communityId, setCommunityId] = useLocalStorage('communityId', router.query.communityId)
   const [token, setToken] = useLocalStorage('token', router.query.token)
@@ -61,7 +62,7 @@ export default function Home() {
       await fetch('api/getData', { method: 'POST', headers: { communityId: communityId } })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result)
+          console.log({ result })
           if (result.length === 0) {
             setLoading(false)
           } else {
@@ -69,6 +70,7 @@ export default function Home() {
             if (auth) {
               console.log({ afterFetch: true, userList })
               setUserList(result)
+              setOriginalData(result)
               setLoading(false)
             }
           }
@@ -78,41 +80,42 @@ export default function Home() {
   }, [])
 
   function handleName() {
-    const dataCopy = [...userList]
+    const dataCopy = [...originalData]
     setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
   }
 
   function handleContact() {
-    const dataCopy = [...userList]
+    const dataCopy = [...originalData]
     setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
   }
 
   function handleLocation() {
-    const dataCopy = [...userList]
+    const dataCopy = [...originalData]
     setUserList(dataCopy.slice().sort((a, b) => a.location.localeCompare(b.location)))
   }
 
   function handleWork() {
-    const dataCopy = [...userList]
+    const dataCopy = [...originalData]
     setUserList(dataCopy.slice().sort((a, b) => a.work.localeCompare(b.work)))
   }
 
   function handleRole() {
-    const dataCopy = [...userList]
+    const dataCopy = [...originalData]
     setUserList(dataCopy.slice().sort((a, b) => a.role.localeCompare(b.role)))
   }
 
   function handleReferral() {
-    const dataCopy = [...userList]
-    setUserList(dataCopy.slice().sort((a, b) => a.refer.localeCompare(b.refer)))
+    const dataCopy = [...originalData]
+    setUserList(dataCopy.slice().filter((a) => a.refer === true))
   }
 
   function handleUpdated() {
-    const dataCopy = [...userList]
+    const dataCopy = [...originalData]
     setUserList(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
   }
 
   const handleSortByChange = (option) => {
+    console.log({ handleSortByChange: option })
     if (option.value === 'name') {
       handleName()
     } else if (option.value === 'contact') {
