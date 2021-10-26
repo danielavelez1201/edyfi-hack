@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/link-passhref */
 /* eslint-disable @next/next/no-html-link-for-pages */
 import router from 'next/router'
 import { useState, useEffect } from 'react'
@@ -15,11 +16,6 @@ export default function Landing() {
   const [error, setError] = useState('')
   const [userLoggedIn, setUserLoggedIn] = useState(false)
   const [user, setUser] = useState(null)
-
-  function login(e) {
-    e.preventDefault()
-    const communityId = e.target[0].value.toString()
-  }
 
   function updateFormData(e) {
     setFormData({
@@ -44,6 +40,7 @@ export default function Landing() {
 
   async function onSubmit(e) {
     e.preventDefault()
+    console.log('SUBMIT')
     await fetch('api/adminLogin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', userId: user.uid },
@@ -55,7 +52,7 @@ export default function Landing() {
           query: { communityId: formData.communityId, token: hashcode(formData.communityToken) }
         })
       } else {
-        setError("Community doesn't exist or password is incorrect.")
+        setError("Community doesn't exist or token is incorrect.")
       }
     })
   }
@@ -65,7 +62,7 @@ export default function Landing() {
       <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
         <h1 className='text-xl font-medium mt-4 text-center'>Log in to manage your community.</h1>
         <br></br>
-        <form onSubmit={onSubmit}>
+        <form>
           <input
             className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
             type='text'
@@ -91,9 +88,15 @@ export default function Landing() {
             {!userLoggedIn && <div className={googleTextStyle}>Connect your Google account</div>}
           </button>
           <br></br>
-          <button className='bg-blue py-2 px-4 text-sm text-white rounded focus:outline-none focus:border-green-dark hover:bg-blue-hover'>
-            Log in
-          </button>
+          {userLoggedIn && (
+            <button
+              onClick={onSubmit}
+              className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+            >
+              Log in
+            </button>
+          )}
+
           <br></br>
           <br></br>
           <h1 className='text-red'>{error}</h1>
