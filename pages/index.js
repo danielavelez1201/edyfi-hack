@@ -41,11 +41,11 @@ export default function Landing() {
   return (
     <div className='h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
-        <h1 className='text-2xl font-medium text-primary mt-4 mb-12 text-center'>
-          Welcome to Loop. <h3 className='text-gray text-sm'>Creating perennial communities.</h3>{' '}
-        </h1>
-        {/* <h1 className='font-medium mt-4 text-center'>Log in</h1> */}
-        <br></br>
+        <div className='flex flex-col items-center mb-4'>
+          <h1 className='text-2xl font-medium text-primary mt-4 mb-1 text-center'>Welcome to Loop. </h1>
+          <h3 className='text-gray text-sm'>Creating perennial communities.</h3>{' '}
+        </div>
+
         <form onSubmit={onSubmit}>
           <input
             className='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
