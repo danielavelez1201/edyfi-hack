@@ -8,6 +8,9 @@ import Image from 'next/image'
 import { useLocalStorage } from 'react-use'
 import { hashcode } from './api/helpers'
 import SortBy from '../components/SortBy'
+import 'regenerator-runtime/runtime'
+import React from 'react'
+import Table, { AvatarCell, SelectColumnFilter, StatusPill } from '../components/NewTable' // new
 
 const Message = ({ variant, children }) => {
   // the alert is displayed by default
@@ -55,6 +58,40 @@ export default function Home() {
     setCopied(true)
   }
 
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Name',
+        accessor: 'firstName',
+        Cell: AvatarCell,
+        //imgAccessor: 'imgUrl',
+        emailAccessor: 'email'
+      },
+      {
+        Header: 'Location',
+        accessor: 'location'
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        Cell: StatusPill
+      },
+      {
+        Header: 'Phone',
+        accessor: 'age'
+      },
+      {
+        Header: 'Role',
+        accessor: 'role',
+        Filter: SelectColumnFilter, // new
+        filter: 'includes'
+      }
+    ],
+    []
+  )
+
+  //const data = React.useMemo(() => getData(), [])
+
   useEffect(() => {
     setCommunityId(router.query.communityId)
     setToken(router.query.token)
@@ -79,112 +116,120 @@ export default function Home() {
     fetchData()
   }, [])
 
-  function handleName() {
-    const dataCopy = [...originalData]
-    setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
-  }
+  // function handleName() {
+  //   const dataCopy = [...originalData]
+  //   setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
+  // }
 
-  function handleContact() {
-    const dataCopy = [...originalData]
-    setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
-  }
+  // function handleContact() {
+  //   const dataCopy = [...originalData]
+  //   setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
+  // }
 
-  function handleLocation() {
-    const dataCopy = [...originalData]
-    setUserList(dataCopy.slice().sort((a, b) => a.location.localeCompare(b.location)))
-  }
+  // function handleLocation() {
+  //   const dataCopy = [...originalData]
+  //   setUserList(dataCopy.slice().sort((a, b) => a.location.localeCompare(b.location)))
+  // }
 
-  function handleWork() {
-    const dataCopy = [...originalData]
-    setUserList(dataCopy.slice().sort((a, b) => a.work.localeCompare(b.work)))
-  }
+  // function handleWork() {
+  //   const dataCopy = [...originalData]
+  //   setUserList(dataCopy.slice().sort((a, b) => a.work.localeCompare(b.work)))
+  // }
 
-  function handleRole() {
-    const dataCopy = [...originalData]
-    setUserList(dataCopy.slice().sort((a, b) => a.role.localeCompare(b.role)))
-  }
+  // function handleRole() {
+  //   const dataCopy = [...originalData]
+  //   setUserList(dataCopy.slice().sort((a, b) => a.role.localeCompare(b.role)))
+  // }
 
-  function handleReferral() {
-    const dataCopy = [...originalData]
-    setUserList(dataCopy.slice().filter((a) => a.refer === true))
-  }
+  // function handleReferral() {
+  //   const dataCopy = [...originalData]
+  //   setUserList(dataCopy.slice().filter((a) => a.refer === true))
+  // }
 
-  function handleUpdated() {
-    const dataCopy = [...originalData]
-    setUserList(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
-  }
+  // function handleUpdated() {
+  //   const dataCopy = [...originalData]
+  //   setUserList(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
+  // }
 
-  const handleSortByChange = (option) => {
-    console.log({ handleSortByChange: option })
-    if (option.value === 'name') {
-      handleName()
-    } else if (option.value === 'contact') {
-      handleContact()
-    } else if (option.value === 'location') {
-      handleLocation()
-    } else if (option.value === 'work') {
-      handleWork()
-    } else if (option.value === 'role') {
-      handleRole()
-    } else if (option.value === 'referral') {
-      handleReferral()
-    } else if (option.value === 'updated') {
-      handleUpdated()
-    }
-  }
+  // const handleSortByChange = (option) => {
+  //   console.log({ handleSortByChange: option })
+  //   if (option.value === 'name') {
+  //     handleName()
+  //   } else if (option.value === 'contact') {
+  //     handleContact()
+  //   } else if (option.value === 'location') {
+  //     handleLocation()
+  //   } else if (option.value === 'work') {
+  //     handleWork()
+  //   } else if (option.value === 'role') {
+  //     handleRole()
+  //   } else if (option.value === 'referral') {
+  //     handleReferral()
+  //   } else if (option.value === 'updated') {
+  //     handleUpdated()
+  //   }
+  // }
 
   return (
-    <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
-      <div className='w-full m-auto mx-20 my-10 bg-white rounded-lg drop-shadow py-10 px-16'>
-        <div className='w-full h-full flex flex-col justify-center items-center'>
-          <div className='mt-12 '>
-            <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
-            <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
-            {userList.length !== 0 && !loading && (
-              <div onClick={copy} className='-ml-2 flex bg-gray-light rounded py-5 px-2'>
-                <Image src='/copy.png' width='20px' height='25px' />
-                <input
-                  type='text'
-                  disabled={true}
-                  id='link'
-                  value={onboardLink}
-                  placeholder={onboardLink}
-                  className='text-blue ml-2 w-96 font-bold items-center text-center'
-                ></input>
-              </div>
-            )}
-          </div>
-          <br></br>
-          <div className='flex items-center'>
-            <button
-              onClick={() => sendBumps()}
-              className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-            >
-              Send text to all members
-            </button>
-            <div className='mr-4' style={{ width: 175 }}>
-              <SortBy style={{ zIndex: '99' }} onChange={handleSortByChange} />
-            </div>
-          </div>
-          <br></br>
-          {userList.length > 0 && <SortableTable people={userList} />}
-          {userList.length === 0 && !loading && (
-            <div>
-              <h1 className='text-2l'>✨ Let's get some members added! Send your members the magic link:</h1>
-              {loading && <h1>Just a sec...</h1>}
-              <br></br>
-              <div onClick={copy} className='bg-gray-light rounded px-5 py-5'>
-                <div className='flex items-center'>
-                  <h1 className='text-blue font-bold mr-5'>{onboardLink}</h1>
-                  <Image src='/copy.png' width='20px' height='25px' />
-                  {copied && <Message />}
-                </div>
-              </div>
-            </div>
-          )}
+    <div className='min-h-screen bg-gray-100 text-gray-900'>
+      <main className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
+        <div className=''>
+          <h1 className='text-xl font-semibold'>React Table + Tailwind CSS = ❤</h1>
         </div>
-      </div>
+        <div className='mt-6'>{userList.length > 0 && <Table columns={columns} data={userList} />}</div>
+      </main>
     </div>
+    // <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+    //   <div className='w-full m-auto mx-20 my-10 bg-white rounded-lg drop-shadow py-10 px-16'>
+    //     <div className='w-full h-full flex flex-col justify-center items-center'>
+    //       <div className='mt-12 '>
+    //         <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
+    //         <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
+    //         {userList.length !== 0 && !loading && (
+    //           <div onClick={copy} className='-ml-2 flex bg-gray-light rounded py-5 px-2'>
+    //             <Image src='/copy.png' width='20px' height='25px' />
+    //             <input
+    //               type='text'
+    //               disabled={true}
+    //               id='link'
+    //               value={onboardLink}
+    //               placeholder={onboardLink}
+    //               className='text-blue ml-2 w-96 font-bold items-center text-center'
+    //             ></input>
+    //           </div>
+    //         )}
+    //       </div>
+    //       <br></br>
+    //       <div className='flex items-center'>
+    //         <button
+    //           onClick={() => sendBumps()}
+    //           className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+    //         >
+    //           Send text to all members
+    //         </button>
+    //         <div className='mr-4' style={{ width: 175 }}>
+    //           <SortBy style={{ zIndex: '99' }} onChange={handleSortByChange} />
+    //         </div>
+    //       </div>
+    //       <br></br>
+    //       {userList.length > 0 && <SortableTable people={userList} />}
+    //       {userList.length === 0 && !loading && (
+    //         <div>
+    //           <h1 className='text-2l'>✨ Let's get some members added! Send your members the magic link:</h1>
+    //           {loading && <h1>Just a sec...</h1>}
+    //           <br></br>
+    //           <div onClick={copy} className='bg-gray-light rounded px-5 py-5'>
+    //             <div className='flex items-center'>
+    //               <h1 className='text-blue font-bold mr-5'>{onboardLink}</h1>
+    //               <Image src='/copy.png' width='20px' height='25px' />
+    //               {copied && <Message />}
+    //             </div>
+    //           </div>
+    //         </div>
+    //       )}
+    //     </div>
+    //   </div>
+    // </div>
   )
 }
 
