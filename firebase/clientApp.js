@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { setUserCookie } from './userCookies'
+import { mapUserData } from './mapUserData'
 
 const firebaseApp = initializeApp({
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -29,7 +31,10 @@ export const signInWithGoogle = () =>
       const token = credential.accessToken
       // The signed-in user info.
       const user = result.user
+
+      setUserCookie(mapUserData(user))
       // ...
+      console.log({ credential, token, user })
     })
     .catch((error) => {
       // Handle Errors here.
@@ -40,6 +45,7 @@ export const signInWithGoogle = () =>
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error)
       // ...
+      console.log({ errorCode, errorMessage, email, credential })
     })
 
 export const user = auth.currentUser

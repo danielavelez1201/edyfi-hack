@@ -1,19 +1,17 @@
-import router from 'next/router'
-import { useState, useEffect } from 'react'
-import 'tailwindcss/tailwind.css'
-import { signInWithGoogle, user } from '../firebase/clientApp'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { signInWithGoogle } from '../firebase/clientApp'
+import { useUser } from '../firebase/useUser'
 import Google from '../img/Google.png'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { hashcode } from './api/helpers'
 
-export default function Landing() {
+export default function AdminLogin() {
+  const router = useRouter()
   const [formData, setFormData] = useState({})
   const [error, setError] = useState('')
-  const [userLoggedIn, setUserLoggedIn] = useState(false)
-  const [user, setUser] = useState(null)
+  const { user } = useUser()
 
   function updateFormData(e) {
     setFormData({
@@ -22,37 +20,28 @@ export default function Landing() {
     })
   }
 
-  useEffect(() => {
-    const auth = getAuth()
-    onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUserLoggedIn(true)
-        setUser(currentUser)
-      } else {
-        console.log('not logged in')
-      }
-    })
-  }, [])
-
-  const googleTextStyle = userLoggedIn ? 'text-center ml-5 text-cyan' : 'text-center ml-5'
+  const googleTextStyle = user ? 'text-center ml-5 text-cyan' : 'text-center ml-5'
 
   async function onSubmit(e) {
+    console.log('onsubmit')
     e.preventDefault()
-    console.log('SUBMIT')
-    await fetch('api/adminLogin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', userId: user.uid },
-      body: JSON.stringify({ formData })
-    }).then((res) => {
-      if (res.ok) {
-        router.push({
-          pathname: '/home',
-          query: { communityId: formData.communityId, token: hashcode(formData.communityToken) }
-        })
-      } else {
-        setError("Community doesn't exist or token is incorrect.")
-      }
-    })
+    if (user) {
+      console.log('SUBMIT')
+      await fetch('api/adminLogin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', userId: user.uid },
+        body: JSON.stringify({ formData })
+      }).then((res) => {
+        if (res.ok) {
+          router.push({
+            pathname: '/home',
+            query: { communityId: formData.communityId, token: hashcode(formData.communityToken) }
+          })
+        } else {
+          setError("Community doesn't exist or token is incorrect.")
+        }
+      })
+    }
   }
 
   return (
@@ -60,7 +49,7 @@ export default function Landing() {
       <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
         <h1 className='text-xl font-medium mt-4 text-center'>Log in to manage your community.</h1>
         <br></br>
-        <form>
+        <form onSubmit={onSubmit}>
           <input
             className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
             type='text'
@@ -82,15 +71,12 @@ export default function Landing() {
             onClick={signInWithGoogle}
           >
             <Image alt="don't be evil" height={24} width={24} src={Google} />
-            {userLoggedIn && <div className={googleTextStyle}>Google account connected!</div>}
-            {!userLoggedIn && <div className={googleTextStyle}>Connect your Google account</div>}
+            {user && <div className={googleTextStyle}>Google account connected!</div>}
+            {!user && <div className={googleTextStyle}>Connect your Google account</div>}
           </button>
           <br></br>
-          {userLoggedIn && (
-            <button
-              onClick={onSubmit}
-              className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-            >
+          {user && (
+            <button className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '>
               Log in
             </button>
           )}

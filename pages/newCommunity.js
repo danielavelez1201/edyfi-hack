@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react'
-import { signInWithGoogle, user } from '../firebase/clientApp'
+import { signInWithGoogle } from '../firebase/clientApp'
+import { useUser } from '../firebase/useUser'
 import { useRouter } from 'next/router'
 import Google from '../img/Google.png'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { hashcode } from './api/helpers'
 
 export default function NewCommunity() {
   const router = useRouter()
+  const { user } = useUser()
   const [formData, setFormData] = useState({})
-  const [userLoggedIn, setUserLoggedIn] = useState(false)
-  const [user, setUser] = useState(null)
+  // const [userLoggedIn, setUserLoggedIn] = useState(false)
+  // const [user, setUser] = useState(null)
 
   function updateFormData(e) {
     setFormData({
@@ -20,22 +21,10 @@ export default function NewCommunity() {
     })
   }
 
-  useEffect(() => {
-    const auth = getAuth()
-    onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser !== undefined) {
-        setUserLoggedIn(true)
-        setUser(currentUser)
-      } else {
-        console.log('not logged in')
-      }
-    })
-  }, [])
-
-  const googleTextStyle = userLoggedIn ? 'text-center ml-5 text-cyan' : 'text-center ml-5'
+  const googleTextStyle = user ? 'text-center ml-5 text-cyan' : 'text-center ml-5'
   async function onSubmit(e) {
-    if (userLoggedIn) {
-      e.preventDefault()
+    e.preventDefault()
+    if (user) {
       await fetch('api/createCommunity', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', userId: user.uid },
@@ -84,12 +73,12 @@ export default function NewCommunity() {
             className='focus:outline-none flex items-center  h-9 justify-left  rounded-xl p-5 border-black border border-cyan'
             onClick={signInWithGoogle}
           >
-            <Image height={24} width={24} src={Google} />
-            {userLoggedIn && <div className={googleTextStyle}>Google account connected!</div>}
-            {!userLoggedIn && <div className={googleTextStyle}>Connect your Google account</div>}
+            <Image alt='dont be evil' height={24} width={24} src={Google} />
+            {user && <div className={googleTextStyle}>Google account connected!</div>}
+            {!user && <div className={googleTextStyle}>Connect your Google account</div>}
           </button>
           <br></br>
-          {userLoggedIn && (
+          {user && (
             <button className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '>
               Create community
             </button>
