@@ -10,7 +10,7 @@ import { hashcode } from './api/helpers'
 import SortBy from '../components/SortBy'
 import 'regenerator-runtime/runtime'
 import React from 'react'
-import Table, { AvatarCell, SelectColumnFilter, StatusPill } from '../components/NewTable' // new
+import Table, { AvatarCell, ReferState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
 
 const Message = ({ variant, children }) => {
   // the alert is displayed by default
@@ -63,27 +63,40 @@ export default function Home() {
       {
         Header: 'Name',
         accessor: 'firstName',
+        lastnameAccessor: 'lastName',
         Cell: AvatarCell,
         //imgAccessor: 'imgUrl',
-        emailAccessor: 'email'
+        emailAccessor: 'email',
+        phoneAccessor: 'phone'
       },
       {
         Header: 'Location',
         accessor: 'location'
       },
       {
-        Header: 'Status',
-        accessor: 'status',
-        Cell: StatusPill
+        Header: 'Can refer',
+        accessor: 'refer',
+        Cell: ReferState
       },
       {
-        Header: 'Phone',
-        accessor: 'age'
+        Header: 'Projects',
+        accessor: 'projects',
+        Cell: ProjectList
       },
       {
         Header: 'Role',
         accessor: 'role',
         Filter: SelectColumnFilter, // new
+        filter: 'includes'
+      },
+      {
+        Header: 'Asks',
+        accessor: 'asks',
+        filter: 'includes'
+      },
+      {
+        Header: 'Last Updated',
+        accessor: 'updated',
         filter: 'includes'
       }
     ],
@@ -171,65 +184,58 @@ export default function Home() {
   // }
 
   return (
-    <div className='min-h-screen bg-gray-100 text-gray-900'>
-      <main className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
-        <div className=''>
-          <h1 className='text-xl font-semibold'>React Table + Tailwind CSS = ❤</h1>
+    <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+      <div className='w-full m-auto mx-20 my-10 bg-white rounded-lg drop-shadow py-10 px-16'>
+        <div className='w-full h-full flex flex-col justify-center items-center'>
+          <div className='mt-12 '>
+            <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
+            <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
+            {userList.length !== 0 && !loading && (
+              <div onClick={copy} className='-ml-2 flex bg-gray-light rounded py-5 px-2'>
+                <Image src='/copy.png' width='20px' height='25px' />
+                <input
+                  type='text'
+                  disabled={true}
+                  id='link'
+                  value={onboardLink}
+                  placeholder={onboardLink}
+                  className='text-blue ml-2 w-96 font-bold items-center text-center'
+                ></input>
+              </div>
+            )}
+          </div>
+          <br></br>
+          <div className='flex items-center'>
+            <button
+              onClick={() => sendBumps()}
+              className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+            >
+              Send text to all members
+            </button>
+          </div>
+          <br></br>
+          {userList.length > 0 && (<main className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
+              <div className=''></div>
+              <div className='mt-6'>{userList.length > 0 && <Table columns={columns} data={userList} />}</div>
+            </main>
+          )}
+          {userList.length === 0 && !loading && (
+            <div>
+              <h1 className='text-2l'>✨ Let's get some members added! Send your members the magic link:</h1>
+              {loading && <h1>Just a sec...</h1>}
+              <br></br>
+              <div onClick={copy} className='bg-gray-light rounded px-5 py-5'>
+                <div className='flex items-center'>
+                  <h1 className='text-blue font-bold mr-5'>{onboardLink}</h1>
+                  <Image src='/copy.png' width='20px' height='25px' />
+                  {copied && <Message />}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-        <div className='mt-6'>{userList.length > 0 && <Table columns={columns} data={userList} />}</div>
-      </main>
+      </div>
     </div>
-    // <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
-    //   <div className='w-full m-auto mx-20 my-10 bg-white rounded-lg drop-shadow py-10 px-16'>
-    //     <div className='w-full h-full flex flex-col justify-center items-center'>
-    //       <div className='mt-12 '>
-    //         <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
-    //         <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
-    //         {userList.length !== 0 && !loading && (
-    //           <div onClick={copy} className='-ml-2 flex bg-gray-light rounded py-5 px-2'>
-    //             <Image src='/copy.png' width='20px' height='25px' />
-    //             <input
-    //               type='text'
-    //               disabled={true}
-    //               id='link'
-    //               value={onboardLink}
-    //               placeholder={onboardLink}
-    //               className='text-blue ml-2 w-96 font-bold items-center text-center'
-    //             ></input>
-    //           </div>
-    //         )}
-    //       </div>
-    //       <br></br>
-    //       <div className='flex items-center'>
-    //         <button
-    //           onClick={() => sendBumps()}
-    //           className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-    //         >
-    //           Send text to all members
-    //         </button>
-    //         <div className='mr-4' style={{ width: 175 }}>
-    //           <SortBy style={{ zIndex: '99' }} onChange={handleSortByChange} />
-    //         </div>
-    //       </div>
-    //       <br></br>
-    //       {userList.length > 0 && <SortableTable people={userList} />}
-    //       {userList.length === 0 && !loading && (
-    //         <div>
-    //           <h1 className='text-2l'>✨ Let's get some members added! Send your members the magic link:</h1>
-    //           {loading && <h1>Just a sec...</h1>}
-    //           <br></br>
-    //           <div onClick={copy} className='bg-gray-light rounded px-5 py-5'>
-    //             <div className='flex items-center'>
-    //               <h1 className='text-blue font-bold mr-5'>{onboardLink}</h1>
-    //               <Image src='/copy.png' width='20px' height='25px' />
-    //               {copied && <Message />}
-    //             </div>
-    //           </div>
-    //         </div>
-    //       )}
-    //     </div>
-    //   </div>
-    // </div>
   )
 }
 

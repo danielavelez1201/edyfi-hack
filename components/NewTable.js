@@ -73,16 +73,16 @@ export function SelectColumnFilter({ column: { filterValue, setFilter, preFilter
   )
 }
 
-export function StatusPill({ value }) {
-  const status = value ? value.toLowerCase() : 'unknown'
+export function ReferState({ value }) {
+  const status = value ? 'Yes' : 'No'
 
   return (
     <span
       className={classNames(
         'px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm',
-        status.startsWith('active') ? 'bg-green-100 text-green-800' : null,
-        status.startsWith('inactive') ? 'bg-yellow-100 text-yellow-800' : null,
-        status.startsWith('offline') ? 'bg-red-100 text-red-800' : null
+        status.startsWith('Yes') ? 'bg-green-100 text-green-800' : null,
+        //status.startsWith('inactive') ? 'bg-yellow-100 text-yellow-800' : null,
+        status.startsWith('No') ? 'bg-red-100 text-red-800' : null
       )}
     >
       {status}
@@ -93,16 +93,55 @@ export function StatusPill({ value }) {
 export function AvatarCell({ value, column, row }) {
   return (
     <div className='flex items-center'>
-      <div className='flex-shrink-0 h-10 w-10'>
+      {/* <div className='flex-shrink-0 h-10 w-10'>
         <img className='h-10 w-10 rounded-full' src={row.original[column.imgAccessor]} alt='' />
-      </div>
+      </div> */}
       <div className='ml-4'>
-        <div className='text-sm font-medium text-gray-900'>{value}</div>
+        <div className='text-sm font-medium text-gray-900'>
+          {value + ' '}
+          {row.original[column.lastnameAccessor]}
+        </div>
         <div className='text-sm text-gray-500'>{row.original[column.emailAccessor]}</div>
+        <div className='text-sm text-gray-500'>{row.original[column.phoneAccessor]}</div>
       </div>
     </div>
   )
 }
+
+export function ProjectList({ value }) {
+
+  return (
+  <span className={'text-sm font-medium text-gray-500 no-underline'}>
+      {value.map((value) => {
+        return (
+          <>
+            <a className={'hover:underline'} rel='noreferrer' target='_blank' href={value}>
+              {value}
+            </a>
+            <br></br>
+          </>
+        )
+      })}
+    </span>
+  )
+}
+
+export function AsksList({ value }) {
+
+  return (
+  <span className={'text-sm font-medium text-gray-500'}>
+      {value.map((value) => {
+        return (
+          <>
+            {value}
+            <br></br>
+          </>
+        )
+      })}
+    </span>
+  )
+}
+
 
 function Table({ columns, data }) {
   // Use the state and functions returned from useTable to build your UI
