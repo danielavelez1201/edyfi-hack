@@ -10,6 +10,7 @@ import {
 import { Button, PageButton } from './shared/Button'
 import { classNames } from './shared/Utils'
 import { SortIcon, SortUpIcon, SortDownIcon } from './shared/Icon'
+import { useUser } from '../firebase/useUser'
 
 // Define a default UI for filtering
 function GlobalFilter({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) {
@@ -109,9 +110,8 @@ export function AvatarCell({ value, column, row }) {
 }
 
 export function ProjectList({ value }) {
-
   return (
-  <span className={'text-sm font-medium text-gray-500 no-underline'}>
+    <span className={'text-sm font-medium text-gray-500 no-underline'}>
       {value.map((value) => {
         return (
           <>
@@ -127,9 +127,8 @@ export function ProjectList({ value }) {
 }
 
 export function AsksList({ value }) {
-
   return (
-  <span className={'text-sm font-medium text-gray-500'}>
+    <span className={'text-sm font-medium text-gray-500'}>
       {value.map((value) => {
         return (
           <>
@@ -141,7 +140,6 @@ export function AsksList({ value }) {
     </span>
   )
 }
-
 
 function Table({ columns, data }) {
   // Use the state and functions returned from useTable to build your UI
@@ -176,10 +174,12 @@ function Table({ columns, data }) {
     useSortBy,
     usePagination // new
   )
+  const { user } = useUser()
 
   // Render the UI for your table
   return (
     <>
+      {user && <div>you are logged in as admin?</div>}
       <div className='sm:flex sm:gap-x-2'>
         <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}
