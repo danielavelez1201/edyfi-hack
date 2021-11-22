@@ -129,63 +129,9 @@ export default function Home() {
     fetchData()
   }, [])
 
-  // function handleName() {
-  //   const dataCopy = [...originalData]
-  //   setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
-  // }
-
-  // function handleContact() {
-  //   const dataCopy = [...originalData]
-  //   setUserList(dataCopy.slice().sort((a, b) => a.lastName.localeCompare(b.lastName)))
-  // }
-
-  // function handleLocation() {
-  //   const dataCopy = [...originalData]
-  //   setUserList(dataCopy.slice().sort((a, b) => a.location.localeCompare(b.location)))
-  // }
-
-  // function handleWork() {
-  //   const dataCopy = [...originalData]
-  //   setUserList(dataCopy.slice().sort((a, b) => a.work.localeCompare(b.work)))
-  // }
-
-  // function handleRole() {
-  //   const dataCopy = [...originalData]
-  //   setUserList(dataCopy.slice().sort((a, b) => a.role.localeCompare(b.role)))
-  // }
-
-  // function handleReferral() {
-  //   const dataCopy = [...originalData]
-  //   setUserList(dataCopy.slice().filter((a) => a.refer === true))
-  // }
-
-  // function handleUpdated() {
-  //   const dataCopy = [...originalData]
-  //   setUserList(dataCopy.slice().sort((b, a) => new Date(a.createdAt) - new Date(b.createdAt)))
-  // }
-
-  // const handleSortByChange = (option) => {
-  //   console.log({ handleSortByChange: option })
-  //   if (option.value === 'name') {
-  //     handleName()
-  //   } else if (option.value === 'contact') {
-  //     handleContact()
-  //   } else if (option.value === 'location') {
-  //     handleLocation()
-  //   } else if (option.value === 'work') {
-  //     handleWork()
-  //   } else if (option.value === 'role') {
-  //     handleRole()
-  //   } else if (option.value === 'referral') {
-  //     handleReferral()
-  //   } else if (option.value === 'updated') {
-  //     handleUpdated()
-  //   }
-  // }
-
   return (
     <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
-      <div className='w-full m-auto mx-20 my-10 bg-white rounded-lg drop-shadow py-10 px-16'>
+      <div className='w-full m-auto mx-20 my-10 rounded-lg drop-shadow py-10 px-16'>
         <div className='w-full h-full flex flex-col justify-center items-center'>
           <div className='mt-12 '>
             <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>

@@ -48,9 +48,6 @@ body {
   border-bottom: thin solid #dddddd;
 }
 
-.styled-table tr:nth-of-type(even) {
-  background-color: #fafafa;
-}
 
 .styled-table tr:last-of-type {
   border-bottom: 2px solid #000000;
