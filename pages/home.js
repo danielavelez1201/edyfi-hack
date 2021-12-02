@@ -2,7 +2,6 @@ import SortableTable from '../components/SortableTable'
 import { useState, useEffect } from 'react'
 import { LogInstance } from 'twilio/lib/rest/serverless/v1/service/environment/log'
 import { useRouter } from 'next/router'
-import user from '../firebase/clientApp'
 import route from 'next/router'
 import Image from 'next/image'
 import { useLocalStorage } from 'react-use'
@@ -12,6 +11,7 @@ import 'regenerator-runtime/runtime'
 import React from 'react'
 import Button from '../components/shared/Button'
 import Table, { AvatarCell, ReferState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
+import { useUser } from '../firebase/useUser'
 
 const Message = ({ variant, children }) => {
   // the alert is displayed by default
@@ -29,6 +29,7 @@ const Message = ({ variant, children }) => {
 
 export default function Home() {
   const router = useRouter()
+  const { user } = useUser()
   const [userList, setUserList] = useState([])
   const [originalData, setOriginalData] = useState([])
   const [loading, setLoading] = useState(true)
@@ -111,6 +112,11 @@ export default function Home() {
     setCommunityId(router.query.communityId)
     setToken(router.query.token)
     const fetchData = async () => {
+      // await fetch('api/getCommunityInfo', { method: 'POST', headers: { communityId } })
+      //   .then((res) => res.json())
+      //   .then((result) => {
+      //     console.log({ communityInfo: result })
+      //   })
       await fetch('api/getData', { method: 'POST', headers: { communityId: communityId } })
         .then((res) => res.json())
         .then((result) => {
