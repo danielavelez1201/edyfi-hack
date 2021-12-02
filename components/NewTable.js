@@ -109,7 +109,6 @@ export function AvatarCell({ value, column, row }) {
 }
 
 export function ProjectList({ value }) {
-
   return (
   <span className={'text-sm font-medium text-gray-500 no-underline'}>
       {value.map((value) => {
@@ -127,7 +126,6 @@ export function ProjectList({ value }) {
 }
 
 export function AsksList({ value }) {
-
   return (
   <span className={'text-sm font-medium text-gray-500'}>
       {value.map((value) => {
@@ -278,7 +276,7 @@ function Table({ columns, data }) {
             <label>
               <span className='sr-only'>Items Per Page</span>
               <select
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                className='form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                 value={state.pageSize}
                 onChange={(e) => {
                   setPageSize(Number(e.target.value))

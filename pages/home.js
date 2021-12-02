@@ -10,6 +10,7 @@ import { hashcode } from './api/helpers'
 import SortBy from '../components/SortBy'
 import 'regenerator-runtime/runtime'
 import React from 'react'
+import Button from '../components/shared/Button'
 import Table, { AvatarCell, ReferState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
 
 const Message = ({ variant, children }) => {
@@ -54,8 +55,9 @@ export default function Home() {
   }
 
   function copy(e) {
-    navigator.clipboard.writeText(onboardLink).then(() => alert('Copied'))
+    //navigator.clipboard.writeText(onboardLink).then(() => alert('Copied'))
     setCopied(true)
+    setTimeout(() => setCopied(false), 1500)
   }
 
   const columns = React.useMemo(
@@ -131,22 +133,26 @@ export default function Home() {
 
   return (
     <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
-      <div className='w-full m-auto mx-20 my-10 rounded-lg drop-shadow py-10 px-16'>
+      <div className='w-full m-auto mx-20 my-10 rounded-lg bg-gray-light drop-shadow py-10 px-16'>
         <div className='w-full h-full flex flex-col justify-center items-center'>
           <div className='mt-12 '>
             <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
             <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
             {userList.length !== 0 && !loading && (
-              <div onClick={copy} className='-ml-2 flex bg-gray-light rounded py-5 px-2'>
-                <Image src='/copy.png' width='20px' height='25px' />
-                <input
-                  type='text'
-                  disabled={true}
-                  id='link'
-                  value={onboardLink}
-                  placeholder={onboardLink}
-                  className='text-blue ml-2 w-96 font-bold items-center text-center'
-                ></input>
+              <div onClick={copy} className='-ml-2 border-solid flex flex-grow bg-white rounded-lg text-cyan'>
+                <div className='px-5 border-r-2 border-r-gray justify-center flex items-center '>
+                  <Image src='/link.png' width='23px' height='20px' />
+                </div>
+                <div className='px-3 justify-center flex items-center'>{onboardLink}</div>
+                <div className='px-2 py-2'>
+                  <button
+                    className={`${
+                      copied ? 'bg-green hover:bg-green-light' : 'bg-blue-500 hover:bg-blue-700 '
+                    } text-white font-bold py-2 px-4 rounded`}
+                  >
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -160,7 +166,8 @@ export default function Home() {
             </button>
           </div>
           <br></br>
-          {userList.length > 0 && (<main className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
+          {userList.length > 0 && (
+            <main className='max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
               <div className=''></div>
               <div className='mt-6'>{userList.length > 0 && <Table columns={columns} data={userList} />}</div>
             </main>

@@ -73,7 +73,8 @@ module.exports = {
     }
   },
   variants: {
-    extend: {}
+    extend: {},
+    div: ['hover']
   },
   plugins: [require('@tailwindcss/forms')]
 }

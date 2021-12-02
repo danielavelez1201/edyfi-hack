@@ -48,7 +48,7 @@ export default function Landing() {
 
         <form onSubmit={onSubmit}>
           <input
-            className='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+            className='w-full p-2 bg-gray-light text-primary border-transparent rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
             type='text'
             name='communityId'
             placeholder='Community Id'
@@ -56,7 +56,7 @@ export default function Landing() {
           />
           <br></br>
           <input
-            className='w-full p-2 bg-gray-light text-primary  rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+            className='w-full p-2 bg-gray-light text-primary border-transparent rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
             type='text'
             name='communityToken'
             placeholder='Token'
