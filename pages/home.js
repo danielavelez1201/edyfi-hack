@@ -36,7 +36,6 @@ export default function Home() {
   const [token, setToken] = useLocalStorage('token', router.query.token)
   const [copied, setCopied] = useState(false)
 
-  console.log(communityId)
   const onboardLink = `keeploop.io/onboard/${communityId}`
 
   function checkAuth(dataToken) {
@@ -106,33 +105,41 @@ export default function Home() {
 
   //const data = React.useMemo(() => getData(), [])
 
-  useEffect(() => {
+  const fetchData = async () => {
     setCommunityId(router.query.communityId)
     setToken(router.query.token)
-    const fetchData = async () => {
-      // await fetch('api/getCommunityInfo', { method: 'POST', headers: { communityId } })
-      //   .then((res) => res.json())
-      //   .then((result) => {
-      //     console.log({ communityInfo: result })
-      //   })
-      await fetch('api/getData', { method: 'POST', headers: { communityId: communityId } })
-        .then((res) => res.json())
-        .then((result) => {
-          console.log({ result })
-          if (result.length === 0) {
+    await fetch('api/getData', { method: 'POST', headers: { communityId: communityId } })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log({ result })
+        if (result.length === 0) {
+          setLoading(false)
+        } else {
+          const auth = checkAuth(result[0].token)
+          if (auth) {
+            console.log({ afterFetch: true, userList })
+            setUserList(result)
+            setOriginalData(result)
             setLoading(false)
-          } else {
-            const auth = checkAuth(result[0].token)
-            if (auth) {
-              console.log({ afterFetch: true, userList })
-              setUserList(result)
-              setOriginalData(result)
-              setLoading(false)
-            }
           }
-        })
-    }
+        }
+      })
+  }
+
+  useEffect(() => {
     fetchData()
+  }, [])
+
+  const getCommunityInfo = async () => {
+    await fetch('api/getCommunityInfo', { method: 'POST', headers: { communityId: router.query.communityId } })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log({ communityInfo: result })
+      })
+  }
+
+  useEffect(() => {
+    getCommunityInfo()
   }, [])
 
   return (
@@ -166,7 +173,8 @@ export default function Home() {
             </button>
           </div>
           <br></br>
-          {userList.length > 0 && (<main className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
+          {userList.length > 0 && (
+            <main className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
               <div className=''></div>
               <div className='mt-6'>{userList.length > 0 && <Table columns={columns} data={userList} />}</div>
             </main>

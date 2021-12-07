@@ -10,8 +10,6 @@ const useUser = () => {
   const [user, setUser] = useState()
   const router = useRouter()
 
-  firebaseApp.name
-
   const logout = async () => {
     return getAuth()
       .signOut()
@@ -40,6 +38,7 @@ const useUser = () => {
     })
 
     const userFromCookie = getUserFromCookie()
+    console.log({ userFromCookie, type: typeof userFromCookie })
     if (!userFromCookie) {
       //   router.push('/')
       return
@@ -51,7 +50,6 @@ const useUser = () => {
     }
   }, [])
 
-  console.log({ useUserUser: user })
   return { user, logout }
 }
 

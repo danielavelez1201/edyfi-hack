@@ -3,13 +3,16 @@ import db from '../../firebase/clientApp'
 
 async function handler(req, res) {
   try {
-    console.log(req.headers)
+    const q = query(collection(db, 'communities'), where('communityId', '==', req.headers.communityid))
 
-    const q = query(collection(db, 'community'), where('communityId', '==', req.headers.communityid))
+    const communityMatches = await getDocs(q)
+    const communities = []
 
-    const community = await getDoc(q)
+    communityMatches.forEach((doc) => communities.push(doc.data()))
 
-    res.status(200).json(community)
+    console.log({ communities })
+
+    res.status(200).json(communities)
   } catch (e) {
     console.log(e)
   }

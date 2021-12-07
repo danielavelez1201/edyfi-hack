@@ -2,8 +2,6 @@ import { doc, getDoc, collection, query, getDocs, where } from 'firebase/firesto
 import db from '../../firebase/clientApp'
 
 async function handler(req, res) {
-  console.log(req.headers)
-
   const q = query(collection(db, 'users'), where('communityId', '==', req.headers.communityid))
 
   const users = await getDocs(q)
