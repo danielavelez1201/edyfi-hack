@@ -138,8 +138,8 @@ export default function Home() {
   }, [])
 
   return (
-    <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
-      <div className='w-full m-auto mx-20 my-10 rounded-lg bg-gray-light drop-shadow py-10 px-16'>
+    <div className='h-full justify-center items-center w-fit py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+      <div className='w-fit m-auto mx-20 my-10 rounded-lg bg-gray-light drop-shadow py-10 px-16'>
         <div className='w-full h-full flex flex-col justify-center items-center'>
           <div className='mt-12 '>
             <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
