@@ -1,17 +1,14 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { signInWithGoogle } from '../firebase/clientApp'
-import { useUser } from '../firebase/useUser'
-import Google from '../img/Google.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import { hashcode } from './api/helpers'
+import { GoogleSignIn } from './components/googleSignIn'
 
 export default function AdminLogin() {
   const router = useRouter()
   const [formData, setFormData] = useState({})
   const [error, setError] = useState('')
-  const { user } = useUser()
 
   function updateFormData(e) {
     setFormData({
@@ -19,8 +16,6 @@ export default function AdminLogin() {
       [e.target.name]: e.target.value
     })
   }
-
-  const googleTextStyle = user ? 'text-center ml-5 text-cyan' : 'text-center ml-5'
 
   async function onSubmit(e) {
     console.log('onsubmit')
@@ -66,21 +61,7 @@ export default function AdminLogin() {
             onChange={updateFormData}
           />
           <br></br>
-          <button
-            className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
-            onClick={signInWithGoogle}
-          >
-            <Image alt="don't be evil" height={24} width={24} src={Google} />
-            {user && <div className={googleTextStyle}>Google account connected!</div>}
-            {!user && <div className={googleTextStyle}>Connect your Google account</div>}
-          </button>
-          <br></br>
-          {user && (
-            <button className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '>
-              Log in
-            </button>
-          )}
-
+          <GoogleSignIn></GoogleSignIn>
           <br></br>
           <br></br>
           <h1 className='text-red'>{error}</h1>
