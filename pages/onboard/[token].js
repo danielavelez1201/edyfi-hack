@@ -8,6 +8,11 @@ import { TextInput } from '../../components/TextInput'
 import { ProjectInput } from '../../components/ProjectInput'
 import { TextArea } from '../../components/TextArea'
 import { hashcode } from '../api/helpers'
+import { GoogleSignIn } from '../components/googleSignIn'
+import Image from 'next/image'
+import { signInWithGoogle } from '../../firebase/clientApp'
+import { useUser } from '../../firebase/useUser'
+import Google from '../../img/Google.png'
 
 export default function Onboarding() {
   const router = useRouter()
@@ -19,6 +24,10 @@ export default function Onboarding() {
   const [buttonElement, setButtonElement] = useState('')
   const [refer, setRefer] = useState(false)
   const [error, setError] = useState('')
+
+  const { user } = useUser()
+
+  const googleTextStyle = user ? 'text-center ml-5 text-cyan' : 'text-center ml-5'
 
   function projectAdd() {
     if (projects.includes(newProject)) {
@@ -59,7 +68,8 @@ export default function Onboarding() {
               refer: '',
               asks: '',
               token: '',
-              communityId: communityId
+              communityId: communityId,
+              googleUser: user
             }}
             validationSchema={Yup.object({
               firstName: Yup.string().max(40, charError).required(requiredError),
@@ -75,7 +85,7 @@ export default function Onboarding() {
               await axios
                 .post('/api/signup', {
                   ...values,
-                  headers: { communityId: communityId },
+                  headers: { communityId: communityId, googleUser: user },
                   projects: projects,
                   refer: refer,
                   updated: new Date().toLocaleString().split(',')[0]
@@ -108,125 +118,140 @@ export default function Onboarding() {
                 <h1 className='text-2xl font-medium text-primary mt-4 mb-12 text-center'>
                   🏡 Join as a member of community {communityId}.
                 </h1>
+                <h className='text-sm'>Sign in with Google to sync across all your communities.</h>
+                <br></br>
+                <button
+                  className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
+                  onClick={signInWithGoogle}
+                >
+                  <Image alt="don't be evil" height={24} width={24} src={Google} />
+                  {user && <div className={googleTextStyle}>Google account connected!</div>}
+                  {!user && <div className={googleTextStyle}>Connect your Google account</div>}
+                </button>
+                <br></br>
 
                 <div style={{ margin: '0 20px', textAlign: 'center' }}></div>
-                <TextInput
-                  label='First Name'
-                  name='firstName'
-                  type='text'
-                  placeholder='First name'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                />
-                <TextInput
-                  label='Last Name'
-                  name='lastName'
-                  type='text'
-                  placeholder='Last name'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                />
-                <TextInput
-                  label='Email Address'
-                  name='email'
-                  type='email'
-                  placeholder='Email'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                />
-                <TextInput
-                  label='Phone'
-                  name='phone'
-                  type='text'
-                  placeholder='Phone'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                />
-                <TextInput
-                  label='Location'
-                  name='location'
-                  type='text'
-                  placeholder='Location'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                />
-                <TextInput
-                  label='Work'
-                  name='work'
-                  type='text'
-                  placeholder='Work'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                />
-                <TextInput
-                  label='Role'
-                  name='role'
-                  type='role'
-                  placeholder='Role'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                />
-                <div className='flex flex-col w-full text-center text-sm'>
-                  Can you give a referral?
-                  <div className='w-full flex justify-evenly mb-4 mt-1'>
-                    <button
-                      type='button'
-                      onClick={() => setRefer(true)}
-                      style={{ border: '1px solid #1d4ed8' }}
-                      className={`${refer ? 'bg-blue' : ''} shadow hover:bg-blue rounded-full w-full py-1 mr-2`}
-                    >
-                      ✅
-                    </button>
-                    <button
-                      type='button'
-                      onClick={() => setRefer(false)}
-                      style={{ border: '1px solid #1d4ed8' }}
-                      className={`${!refer ? 'bg-blue' : ''} shadow hover:bg-blue rounded-full w-full py-1 ml-2`}
-                    >
-                      ❌
-                    </button>
-                  </div>
-                </div>
-                <div className='mr-auto'>
-                  {projects.map((project) => (
-                    <a key={project} href={project} className='underline'>
-                      {project}
-                      {/* <button
+                {!user && (
+                  <div>
+                    <TextInput
+                      label='First Name'
+                      name='firstName'
+                      type='text'
+                      placeholder='First name'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
+                    <TextInput
+                      label='Last Name'
+                      name='lastName'
+                      type='text'
+                      placeholder='Last name'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
+                    <TextInput
+                      label='Email Address'
+                      name='email'
+                      type='email'
+                      placeholder='Email'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
+                    <TextInput
+                      label='Phone'
+                      name='phone'
+                      type='text'
+                      placeholder='Phone'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
+                    <TextInput
+                      label='Location'
+                      name='location'
+                      type='text'
+                      placeholder='Location'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
+                    <TextInput
+                      label='Work'
+                      name='work'
+                      type='text'
+                      placeholder='Work'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
+                    <TextInput
+                      label='Role'
+                      name='role'
+                      type='role'
+                      placeholder='Role'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
+                    <div className='flex flex-col w-full text-center text-sm'>
+                      Can you give a referral?
+                      <div className='w-full flex justify-evenly mb-4 mt-1'>
+                        <button
+                          type='button'
+                          onClick={() => setRefer(true)}
+                          style={{ border: '1px solid #1d4ed8' }}
+                          className={`${refer ? 'bg-blue' : ''} shadow hover:bg-blue rounded-full w-full py-1 mr-2`}
+                        >
+                          ✅
+                        </button>
+                        <button
+                          type='button'
+                          onClick={() => setRefer(false)}
+                          style={{ border: '1px solid #1d4ed8' }}
+                          className={`${!refer ? 'bg-blue' : ''} shadow hover:bg-blue rounded-full w-full py-1 ml-2`}
+                        >
+                          ❌
+                        </button>
+                      </div>
+                    </div>
+                    <div className='mr-auto'>
+                      {projects.map((project) => (
+                        <a key={project} href={project} className='underline'>
+                          {project}
+                          {/* <button
                       type='button'
                       className='ml-1'
                       onClick={(e) => e.key === 'Enter' && e.preventDefault() && removeProject(project)}
                     >
                       ❌
                     </button> */}
-                      <br />
-                    </a>
-                  ))}
-                </div>
-                {addProject ? (
-                  <button
-                    style={{ border: '1px solid #1d4ed8' }}
-                    className='py-1 mb-3 mr-auto px-2 text-sm rounded focus:outline-none focus:border-green-dark hover:bg-blue-hover'
-                    onClick={addCard}
-                  >
-                    Add a project <span style={{ fontSize: '18px' }}>+</span>
-                  </button>
-                ) : (
-                  <ProjectInput
-                    newLink={newProject}
-                    setNewLink={setNewProject}
-                    projectAdd={projectAdd}
-                    buttonElement={buttonElement}
-                    type='text'
-                    placeholder='link'
-                  />
+                          <br />
+                        </a>
+                      ))}
+                    </div>
+                    {addProject ? (
+                      <button
+                        style={{ border: '1px solid #1d4ed8' }}
+                        className='py-1 mb-3 mr-auto px-2 text-sm rounded focus:outline-none focus:border-green-dark hover:bg-blue-hover'
+                        onClick={addCard}
+                      >
+                        Add a project <span style={{ fontSize: '18px' }}>+</span>
+                      </button>
+                    ) : (
+                      <ProjectInput
+                        newLink={newProject}
+                        setNewLink={setNewProject}
+                        projectAdd={projectAdd}
+                        buttonElement={buttonElement}
+                        type='text'
+                        placeholder='link'
+                      />
+                    )}
+                    <TextArea
+                      label='Asks'
+                      name='asks'
+                      type='asks'
+                      placeholder='Any asks?'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
+                    <TextInput
+                      label='Token'
+                      name='token'
+                      type='text'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                      placeholder='Community token'
+                    />
+                  </div>
                 )}
-                <TextArea
-                  label='Asks'
-                  name='asks'
-                  type='asks'
-                  placeholder='Any asks?'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                />
-                <TextInput
-                  label='Token'
-                  name='token'
-                  type='text'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                  placeholder='Community token'
-                />
                 <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>
                   <button
                     className='bg-blue py-2 px-4 text-white rounded-full font-medium mt-4  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
