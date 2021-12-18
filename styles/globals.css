@@ -2,9 +2,27 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
+}
+
+input[type='text'] {
+  border-width: 0;
+  border-color: transparent;
+}
+
+input[type='email'] {
+  border-width: 0;
+  border-color: transparent;
+}
+
+@layer base {
+  input textarea {
+    border-width: 0;
+    border-color: transparent;
+  }
 }
 
 body {
@@ -47,7 +65,6 @@ body {
 .styled-rows {
   border-bottom: thin solid #dddddd;
 }
-
 
 .styled-table tr:last-of-type {
   border-bottom: 2px solid #000000;
