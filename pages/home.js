@@ -12,20 +12,7 @@ import React from 'react'
 import Button from '../components/shared/Button'
 import Table, { AvatarCell, ReferState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
 import { useUser } from '../firebase/useUser'
-
-const Message = ({ variant, children }) => {
-  // the alert is displayed by default
-  const [alert, setAlert] = useState(true)
-
-  useEffect(() => {
-    // when the component is mounted, the alert is displayed for 3 seconds
-    setTimeout(() => {
-      setAlert(false)
-    }, 3000)
-  }, [])
-
-  return <div className={`alert alert-${variant}`}>{children}</div>
-}
+import { CopyModal } from './components/copyModal'
 
 export default function Home() {
   const router = useRouter()
@@ -35,7 +22,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [communityId, setCommunityId] = useLocalStorage('communityId', router.query.communityId)
   const [token, setToken] = useLocalStorage('token', router.query.token)
-  const [copied, setCopied] = useState(false)
 
   console.log(communityId)
   const onboardLink = `keeploop.io/onboard/${communityId}`
@@ -53,12 +39,6 @@ export default function Home() {
 
   async function sendBumps() {
     await fetch('api/textBumps').then((res) => res.json())
-  }
-
-  function copy(e) {
-    //navigator.clipboard.writeText(onboardLink).then(() => alert('Copied'))
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
   }
 
   const columns = React.useMemo(
@@ -144,23 +124,7 @@ export default function Home() {
           <div className='mt-12 '>
             <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
             <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
-            {userList.length !== 0 && !loading && (
-              <div onClick={copy} className='-ml-2 border-solid flex flex-grow bg-white rounded-lg text-cyan'>
-                <div className='px-5 border-r-2 border-r-gray justify-center flex items-center '>
-                  <Image src='/link.png' width='23px' height='20px' />
-                </div>
-                <div className='px-3 justify-center flex items-center'>{onboardLink}</div>
-                <div className='px-2 py-2'>
-                  <button
-                    className={`${
-                      copied ? 'bg-green hover:bg-green-light' : 'bg-blue-500 hover:bg-blue-700 '
-                    } text-white font-bold py-2 px-4 rounded`}
-                  >
-                    {copied ? 'Copied!' : 'Copy'}
-                  </button>
-                </div>
-              </div>
-            )}
+            {userList.length !== 0 && !loading && <CopyModal onboardLink={onboardLink}></CopyModal>}
           </div>
           <br></br>
           <div className='flex items-center'>
@@ -183,13 +147,7 @@ export default function Home() {
               <h1 className='text-2l'>✨ Let's get some members added! Send your members the magic link:</h1>
               {loading && <h1>Just a sec...</h1>}
               <br></br>
-              <div onClick={copy} className='bg-gray-light rounded px-5 py-5'>
-                <div className='flex items-center'>
-                  <h1 className='text-blue font-bold mr-5'>{onboardLink}</h1>
-                  <Image src='/copy.png' width='20px' height='25px' />
-                  {copied && <Message />}
-                </div>
-              </div>
+              <CopyModal onboardLink={onboardLink}></CopyModal>
             </div>
           )}
         </div>
