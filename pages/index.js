@@ -1,6 +1,6 @@
 import 'tailwindcss/tailwind.css'
 import router from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { hashcode } from './api/helpers'
 import Link from 'next/link'
 
@@ -19,6 +19,15 @@ export default function Landing() {
       [e.target.name]: e.target.value
     })
   }
+
+  // for testing purposes
+  useEffect(async () => {
+    await fetch('api/textBumps', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ formData })
+    })
+  }, [])
 
   async function onSubmit(e) {
     e.preventDefault()
