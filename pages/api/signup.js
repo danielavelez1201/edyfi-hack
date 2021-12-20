@@ -8,6 +8,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID
 const client = require('twilio')(accountSid, authToken)
 
 async function handler(req, res) {
+  console.log('in api')
   // Get community
   const communityId = req.body.headers.communityId
   const communityQuery = query(collection(db, 'communities'), where('communityId', '==', communityId))

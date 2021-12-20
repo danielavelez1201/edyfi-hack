@@ -24,6 +24,9 @@ export default function Onboarding() {
   const [buttonElement, setButtonElement] = useState('')
   const [refer, setRefer] = useState(false)
   const [error, setError] = useState('')
+  const [phoneNum, setPhoneNum] = useState(null)
+
+  const [showForm, setShowForm] = useState(false)
 
   const { user } = useUser()
 
@@ -48,6 +51,41 @@ export default function Onboarding() {
     setProjects(projects.filter((c) => c !== project))
   }
 
+  async function login(values) {
+    if (!phoneNum || phoneNum.length < 9) {
+      setError('Please input a valid phone number.')
+      return
+    }
+    console.log('clicked login')
+    await axios
+      .post('/api/signup', {
+        ...values,
+        headers: { communityId: communityId, googleUser: user, phoneNum: phoneNum },
+        projects: projects,
+        refer: refer,
+        updated: new Date().toLocaleString().split(',')[0]
+      })
+      .then((res) => {
+        console.log(res)
+        setError('')
+        if (res.status === 200) {
+          setSubmitting(true)
+          console.log(hashcode(values.token))
+          router.push({
+            pathname: '/home',
+            query: { communityId: communityId, token: hashcode(values.token) }
+          })
+        }
+        setSubmitting(false)
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data)
+          setError(error.response.data)
+        }
+      })
+  }
+
   const requiredError = 'Required'
   const charError = 'Must be 40 characters or less'
 
@@ -60,7 +98,7 @@ export default function Onboarding() {
               firstName: '',
               lastName: '',
               email: '',
-              phone: '',
+              //phone: '',
               location: '',
               work: '',
               role: '',
@@ -75,40 +113,15 @@ export default function Onboarding() {
               firstName: Yup.string().max(40, charError).required(requiredError),
               lastName: Yup.string().max(40, charError).required(requiredError),
               email: Yup.string().email('Invalid email address').required(requiredError),
-              phone: Yup.string().phone('Enter a valid phone including +country code').required(requiredError),
+              //phone: Yup.string().phone('Enter a valid phone including +country code').required(requiredError),
               location: Yup.string().max(40, charError).required(requiredError),
               work: Yup.string().max(40, charError).required(requiredError),
               role: Yup.string().max(40, charError).required(requiredError)
             })}
             onSubmit={async (values, { setSubmitting }) => {
+              console.log('in onSubmit')
               setSubmitting(true)
-              await axios
-                .post('/api/signup', {
-                  ...values,
-                  headers: { communityId: communityId, googleUser: user },
-                  projects: projects,
-                  refer: refer,
-                  updated: new Date().toLocaleString().split(',')[0]
-                })
-                .then((res) => {
-                  console.log(res)
-                  setError('')
-                  if (res.status === 200) {
-                    setSubmitting(true)
-                    console.log(hashcode(values.token))
-                    router.push({
-                      pathname: '/home',
-                      query: { communityId: communityId, token: hashcode(values.token) }
-                    })
-                  }
-                  setSubmitting(false)
-                })
-                .catch((error) => {
-                  if (error.response) {
-                    console.log(error.response.data)
-                    setError(error.response.data)
-                  }
-                })
+              await login(values)
             }}
           >
             {(formikProps) => (
@@ -118,8 +131,25 @@ export default function Onboarding() {
                 <h1 className='text-2xl font-medium text-primary mt-4 mb-12 text-center'>
                   🏡 Join as a member of community {communityId}.
                 </h1>
-                <h className='text-sm'>Sign in with Google to sync across all your communities.</h>
-                <br></br>
+                <input
+                  label='Phone'
+                  name='phone'
+                  type='text'
+                  placeholder='Phone'
+                  onChange={(e) => {
+                    setError('')
+                    setPhoneNum(e.target.value)
+                  }}
+                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                ></input>
+                <TextInput
+                  label='Token'
+                  name='token'
+                  type='text'
+                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                  placeholder='Community token'
+                />
+
                 <button
                   className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
                   onClick={signInWithGoogle}
@@ -129,6 +159,20 @@ export default function Onboarding() {
                   {!user && <div className={googleTextStyle}>Connect your Google account</div>}
                 </button>
                 <br></br>
+                <h className='text-sm'>
+                  Sign in with Google to sync and protect your info across all your communities.
+                </h>
+                <br></br>
+
+                <button
+                  className='bg-blue py-2 px-4 text-white rounded-full font-medium mt-4  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+                  onClick={async () => {
+                    await login({})
+                  }}
+                  type='button'
+                >
+                  Login
+                </button>
 
                 <div style={{ margin: '0 20px', textAlign: 'center' }}></div>
                 {!user && (
@@ -152,13 +196,6 @@ export default function Onboarding() {
                       name='email'
                       type='email'
                       placeholder='Email'
-                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                    />
-                    <TextInput
-                      label='Phone'
-                      name='phone'
-                      type='text'
-                      placeholder='Phone'
                       className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
                     />
                     <TextInput
@@ -242,13 +279,6 @@ export default function Onboarding() {
                       type='asks'
                       placeholder='Any asks?'
                       className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                    />
-                    <TextInput
-                      label='Token'
-                      name='token'
-                      type='text'
-                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                      placeholder='Community token'
                     />
                   </div>
                 )}
