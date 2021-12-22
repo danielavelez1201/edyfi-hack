@@ -7,6 +7,32 @@ const authToken = process.env.TWILIO_AUTH_TOKEN
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const client = require('twilio')(accountSid, authToken)
 
+/**
+ * Inputs: Phone number + google login
+ *
+ * Cases:
+ *
+ * 1) Account existed already with this google login, not with this phone number though
+ *
+ * => New phone number! Update phone number for this user
+ *
+ * 2) An account existed already with this phone number
+ *
+ * That account has a different google acc
+ * => Error, don't wanna allow ppl to impersonate others w their phone number
+ *    User must log in with own phone number or correct google acc (TODO: add support for multiple google accs)
+ *
+ * That account has no google acc attached yet
+ * => Yay let's add the google info to that account
+ *
+ * 3) Account existed already with BOTH this google login and this phone number
+ *
+ * => Welcome back! Go to community directory
+ *
+ * 4) No account exists with either
+ *
+ * => Open up other form inputs
+ */
 async function handler(req, res) {
   console.log('in api')
   // Get community
@@ -28,33 +54,6 @@ async function handler(req, res) {
   }
 
   const googleUser = req.body.headers.googleUser
-
-  /**
-   * Inputs: Phone number + google login
-   *
-   * Cases:
-   *
-   * 1) Account existed already with this google login, not with this phone number though
-   *
-   * => New phone number! Update phone number for this user
-   *
-   * 2) An account existed already with this phone number
-   *
-   * That account has a different google acc
-   * => Error, don't wanna allow ppl to impersonate others w their phone number
-   *    User must log in with own phone number or correct google acc (TODO: add support for multiple google accs)
-   *
-   * That account has no google acc attached yet
-   * => Yay let's add the google info to that account
-   *
-   * 3) Account existed already with BOTH this google login and this phone number
-   *
-   * => Welcome back! Go to community directory
-   *
-   * 4) No account exists with either
-   *
-   * => Open up other form inputs
-   */
 
   // To check if either phone or google acc is in community
   let isPhoneInCommunity = false
