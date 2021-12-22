@@ -70,17 +70,19 @@ export default function Onboarding() {
         console.log(res)
         setError('')
         if (res.status === 200) {
-          setSubmitting(true)
-          console.log(hashcode(values.token))
+          console.log('res status 200')
+          console.log(token)
+          console.log(hashcode(token))
           router.push({
             pathname: '/home',
-            query: { communityId: communityId, token: hashcode(values.token) }
+            query: { communityId: communityId, token: hashcode(token) }
           })
         }
-        setSubmitting(false)
       })
       .catch((error) => {
-        if (error.response) {
+        if (error.response && error.response.data.msg === 'needs to make account') {
+          setShowForm(true)
+        } else if (error.response && error.response.data) {
           console.log(error.response.data)
           setError(error.response.data)
         }
@@ -132,56 +134,64 @@ export default function Onboarding() {
                 <h1 className='text-2xl font-medium text-primary mt-4 mb-12 text-center'>
                   🏡 Join as a member of community {communityId}.
                 </h1>
-                <input
-                  label='Phone'
-                  name='phone'
-                  type='text'
-                  placeholder='Phone'
-                  onChange={(e) => {
-                    setError('')
-                    setPhoneNum(e.target.value)
-                  }}
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                ></input>
-                <input
-                  label='Token'
-                  name='token'
-                  type='text'
-                  className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                  onChange={(e) => {
-                    setError('')
-                    setToken(e.target.value)
-                  }}
-                  placeholder='Community token'
-                ></input>
+                {!showForm && (
+                  <>
+                    <input
+                      label='Phone'
+                      name='phone'
+                      type='text'
+                      placeholder='Phone'
+                      onChange={(e) => {
+                        setError('')
+                        setPhoneNum(e.target.value)
+                      }}
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    ></input>
+                    <input
+                      label='Token'
+                      name='token'
+                      type='text'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                      onChange={(e) => {
+                        setError('')
+                        setToken(e.target.value)
+                      }}
+                      placeholder='Community token'
+                    ></input>
 
-                <button
-                  className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
-                  onClick={signInWithGoogle}
-                  type='button'
-                >
-                  <Image alt="don't be evil" height={24} width={24} src={Google} />
-                  {user && <div className={googleTextStyle}>Google account connected!</div>}
-                  {!user && <div className={googleTextStyle}>Connect your Google account</div>}
-                </button>
-                <br></br>
-                <h className='text-sm'>
-                  Sign in with Google to sync and protect your info across all your communities.
-                </h>
-                <br></br>
-
-                <button
-                  className='bg-blue py-2 px-4 text-white rounded-full font-medium mt-4  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-                  onClick={async () => {
-                    await login({})
-                  }}
-                  type='button'
-                >
-                  Login
-                </button>
-
+                    <button
+                      className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
+                      onClick={signInWithGoogle}
+                      type='button'
+                    >
+                      <Image alt="don't be evil" height={24} width={24} src={Google} />
+                      {user && <div className={googleTextStyle}>Google account connected!</div>}
+                      {!user && <div className={googleTextStyle}>Connect your Google account</div>}
+                    </button>
+                    {!user && (
+                      <>
+                        <br></br>
+                        <h className='text-sm'>
+                          Sign in with Google to sync and protect your info across all your communities.
+                        </h>
+                      </>
+                    )}
+                    <br></br>
+                  </>
+                )}
+                {!showForm && (
+                  <button
+                    className='bg-blue py-2 px-4 text-white rounded-full font-medium mt-4  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+                    onClick={async () => {
+                      await login({})
+                    }}
+                    type='button'
+                  >
+                    Continue
+                  </button>
+                )}
                 <div style={{ margin: '0 20px', textAlign: 'center' }}></div>
-                {!user && (
+                {showForm && (
                   <div>
                     <TextInput
                       label='First Name'
@@ -289,13 +299,15 @@ export default function Onboarding() {
                   </div>
                 )}
                 <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>
-                  <button
-                    className='bg-blue py-2 px-4 text-white rounded-full font-medium mt-4  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-                    type='submit'
-                    disabled={formikProps.isSubmitting || !formikProps.isValid}
-                  >
-                    {formikProps.isSubmitting ? 'loading...' : 'Join community'}
-                  </button>
+                  {showForm && (
+                    <button
+                      className='bg-blue py-2 px-4 text-white rounded-full font-medium mt-4  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+                      type='submit'
+                      disabled={formikProps.isSubmitting || !formikProps.isValid}
+                    >
+                      {formikProps.isSubmitting ? 'loading...' : 'Join community'}
+                    </button>
+                  )}
                   <br></br>
                   <br></br>
                   <h1 className='text-red'>{error}</h1>

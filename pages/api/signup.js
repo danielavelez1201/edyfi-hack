@@ -37,7 +37,6 @@ async function handler(req, res) {
   console.log('in api')
   // Get community
   const communityId = req.body.headers.communityId
-  console.log(communityId)
   const communityQuery = query(collection(db, 'communities'), where('communityId', '==', communityId))
   const communityDocs = await getDocs(communityQuery)
   if (communityDocs.empty) {
@@ -46,7 +45,6 @@ async function handler(req, res) {
   const communityDoc = communityDocs.docs[0]
   const community = communityDoc.data()
   const communityWithAddedUser = community.users
-  console.log(community)
 
   // Incorrect community token
   if (community.communityToken !== req.body.headers.token) {
@@ -135,9 +133,7 @@ async function handler(req, res) {
         lastUpdated: Date.now()
       })
 
-      console.log('docRef doc', docRef.docs[0])
-
-      communityWithAddedUser.push(docRef.docs[0].ref.id)
+      communityWithAddedUser.push(docRef.id)
     }
   }
 
