@@ -25,6 +25,7 @@ export default function Onboarding() {
   const [refer, setRefer] = useState(false)
   const [error, setError] = useState('')
   const [phoneNum, setPhoneNum] = useState(null)
+  const [token, setToken] = useState(null)
 
   const [showForm, setShowForm] = useState(false)
 
@@ -60,7 +61,7 @@ export default function Onboarding() {
     await axios
       .post('/api/signup', {
         ...values,
-        headers: { communityId: communityId, googleUser: user, phoneNum: phoneNum },
+        headers: { communityId: communityId, googleUser: user, phoneNum: phoneNum, token: token },
         projects: projects,
         refer: refer,
         updated: new Date().toLocaleString().split(',')[0]
@@ -98,14 +99,14 @@ export default function Onboarding() {
               firstName: '',
               lastName: '',
               email: '',
-              //phone: '',
+              phone: phoneNum,
               location: '',
               work: '',
               role: '',
               projects: [],
               refer: '',
               asks: '',
-              token: '',
+              token: token,
               communityId: communityId,
               googleUser: user
             }}
@@ -142,17 +143,22 @@ export default function Onboarding() {
                   }}
                   className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
                 ></input>
-                <TextInput
+                <input
                   label='Token'
                   name='token'
                   type='text'
                   className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                  onChange={(e) => {
+                    setError('')
+                    setToken(e.target.value)
+                  }}
                   placeholder='Community token'
-                />
+                ></input>
 
                 <button
                   className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
                   onClick={signInWithGoogle}
+                  type='button'
                 >
                   <Image alt="don't be evil" height={24} width={24} src={Google} />
                   {user && <div className={googleTextStyle}>Google account connected!</div>}

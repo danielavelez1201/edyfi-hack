@@ -1,5 +1,5 @@
-import db from '../../firebase/clientApp'
-import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
+import db, { user } from '../../firebase/clientApp'
+import { collection, addDoc, query, where, getDocs, updateDoc } from 'firebase/firestore'
 //import * as twilio from 'twilio';
 
 //const client = twilio(authToken, accountSid);
@@ -11,16 +11,20 @@ async function handler(req, res) {
   console.log('in api')
   // Get community
   const communityId = req.body.headers.communityId
+  console.log(communityId)
   const communityQuery = query(collection(db, 'communities'), where('communityId', '==', communityId))
   const communityDocs = await getDocs(communityQuery)
-  if (communityDocs.docs.length === 0) {
-    res.status(401).json('This onboarding link is invalid')
+  if (communityDocs.empty) {
+    return res.status(401).json('This onboarding link is invalid')
   }
-  const community = communityDocs.docs[0]
+  const communityDoc = communityDocs.docs[0]
+  const community = communityDoc.data()
+  const communityWithAddedUser = community.users
+  console.log(community)
 
   // Incorrect community token
-  if (community.data().password !== req.body.token) {
-    res.status(401).json('Incorrect community token.')
+  if (community.communityToken !== req.body.headers.token) {
+    return res.status(401).json('Incorrect community token.')
   }
 
   const googleUser = req.body.headers.googleUser
@@ -52,69 +56,95 @@ async function handler(req, res) {
    * => Open up other form inputs
    */
 
+  // To check if either phone or google acc is in community
+  let isPhoneInCommunity = false
+  let isGoogleAccInCommunity = false
+
   // User query with phone number
   const phoneNum = req.body.headers.phoneNum
   const userQueryByPhone = query(collection(db, 'users'), where('phone', '==', phoneNum))
-  const userByPhone = userQueryByPhone.docs[0]
+  const userQueryByPhoneDocs = await getDocs(userQueryByPhone)
+  const phoneAccExists = !userQueryByPhoneDocs.empty
 
   // User query with google info
   const userQueryByGoogle = query(collection(db, 'users'), where('googleUser', '==', googleUser))
-  const userByGoogle = userQueryByGoogle.docs[0]
+  const userQueryByGoogleDocs = await getDocs(userQueryByGoogle)
+  const googleAccExists = !userQueryByGoogleDocs.empty
 
-  if (userByPhone) {
+  if (phoneAccExists) {
+    const userByPhoneDoc = userQueryByPhoneDocs.docs[0]
+    const userByPhone = userByPhoneDoc.data()
+    const phoneAccId = userByPhoneDoc.ref.id
+    isPhoneInCommunity = community.users.includes(phoneAccId)
+
     // The existing account has google account info
     if (userByPhone.googleUser) {
       if (!googleUser) {
-        res.status(300).json('Your phone number is tied to a google account. Please log in with google.')
+        return res.status(300).json('Your phone number is tied to a google account. Please log in with google.')
       }
       // An account existed already with the phone number but with a diff google acc
       else if (googleUser !== userByPhone.googleUser) {
-        res.status(300).json('Your phone number is tied to a different google account.')
+        return res.status(300).json('Your phone number is tied to a different google account.')
       }
     }
 
-    // The existing account does not have google account info yet
-    if (googleUser) {
-      userByPhone.update({ googleInfo: googleUser })
+    // The existing account does not have google account info yet, and we need to add the info
+    if (googleAccExists) {
+      updateDoc(userByPhoneDoc.ref, { googleInfo: googleUser })
       console.log('Google info updated')
     }
 
     // Add user to community user array
-    community.users.push(userByPhone.uuid)
+    console.log(community.users)
+    if (!communityWithAddedUser.includes(phoneAccId)) {
+      communityWithAddedUser.push(phoneAccId)
+    }
   }
 
-  if (googleUser) {
+  if (googleAccExists) {
+    const userByGoogleDoc = userQueryByGoogleDocs.docs[0]
+    const userByGoogle = userByGoogleDoc.data()
+    const googleAccId = userByGoogle.ref.id
+    isGoogleAccInCommunity = community.users.includes(googleAccId)
+
     // User existed with different phone number
     if (userByGoogle && userByGoogle.phoneNum !== phoneNum) {
-      userByGoogle.update({ phoneNum: phoneNum })
+      updateDoc(userByGoogleDoc.ref, { phoneNum: phoneNum })
       console.log('Phone number updated')
     }
     // Add user to community user array if not already added
-    if (!userByPhone) {
-      community.users.push(userByGoogle.uuid)
+    if (!communityWithAddedUser.includes(googleAccId)) {
+      communityWithAddedUser.push(googleAccId)
     }
   }
 
-  const isPhoneInCommunity = await getDocs(community.users.includes(userByPhone.uuid))
-  const isGoogleAccInCommunity = await getDocs(community.users.includes(userByGoogle.uuid))
+  // User already in community
   if (isPhoneInCommunity || isGoogleAccInCommunity) {
-    res.status(200).json({ msg: 'success' })
-  } else if (!req.body.firstName) {
-    // Prompt other form input fields
-    res.status(400).json({ msg: 'needs to make account' })
-  } else {
-    // Create user
-    const docRef = await addDoc(collection(db, 'users'), {
-      ...req.body,
-      communityId: communityId,
-      lastUpdated: Date.now()
-    })
-
-    // Add user to community user array
-    community.users.push(docRef.docs[0].uuid)
+    return res.status(200).json({ msg: 'success' })
   }
 
-  res.status(200).json('Signup successful')
+  // Need to make new user
+  if (!googleAccExists && !phoneAccExists) {
+    if (!req.body.firstName) {
+      // Prompt other form input fields
+      return res.status(400).json({ msg: 'needs to make account' })
+    } else {
+      // Create user
+      const docRef = await addDoc(collection(db, 'users'), {
+        ...req.body,
+        communityIds: [communityId],
+        lastUpdated: Date.now()
+      })
+
+      console.log('docRef doc', docRef.docs[0])
+
+      communityWithAddedUser.push(docRef.docs[0].ref.id)
+    }
+  }
+
+  // Set new user list in community
+  updateDoc(communityDoc.ref, { users: communityWithAddedUser })
+  return res.status(200).json('Signup successful')
 }
 
 export default handler
