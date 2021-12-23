@@ -92,11 +92,6 @@ export default function Home() {
     setCommunityId(router.query.communityId)
     setToken(router.query.token)
     const fetchData = async () => {
-      // await fetch('api/getCommunityInfo', { method: 'POST', headers: { communityId } })
-      //   .then((res) => res.json())
-      //   .then((result) => {
-      //     console.log({ communityInfo: result })
-      //   })
       await fetch('api/getData', { method: 'POST', headers: { communityId: communityId } })
         .then((res) => res.json())
         .then((result) => {
@@ -118,7 +113,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div className='h-full justify-center items-center w-fit py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+    <div className='h-screen justify-center items-center w-fit py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       <div className='w-fit m-auto mx-20 my-10 rounded-lg bg-gray-light drop-shadow py-10 px-16'>
         <div className='w-full h-full flex flex-col justify-center items-center'>
           <div className='mt-12 '>
@@ -128,12 +123,14 @@ export default function Home() {
           </div>
           <br></br>
           <div className='flex items-center'>
-            <button
-              onClick={() => sendBumps()}
-              className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-            >
-              Send text to all members
-            </button>
+            {userList.length !== 0 && (
+              <button
+                onClick={() => sendBumps()}
+                className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+              >
+                Send text to all members
+              </button>
+            )}
           </div>
           <br></br>
           {userList.length > 0 && (

@@ -8,11 +8,6 @@ export default function Landing() {
   const [formData, setFormData] = useState({})
   const [error, setError] = useState('')
 
-  function login(e) {
-    e.preventDefault()
-    const communityId = e.target[0].value.toString()
-  }
-
   function updateFormData(e) {
     setFormData({
       ...formData,

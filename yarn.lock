@@ -4518,10 +4518,10 @@
   "resolved" "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz"
   "version" "3.0.1"
 
-"jest-worker@^27.0.6":
-  "integrity" "sha512-0QMy/zPovLfUPyHuOuuU4E+kGACXXE84nRnq6lBVI9GJg5DCBiA97SATi+ZP8CpiJwEQy1oCPjRBf8AnLjN+Ag=="
-  "resolved" "https://registry.npmjs.org/jest-worker/-/jest-worker-27.4.2.tgz"
-  "version" "27.4.2"
+"jest-worker@^27.0.6", "jest-worker@^27.4.5":
+  "integrity" "sha512-f2s8kEdy15cv9r7q4KkzGXvlY0JTcmCbMHZBfSQDwW77REr45IDWwd0lksDFeVHH2jJ5pqb90T77XscrjeGzzg=="
+  "resolved" "https://registry.npmjs.org/jest-worker/-/jest-worker-27.4.5.tgz"
+  "version" "27.4.5"
   dependencies:
     "@types/node" "*"
     "merge-stream" "^2.0.0"
