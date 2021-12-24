@@ -31,7 +31,7 @@ export default function Home() {
     window.localStorage.setItem('communityId', JSON.stringify(community))
     router.push({
       pathname: '/home',
-      query: { communityId: community, token: '', bypassAuth: true }
+      query: { communityId: community, bypassAuth: true }
     })
   }
 

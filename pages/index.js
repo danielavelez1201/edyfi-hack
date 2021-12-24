@@ -59,7 +59,7 @@ export default function Landing() {
           />
           <br></br>
           <button className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '>
-            Log in
+            Log in to community
           </button>
           <br></br>
           <br></br>
@@ -76,6 +76,12 @@ export default function Landing() {
           ➡️
           <Link href='/adminLogin' passHref>
             <a className='text-blue hover:underline ml-3'>Log in as admin </a>
+          </Link>
+        </h2>
+        <h2>
+          ➡️
+          <Link href='/userLogin' passHref>
+            <a className='text-blue hover:underline ml-3'>Log in as user </a>
           </Link>
         </h2>
       </div>
