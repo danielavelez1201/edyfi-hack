@@ -1,20 +1,13 @@
-import SortableTable from '../components/SortableTable'
 import { useState, useEffect } from 'react'
-import { LogInstance } from 'twilio/lib/rest/serverless/v1/service/environment/log'
 import { useRouter } from 'next/router'
-import route from 'next/router'
-import Image from 'next/image'
 import { useLocalStorage, useLocation } from 'react-use'
 import { hashcode } from './api/helpers'
-import SortBy from '../components/SortBy'
 import 'regenerator-runtime/runtime'
 import React from 'react'
-import Button from '../components/shared/Button'
 import Table, { AvatarCell, ReferState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
 import { useUser } from '../firebase/useUser'
 import { CopyModal } from './components/copyModal'
 import { Navbar } from './components/navbar'
-import { withRouter } from 'react-router-dom'
 
 export default function Home() {
   const router = useRouter()
@@ -26,7 +19,6 @@ export default function Home() {
   const [token, setToken] = useLocalStorage('token', router.query.token)
   let location = useLocation()
 
-  console.log(communityId)
   const onboardLink = `keeploop.io/onboard/${communityId}`
 
   async function sendBumps() {
@@ -34,7 +26,6 @@ export default function Home() {
   }
 
   function switchCommunity(community) {
-    console.log('switching to', community)
     setCommunityId(community)
     setToken('')
     window.localStorage.setItem('communityId', JSON.stringify(community))
@@ -95,7 +86,6 @@ export default function Home() {
       if (router.query.bypassAuth) {
         return true
       }
-      console.log(hashcode(dataToken), token)
       if (hashcode(dataToken) !== token) {
         router.push({
           pathname: '/'
@@ -112,16 +102,13 @@ export default function Home() {
       await fetch('api/getData', { method: 'POST', headers: { communityId: communityId } })
         .then((res) => res.json())
         .then((result) => {
-          console.log({ result })
           if (result.length === 0) {
-            setLoading(false)
+            setLoading(true)
           } else {
-            const auth = checkAuth(result[0].token)
-            console.log(router.query.bypassAuth)
+            const auth = checkAuth(result.token)
             if (auth) {
-              console.log({ afterFetch: true, userList })
-              setUserList(result)
-              setOriginalData(result)
+              setUserList(result.users)
+              setOriginalData(result.users)
               setLoading(false)
             }
           }
