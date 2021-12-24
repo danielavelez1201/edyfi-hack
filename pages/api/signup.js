@@ -129,6 +129,8 @@ async function handler(req, res) {
       // Create user
       const docRef = await addDoc(collection(db, 'users'), {
         ...req.body,
+        googleUser: req.body.headers.googleUser,
+        phoneNum: req.body.headers.phoneNum,
         communityIds: [communityId],
         lastUpdated: Date.now()
       })

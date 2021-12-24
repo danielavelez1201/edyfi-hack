@@ -101,16 +101,12 @@ export default function Onboarding() {
               firstName: '',
               lastName: '',
               email: '',
-              phone: phoneNum,
               location: '',
               work: '',
               role: '',
               projects: [],
               refer: '',
-              asks: '',
-              token: token,
-              communityId: communityId,
-              googleUser: user
+              asks: ''
             }}
             validationSchema={Yup.object({
               firstName: Yup.string().max(40, charError).required(requiredError),

@@ -17,6 +17,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [communityId, setCommunityId] = useLocalStorage('communityId', router.query.communityId)
   const [token, setToken] = useLocalStorage('token', router.query.token)
+  const [communities, setCommunities] = useState([])
+
   let location = useLocation()
 
   const onboardLink = `keeploop.io/onboard/${communityId}`
@@ -99,7 +101,8 @@ export default function Home() {
     setToken(router.query.token)
 
     const fetchData = async () => {
-      await fetch('api/getData', { method: 'POST', headers: { communityId: communityId } })
+      console.log('user', user)
+      await fetch('api/getData', { method: 'POST', headers: { communityId: communityId, googleUser: user } })
         .then((res) => res.json())
         .then((result) => {
           if (result.length === 0) {
@@ -109,6 +112,8 @@ export default function Home() {
             if (auth) {
               setUserList(result.users)
               setOriginalData(result.users)
+              console.log('communities', result.communities)
+              setCommunities(result.communities)
               setLoading(false)
             }
           }
@@ -121,7 +126,7 @@ export default function Home() {
     <div>
       <div className='h-screen justify-center items-center w-screen py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
         <div className='mx-20 my-10'>
-          <Navbar communities={['odc', 'edyfi2']} switchCommunity={switchCommunity}></Navbar>
+          <Navbar communities={communities} switchCommunity={switchCommunity}></Navbar>
           <div className='w-full m-auto rounded-b-lg bg-gray-light drop-shadow py-10 px-16'>
             <div className='w-full h-full flex flex-col justify-center items-center'>
               <div className='mt-12 '>
