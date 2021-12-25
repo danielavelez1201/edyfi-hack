@@ -9,7 +9,7 @@ async function handler(req, res) {
     // User query with google info
     const userQueryByGoogle = query(collection(db, 'users'), where('googleUser', '==', req.headers.googleuser))
     const userQueryByGoogleDocs = await getDocs(userQueryByGoogle)
-    console.log('user query', userQueryByGoogleDocs)
+    console.log('user query', userQueryByGoogleDocs.docs)
     const userId = userQueryByGoogleDocs.docs[0].ref.id
     const communityQuery = query(collection(db, 'communities'), where(userId, 'in', 'users'))
     const communityQueryDocs = await getDocs(communityQuery)

@@ -14,7 +14,7 @@ const client = require('twilio')(accountSid, authToken)
  *
  * 1) Account existed already with this google login, not with this phone number though
  *
- * => New phone number! Update phone number for this user
+ * => New phone number! Update phone number for this user (TODO: add modal that lets the user merge accounts)
  *
  * 2) An account existed already with this phone number
  *
@@ -86,7 +86,7 @@ async function handler(req, res) {
     }
 
     // The existing account does not have google account info yet, and we need to add the info
-    if (googleAccExists) {
+    if (googleUser !== undefined) {
       updateDoc(userByPhoneDoc.ref, { googleInfo: googleUser })
       console.log('Google info updated')
     }
