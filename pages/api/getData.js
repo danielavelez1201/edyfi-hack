@@ -4,7 +4,10 @@ import db from '../../firebase/clientApp'
 async function handler(req, res) {
   const communities = [req.headers.communityId]
   console.log(req.headers.googleuser)
-  // User is signed in with google so we need to also return all the communities
+
+  // We're not returning all communities for now to focus on other features first
+
+  /* // User is signed in with google so we need to also return all the communities
   if (req.headers.googleuser !== undefined) {
     // User query with google info
     const userQueryByGoogle = query(collection(db, 'users'), where('googleUser', '==', req.headers.googleuser))
@@ -15,7 +18,7 @@ async function handler(req, res) {
     const communityQueryDocs = await getDocs(communityQuery)
     console.log('community Docs', communityQueryDocs)
     communityQueryDocs.forEach((communityDoc) => communities.push(communityDoc.data().communityId))
-  }
+  } */
 
   const q = query(collection(db, 'communities'), where('communityId', '==', req.headers.communityid))
 
@@ -31,7 +34,7 @@ async function handler(req, res) {
   const userList = await Promise.all(userListPromises)
   const userData = userList.map((user) => user.docs[0].data())
 
-  res.status(200).json({ token: communityDoc.token, users: userData, communities: communities })
+  res.status(200).json({ token: communityDoc.token, users: userData })
 }
 
 export default handler

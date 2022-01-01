@@ -4,10 +4,24 @@ import { useLocalStorage, useLocation } from 'react-use'
 import { hashcode } from './api/helpers'
 import 'regenerator-runtime/runtime'
 import React from 'react'
-import Table, { AvatarCell, ReferState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
+import Table, { AvatarCell, OfferState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
 import { useUser } from '../firebase/useUser'
 import { CopyModal } from './components/copyModal'
 import { Navbar } from './components/navbar'
+import { classNames } from '../components/shared/Utils'
+import { HelpLabelKey } from '../components/NewTable'
+import { CommunityBoard } from './components/communityBoard'
+
+const fakeUser = {
+  firstName: 'Daniela',
+  lastName: 'Velez',
+  email: 'dvelez@mit.edu',
+  location: 'Boston',
+  work: 'Figma',
+  role: 'SWE',
+  projects: ['Loop'],
+  offers: ['investors', 'refer', 'hiring', 'cofounders']
+}
 
 export default function Home() {
   const router = useRouter()
@@ -18,6 +32,15 @@ export default function Home() {
   const [communityId, setCommunityId] = useLocalStorage('communityId', router.query.communityId)
   const [token, setToken] = useLocalStorage('token', router.query.token)
   const [communities, setCommunities] = useState([])
+  const [communityBoardContent, setCommunityBoardContent] = useState({ text: '', links: [] })
+  const [editingCommunityBoard, setEditingCommunityBoard] = useState(false)
+
+  const communityBoardProps = {
+    content: communityBoardContent,
+    setContent: setCommunityBoardContent,
+    editing: editingCommunityBoard,
+    setEditing: setEditingCommunityBoard
+  }
 
   let location = useLocation()
 
@@ -53,11 +76,6 @@ export default function Home() {
         accessor: 'location'
       },
       {
-        Header: 'Can refer',
-        accessor: 'refer',
-        Cell: ReferState
-      },
-      {
         Header: 'Projects',
         accessor: 'projects',
         Cell: ProjectList
@@ -69,14 +87,14 @@ export default function Home() {
         filter: 'includes'
       },
       {
-        Header: 'Asks',
-        accessor: 'asks',
-        filter: 'includes'
-      },
-      {
         Header: 'Last Updated',
         accessor: 'updated',
         filter: 'includes'
+      },
+      {
+        Header: 'Can help with...',
+        accessor: 'offers',
+        Cell: OfferState
       }
     ],
     []
@@ -102,22 +120,24 @@ export default function Home() {
 
     const fetchData = async () => {
       console.log('user', user)
-      await fetch('api/getData', { method: 'POST', headers: { communityId: communityId, googleUser: user } })
-        .then((res) => res.json())
-        .then((result) => {
-          if (result.length === 0) {
-            setLoading(true)
-          } else {
-            const auth = checkAuth(result.token)
-            if (auth) {
-              setUserList(result.users)
-              setOriginalData(result.users)
-              console.log('communities', result.communities)
-              setCommunities(result.communities)
-              setLoading(false)
-            }
-          }
-        })
+      setUserList([fakeUser])
+      setOriginalData([fakeUser])
+      setLoading(false)
+      // await fetch('api/getData', { method: 'POST', headers: { communityId: communityId, googleUser: user } })
+      //   .then((res) => res.json())
+      //   .then((result) => {
+      //     if (result.length === 0) {
+      //       setLoading(true)
+      //     } else {
+      //       const auth = checkAuth(result.token)
+      //       if (auth) {
+      //         setUserList(result.users)
+      //         setOriginalData(result.users)
+      //         //setCommunities(result.communities)
+      //         setLoading(false)
+      //       }
+      //     }
+      //   })
     }
     fetchData()
   }, [location])
@@ -126,16 +146,15 @@ export default function Home() {
     <div>
       <div className='h-screen justify-center items-center w-screen py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
         <div className='mx-20 my-10'>
-          <Navbar communities={communities} switchCommunity={switchCommunity}></Navbar>
-          <div className='w-full m-auto rounded-b-lg bg-gray-light drop-shadow py-10 px-16'>
+          <div className='w-full m-auto rounded-lg bg-gray-light drop-shadow py-10 px-16'>
+            <div className='flex justify-between border-b-2 border-gray-300 py-3'>
+              <h1 className='text-3xl font-bold mb-2'>{communityId}</h1>
+              {userList.length !== 0 && !loading && <CopyModal onboardLink={onboardLink}></CopyModal>}
+            </div>
             <div className='w-full h-full flex flex-col justify-center items-center'>
-              <div className='mt-12 '>
-                <h1 className='text-2xl font-bold text-gray text-center'>{communityId} </h1>
-                <h1 className='text-3xl font-bold text-center mb-2'>Members</h1>
-                {userList.length !== 0 && !loading && <CopyModal onboardLink={onboardLink}></CopyModal>}
-              </div>
-              <br></br>
-              <div className='flex items-center'>
+              <div className='mt-12 '></div>
+              <CommunityBoard data={communityBoardProps}></CommunityBoard>
+              {/* <div className='flex items-center'>
                 {userList.length !== 0 && (
                   <button
                     onClick={() => sendBumps()}
@@ -144,8 +163,7 @@ export default function Home() {
                     Send text to all members
                   </button>
                 )}
-              </div>
-              <br></br>
+              </div> */}
               {userList.length > 0 && (
                 <main className='max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
                   <div className=''></div>
