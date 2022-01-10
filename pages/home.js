@@ -32,14 +32,15 @@ export default function Home() {
   const [communityId, setCommunityId] = useLocalStorage('communityId', router.query.communityId)
   const [token, setToken] = useLocalStorage('token', router.query.token)
   const [communities, setCommunities] = useState([])
-  const [communityBoardContent, setCommunityBoardContent] = useState({ text: '', links: [] })
+  const [communityBoardContent, setCommunityBoardContent] = useState({ text: '', links: [], events: [] })
   const [editingCommunityBoard, setEditingCommunityBoard] = useState(false)
 
   const communityBoardProps = {
     content: communityBoardContent,
     setContent: setCommunityBoardContent,
     editing: editingCommunityBoard,
-    setEditing: setEditingCommunityBoard
+    setEditing: setEditingCommunityBoard,
+    communityId: communityId
   }
 
   let location = useLocation()
