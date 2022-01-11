@@ -269,10 +269,10 @@ export const CommunityBoard = (props) => {
         </div>
       )}
 
-      <div className='flex justify-between'>
+      <div className='flex'>
         {!loading && (
           <>
-            <div>
+            <div className='w-1/2'>
               <input
                 className='rounded font-bold bg-white p-5 focus:rounded focus:bg-gray-100 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                 disabled={!editing}
