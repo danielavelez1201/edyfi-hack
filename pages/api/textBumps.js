@@ -17,22 +17,22 @@ async function handler(req, res) {
   const q = query(collection(db, 'users'))
 
   const users = await getDocs(q)
-  let userCommunities = {} // user:[[community1,community2],phone]
+  let userCommunities = [] // user:[[community1,community2],phone]
 
   users.forEach((user) => {
     let userData = user.data()
-    userData.firstName in userCommunities
-      ? userCommunities[userData.firstName][0].push(userData.communityId)
-      : (userCommunities[userData.firstName] = [[userData.communityId], userData.phone, userData.updated])
+    // console.log(userData)
+    userCommunities.push(userData)
   })
-  var today = new Date().toLocaleDateString()
-  console.log(userCommunities)
+  let today = new Date().getTime()
   
-  for (const [key, value] of Object.entries(userCommunities)) {
-    if (value[2].split('/')[0] <= today.split('/')[0] - 3) {
+  userCommunities.forEach((user)=> {
+    // console.log('here',user)
+    if (user.lastUpdated <= today - 7889400000) {
       // textJob.start();
+      console.log('HERE', user.firstName)
     }
-  }
+  })
   //   await client.messages
   //     .create({
   //       body: "You've signed up for Loop! We'll send you updates about other group members and what they're up to.",
