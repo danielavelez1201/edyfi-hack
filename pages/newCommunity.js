@@ -13,6 +13,7 @@ export default function NewCommunity() {
   const [formData, setFormData] = useState({})
   // const [userLoggedIn, setUserLoggedIn] = useState(false)
   // const [user, setUser] = useState(null)
+  const demo = router.query.demo
 
   function updateFormData(e) {
     setFormData({
@@ -33,7 +34,7 @@ export default function NewCommunity() {
         if (res.ok) {
           router.push({
             pathname: '/home',
-            query: { communityId: formData.communityId, token: hashcode(formData.communityToken) }
+            query: { communityId: formData.communityId, token: hashcode(formData.communityToken), demo: demo }
           })
         } else {
           console.log('Error')
@@ -44,6 +45,22 @@ export default function NewCommunity() {
 
   return (
     <div className='h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+      {demo && (
+        <div className='absolute top-5 ml-10 mt-10 w-max max-w-3xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
+          <div className='flex'>
+            <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
+            <h1 className='text-xl font-light text-primary mt-1 mb-1 '>
+              Let's create a sample community of your choosing, and connect your google account. Click create community.
+            </h1>
+          </div>
+          <button className='ml-6 hover:underline'>
+            <Link href='/newCommunity' passHref>
+              <h3 className='text-md font-light text-primary mt-1 mb-1'>Prefer using a sample starter community?</h3>
+            </Link>
+          </button>
+        </div>
+      )}
+
       <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
         <h1 className='text-xl font-medium mt-4 text-left'>Let's create your new community :)</h1>
         <br></br>
