@@ -14,6 +14,8 @@ async function handler(req, res) {
 
   const communityDoc = communityDocs.docs[0]
 
+  console.log('getting community board', communityDoc.data())
+
   return res.status(200).json({ communityBoard: communityDoc.data()?.board })
 }
 

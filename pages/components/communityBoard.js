@@ -24,6 +24,7 @@ export const CommunityBoard = (props) => {
           headers: { communityId: communityId }
         })
         .then((res) => {
+          console.log(res.data)
           if (res.data.communityBoard) {
             setContent(res.data.communityBoard)
             console.log('NEW CONTENT', content)
@@ -39,7 +40,7 @@ export const CommunityBoard = (props) => {
         })
     }
     getCommunityBoard()
-  }, [])
+  }, [communityId, loading])
 
   // LINKS -------------------------------
   const linkEmojis = ['☕️', '📅', '🏡', '🎉', '📄', '🔗']
