@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 import { classNames } from './shared/Utils'
-import url from 'url'
-import Image from 'next/image'
 import axios from 'axios'
 import { format } from 'date-fns'
 

@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import { signInWithGoogle } from '../../firebase/clientApp'
-import { useUser } from '../../firebase/useUser'
-import Google from '../../img/Google.png'
+import { signInWithGoogle } from '../firebase/clientApp'
+import { useUser } from '../firebase/useUser'
+import Google from '../img/Google.png'
 
 export function GoogleSignIn() {
   const { user } = useUser()
