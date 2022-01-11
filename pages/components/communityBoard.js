@@ -24,7 +24,6 @@ export const CommunityBoard = (props) => {
           headers: { communityId: communityId }
         })
         .then((res) => {
-          console.log(res)
           setContent(res.data.communityBoard)
           console.log('NEW CONTENT', content)
           setNewText(content.text)
