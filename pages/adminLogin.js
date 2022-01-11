@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { hashcode } from './api/helpers'
 import { GoogleSignIn } from '../components/googleSignIn'
