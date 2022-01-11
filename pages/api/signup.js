@@ -44,7 +44,7 @@ async function handler(req, res) {
   }
   const communityDoc = communityDocs.docs[0]
   const community = communityDoc.data()
-  const communityWithAddedUser = community.users
+  const communityWithAddedUser = community.users ?? []
 
   // Incorrect community token
   if (community.communityToken !== req.body.headers.token) {
@@ -92,7 +92,6 @@ async function handler(req, res) {
     }
 
     // Add user to community user array
-    console.log(community.users)
     if (!communityWithAddedUser.includes(phoneAccId)) {
       communityWithAddedUser.push(phoneAccId)
     }

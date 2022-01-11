@@ -11,6 +11,7 @@ import { Navbar } from './components/navbar'
 import { classNames } from '../components/shared/Utils'
 import { HelpLabelKey } from '../components/NewTable'
 import { CommunityBoard } from './components/communityBoard'
+import Link from 'next/link'
 
 const fakeUser = {
   firstName: 'Daniela',
@@ -108,9 +109,11 @@ export default function Home() {
         return true
       }
       if (hashcode(dataToken) !== token) {
-        router.push({
-          pathname: '/'
-        })
+        console.log('hash', hashcode(dataToken), 'original', token)
+        console.log('WRONG TOKEN')
+        //router.push({
+        //pathname: '/'
+        //})
       } else {
         return true
       }
@@ -121,33 +124,67 @@ export default function Home() {
 
     const fetchData = async () => {
       console.log('user', user)
-      setUserList([fakeUser])
-      setOriginalData([fakeUser])
+      // setUserList([fakeUser])
+      // setOriginalData([fakeUser])
       setLoading(false)
-      // await fetch('api/getData', { method: 'POST', headers: { communityId: communityId, googleUser: user } })
-      //   .then((res) => res.json())
-      //   .then((result) => {
-      //     if (result.length === 0) {
-      //       setLoading(true)
-      //     } else {
-      //       const auth = checkAuth(result.token)
-      //       if (auth) {
-      //         setUserList(result.users)
-      //         setOriginalData(result.users)
-      //         //setCommunities(result.communities)
-      //         setLoading(false)
-      //       }
-      //     }
-      //   })
+      await fetch('api/getData', { method: 'POST', headers: { communityId: communityId, googleUser: user } })
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.length === 0) {
+            setLoading(true)
+          } else {
+            console.log('API RESULT', result)
+            console.log('token', result.communityToken)
+            const auth = checkAuth(result.communityToken)
+            if (auth) {
+              setUserList(result.users)
+              setOriginalData(result.users)
+              //setCommunities(result.communities)
+              setLoading(false)
+            }
+          }
+        })
     }
     fetchData()
   }, [location])
 
   return (
     <div>
-      <div className='h-screen justify-center items-center w-screen py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+      <div className='h-min-fit h-full justify-center items-center w-full min-w-min py-14 bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+        {router.query.demo === true && (
+          <div className='top-5 ml-10 mt-10 w-max max-w-8xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
+            <div className='flex'>
+              <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
+              <h1 className='text-xl font-light text-primary mt-1 mb-1 '>Here's your new community!</h1>
+            </div>
+            <div className='flex place-items-center'>
+              <h3 className='text-md font-light text-primary mt-1 mb-1'>
+                Try editing the community board to add important info, events, and links. After you're done, let's try
+              </h3>
+              <button className='ml-1 hover:underline'>
+                <Link href='/onboard/demo' passHref>
+                  <h3 className='text-md font-bold text-primary mt-1 mb-1'>joining another community as a member!</h3>
+                </Link>
+              </button>
+            </div>
+          </div>
+        )}
+        {router.query.communityId === 'demo' && (
+          <div className='bg-white top-5 h-fit ml-10 mt-10 max-w-4xl m-auto rounded-lg drop-shadow py-5 px-5'>
+            <div className='flex'>
+              <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
+              <h1 className='text-xl font-light text-primary mt-1 mb-1 '>You've joined community demo!</h1>
+            </div>
+            <div className='flex place-items-center'>
+              <h3 className='text-md font-light text-primary mt-1 mb-1'>
+                Browse through the community directory. Try clicking on the "can help with..." emojis to start an email
+                for that. Thanks for checking out our demo!
+              </h3>
+            </div>
+          </div>
+        )}
         <div className='mx-20 my-10'>
-          <div className='w-full m-auto rounded-lg bg-gray-light drop-shadow py-10 px-16'>
+          <div className='w-fit m-auto rounded-lg bg-gray-light drop-shadow py-10 px-16'>
             <div className='flex justify-between border-b-2 border-gray-300 py-3'>
               <h1 className='text-3xl font-bold mb-2'>{communityId}</h1>
               {userList.length !== 0 && !loading && <CopyModal onboardLink={onboardLink}></CopyModal>}
@@ -173,7 +210,9 @@ export default function Home() {
               )}
               {userList.length === 0 && !loading && (
                 <div>
-                  <h1 className='text-2l'>✨ Let's get some members added! Send your members the magic link:</h1>
+                  <h1 className='text-lg font-bold my-2 mt-10'>
+                    ✨ Let's get some members added! Send your members the magic link:
+                  </h1>
                   {loading && <h1>Just a sec...</h1>}
                   <br></br>
                   <CopyModal onboardLink={onboardLink}></CopyModal>

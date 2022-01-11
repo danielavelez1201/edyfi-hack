@@ -1,4 +1,4 @@
-import { collection, query, getDocs, where } from 'firebase/firestore'
+import { collection, query, getDocs, where, updateDoc } from 'firebase/firestore'
 import db from '../../firebase/clientApp'
 
 async function handler(req, res) {
@@ -22,6 +22,10 @@ async function handler(req, res) {
 
   const q = query(collection(db, 'communities'), where('communityId', '==', req.headers.communityid))
 
+  console.log(req.headers.communityid)
+  const userQ = query(collection(db, 'users'), where('communityId', '==', req.headers.communityid))
+  const users = await getDocs(userQ)
+
   const userListPromises = []
   const communityDocs = await getDocs(q)
   const communityDoc = communityDocs.docs[0].data()
@@ -34,7 +38,17 @@ async function handler(req, res) {
   const userList = await Promise.all(userListPromises)
   const userData = userList.map((user) => user.docs[0].data())
 
-  res.status(200).json({ token: communityDoc.token, users: userData })
+  const communityWithAddedUsers = communityDoc.users
+  for (let i = 0; i < users.docs.length; i++) {
+    const userId = users.docs[i].ref.id
+    if (!communityDoc.users.includes(userId)) {
+      communityWithAddedUsers.push(userId)
+    }
+  }
+  console.log('W ADDED USERS', communityWithAddedUsers)
+  updateDoc(communityDocs.docs[0].ref, { users: communityWithAddedUsers })
+
+  res.status(200).json({ communityToken: communityDoc.communityToken, users: userData })
 }
 
 export default handler

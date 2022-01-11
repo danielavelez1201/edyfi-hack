@@ -13,6 +13,7 @@ import Image from 'next/image'
 import { signInWithGoogle } from '../../firebase/clientApp'
 import { useUser } from '../../firebase/useUser'
 import Google from '../../img/Google.png'
+import Link from 'next/link'
 
 export default function Onboarding() {
   const router = useRouter()
@@ -93,7 +94,17 @@ export default function Onboarding() {
   const charError = 'Must be 40 characters or less'
 
   return (
-    <div className='h-full py-14 flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+    <div className='h-screen h-min-min py-14 flex flex-col bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+      {communityId === 'demo' && (
+        <div className='top-5 ml-10 mt-10 w-max max-w-8xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
+          <div className='flex'>
+            <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
+            <h1 className='text-xl font-light text-primary mt-1 mb-1 '>
+              Log into community "demo" with a phone number and community token "1234"!
+            </h1>
+          </div>
+        </div>
+      )}
       <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow pt-10 pb-5 px-16'>
         <div>
           <Formik
