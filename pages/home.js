@@ -9,6 +9,7 @@ import { useUser } from '../firebase/useUser'
 import { CopyModal } from '../components/copyModal'
 import { CommunityBoard } from '../components/communityBoard'
 import Link from 'next/link'
+import { SMSDemo } from '../components/smsDemo'
 
 const fakeUser = {
   firstName: 'Daniela',
@@ -164,15 +165,19 @@ export default function Home() {
               <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
               <h1 className='text-xl font-light text-primary mt-1 mb-1 '>Here's your new community!</h1>
             </div>
-            <div className='flex place-items-center'>
+            <div>
               <h3 className='text-md font-light text-primary mt-1 mb-1'>
-                Try editing the community board to add important info, events, and links. After you're done, let's try
+                Try editing the community board to add important info, events, and links!
               </h3>
-              <button className='ml-1 hover:underline'>
-                <Link href='/onboard/demo' passHref>
-                  <h3 className='text-md font-bold text-primary mt-1 mb-1'>joining another community as a member!</h3>
-                </Link>
-              </button>
+              <SMSDemo communityId={communityId}></SMSDemo>
+              <div className='flex'>
+                <h3 className='text-md font-light text-primary mt-1 mb-1'>After you're done, let's try</h3>
+                <button className='ml-1 hover:underline'>
+                  <Link href='/onboard/demo' passHref>
+                    <h3 className='text-md font-bold text-primary mt-1 mb-1'>joining another community as a member!</h3>
+                  </Link>
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -182,12 +187,15 @@ export default function Home() {
               <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
               <h1 className='text-xl font-light text-primary mt-1 mb-1 '>You've joined community demo!</h1>
             </div>
-            <div className='flex place-items-center'>
-              <h3 className='text-md font-light text-primary mt-1 mb-1'>
-                Browse through the community directory. Try clicking on the "can help with..." emojis to start an email
-                for that. Thanks for checking out our demo!
-              </h3>
-            </div>
+            <h3 className='text-md font-light text-primary mt-1 mb-1'>
+              Browse through the community directory. Try clicking on the "can help with..." emojis to start an email
+              for that. Thanks for checking out our demo!
+            </h3>
+            <button className='ml-1 hover:underline'>
+              <Link href='/' passHref>
+                <h3 className='text-md font-bold text-primary mt-1 mb-1'>Back to homepage</h3>
+              </Link>
+            </button>
           </div>
         )}
         <div className='mx-20 my-10'>

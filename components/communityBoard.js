@@ -292,7 +292,12 @@ export const CommunityBoard = (props) => {
                       className='border-2 border-gray-100 rounded-xl p-2 mb-2 w-max flex items-center'
                     >
                       <div className='px-2'>{link.emoji}</div>
-                      <a className='px-2 border-l-2 hover:underline text-gray-500 font-bold' href={link.URL}>
+                      <a
+                        className='px-2 border-l-2 hover:underline text-gray-500 font-bold'
+                        href={link.URL}
+                        target='_blank'
+                        rel='noreferrer'
+                      >
                         {link.title}
                       </a>
                       {editing && (
@@ -313,7 +318,12 @@ export const CommunityBoard = (props) => {
                       <div className='flex items-center justify-between'>
                         <div className='flex'>
                           <div className='px-2'>{event.emoji}</div>
-                          <a className='px-2 border-l-2 hover:underline text-gray-500 font-bold' href={event.link}>
+                          <a
+                            className='px-2 border-l-2 hover:underline text-gray-500 font-bold'
+                            href={event.link}
+                            target='_blank'
+                            rel='noreferrer'
+                          >
                             {event.title}
                           </a>
                         </div>

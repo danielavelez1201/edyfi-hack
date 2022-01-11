@@ -14,6 +14,8 @@ import { signInWithGoogle } from '../../firebase/clientApp'
 import { useUser } from '../../firebase/useUser'
 import Google from '../../img/Google.png'
 import Link from 'next/link'
+import { HelpOffers } from '../../components/NewTable'
+import { classNames } from '../../components/shared/Utils'
 
 export default function Onboarding() {
   const router = useRouter()
@@ -23,10 +25,10 @@ export default function Onboarding() {
   const [projects, setProjects] = useState([])
   const [newProject, setNewProject] = useState('')
   const [buttonElement, setButtonElement] = useState('')
-  const [refer, setRefer] = useState(false)
   const [error, setError] = useState('')
   const [phoneNum, setPhoneNum] = useState(null)
   const [token, setToken] = useState(null)
+  const [offers, setOffers] = useState([])
 
   const [showForm, setShowForm] = useState(false)
 
@@ -63,8 +65,8 @@ export default function Onboarding() {
       .post('/api/signup', {
         ...values,
         headers: { communityId: communityId, googleUser: user, phoneNum: phoneNum, token: token },
+        offers: offers,
         projects: projects,
-        refer: refer,
         updated: new Date().toLocaleString().split(',')[0]
       })
       .then((res) => {
@@ -94,14 +96,17 @@ export default function Onboarding() {
   const charError = 'Must be 40 characters or less'
 
   return (
-    <div className='h-screen h-min-min py-14 flex flex-col bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+    <div className='h-fit min-h-full py-14 flex flex-col bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       {communityId === 'demo' && (
-        <div className='top-5 ml-10 mt-10 w-max max-w-8xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
+        <div className='top-5 ml-10 mt-10 mb-3 w-max max-w-8xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
           <div className='flex'>
             <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
-            <h1 className='text-xl font-light text-primary mt-1 mb-1 '>
-              Log into community "demo" with a phone number and community token "1234"!
-            </h1>
+            <div>
+              <h1 className='text-xl font-light text-primary mt-1 mb-1 '>
+                Log into community "demo" with a phone number and community token "1234"!
+              </h1>
+              {showForm && <h3 className='text-md font-light text-primary mt-1 mb-1'>Fill out a profile!</h3>}
+            </div>
           </div>
         </div>
       )}
@@ -116,8 +121,7 @@ export default function Onboarding() {
               work: '',
               role: '',
               projects: [],
-              refer: '',
-              asks: ''
+              offers: []
             }}
             validationSchema={Yup.object({
               firstName: Yup.string().max(40, charError).required(requiredError),
@@ -242,27 +246,7 @@ export default function Onboarding() {
                       placeholder='Role'
                       className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
                     />
-                    <div className='flex flex-col w-full text-center text-sm'>
-                      Can you give a referral?
-                      <div className='w-full flex justify-evenly mb-4 mt-1'>
-                        <button
-                          type='button'
-                          onClick={() => setRefer(true)}
-                          style={{ border: '1px solid #1d4ed8' }}
-                          className={`${refer ? 'bg-blue' : ''} shadow hover:bg-blue rounded-full w-full py-1 mr-2`}
-                        >
-                          ✅
-                        </button>
-                        <button
-                          type='button'
-                          onClick={() => setRefer(false)}
-                          style={{ border: '1px solid #1d4ed8' }}
-                          className={`${!refer ? 'bg-blue' : ''} shadow hover:bg-blue rounded-full w-full py-1 ml-2`}
-                        >
-                          ❌
-                        </button>
-                      </div>
-                    </div>
+
                     <div className='mr-auto'>
                       {projects.map((project) => (
                         <a key={project} href={project} className='underline'>
@@ -296,13 +280,32 @@ export default function Onboarding() {
                         placeholder='link'
                       />
                     )}
-                    <TextArea
-                      label='Asks'
-                      name='asks'
-                      type='asks'
-                      placeholder='Any asks?'
-                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                    />
+                    <div className='py-3'>
+                      {HelpOffers.map((offer) => {
+                        return (
+                          <button
+                            key={offer.text}
+                            onClick={() => {
+                              if (offers.includes(offer.value)) {
+                                setOffers(offers.filter((item) => item !== offer.value))
+                              } else {
+                                setOffers([...offers, offer.value])
+                              }
+                            }}
+                          >
+                            <div
+                              className={classNames(
+                                'my-1 mx-0.5 px-3 py-1 w-max uppercase leading-wide font-bold text-xs rounded-full shadow-sm ',
+                                'hover:' + offer.color,
+                                offers.includes(offer.value) ? offer.color + ' border-2 border-blue' : 'bg-gray-100'
+                              )}
+                            >
+                              {offer.emoji} {offer.text}
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
                 )}
                 <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>

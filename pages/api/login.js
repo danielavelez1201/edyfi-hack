@@ -2,6 +2,7 @@ import { doc, getDoc, collection, query, getDocs, where } from 'firebase/firesto
 import db from '../../firebase/clientApp'
 
 async function handler(req, res) {
+  console.log(req.body)
   const q = query(collection(db, 'communities'), where('communityId', '==', req.body.formData.communityId))
   let data = null
   try {

@@ -36,6 +36,7 @@ const client = require('twilio')(accountSid, authToken)
 async function handler(req, res) {
   console.log('in api')
   // Get community
+  console.log(req.body)
   const communityId = req.body.headers.communityId
   const communityQuery = query(collection(db, 'communities'), where('communityId', '==', communityId))
   const communityDocs = await getDocs(communityQuery)
@@ -64,9 +65,12 @@ async function handler(req, res) {
   const phoneAccExists = !userQueryByPhoneDocs.empty
 
   // User query with google info
-  const userQueryByGoogle = query(collection(db, 'users'), where('googleUser', '==', googleUser))
-  const userQueryByGoogleDocs = await getDocs(userQueryByGoogle)
-  const googleAccExists = !userQueryByGoogleDocs.empty
+  let googleAccExists = googleUser !== undefined
+  if (googleAccExists) {
+    const userQueryByGoogle = query(collection(db, 'users'), where('googleUser', '==', googleUser))
+    const userQueryByGoogleDocs = await getDocs(userQueryByGoogle)
+    googleAccExists = !userQueryByGoogleDocs.empty
+  }
 
   if (phoneAccExists) {
     const userByPhoneDoc = userQueryByPhoneDocs.docs[0]
@@ -126,15 +130,24 @@ async function handler(req, res) {
       return res.status(400).json({ msg: 'needs to make account' })
     } else {
       // Create user
-      const docRef = await addDoc(collection(db, 'users'), {
-        ...req.body,
-        googleUser: req.body.headers.googleUser,
-        phoneNum: req.body.headers.phoneNum,
-        communityIds: [communityId],
-        lastUpdated: Date.now()
-      })
-
-      communityWithAddedUser.push(docRef.id)
+      if (req.body.headers.googleUser === undefined) {
+        const docRef = await addDoc(collection(db, 'users'), {
+          ...req.body,
+          phoneNum: req.body.headers.phoneNum,
+          communityIds: [communityId],
+          lastUpdated: Date.now()
+        })
+        communityWithAddedUser.push(docRef.id)
+      } else {
+        const docRef = await addDoc(collection(db, 'users'), {
+          ...req.body,
+          googleUser: req.body.headers.googleUser,
+          phoneNum: req.body.headers.phoneNum,
+          communityIds: [communityId],
+          lastUpdated: Date.now()
+        })
+        communityWithAddedUser.push(docRef.id)
+      }
     }
   }
 

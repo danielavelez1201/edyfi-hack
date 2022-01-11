@@ -46,7 +46,7 @@ export default function NewCommunity() {
   return (
     <div className='h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       {demo && (
-        <div className='absolute top-5 ml-10 mt-10 w-max max-w-3xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
+        <div className='absolute top-5 ml-10 mt-10 w-max max-w-5xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
           <div className='flex'>
             <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
             <h1 className='text-xl font-light text-primary mt-1 mb-1 '>
