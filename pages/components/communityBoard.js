@@ -3,6 +3,7 @@ import { classNames } from '../../components/shared/Utils'
 import url from 'url'
 import Image from 'next/image'
 import axios from 'axios'
+import { format } from 'date-fns'
 
 export const CommunityBoard = (props) => {
   const editing = props.data.editing
@@ -27,9 +28,9 @@ export const CommunityBoard = (props) => {
           if (res.data.communityBoard) {
             setContent(res.data.communityBoard)
             console.log('NEW CONTENT', content)
-            setNewText(content.text)
-            setNewLinks(content.links)
-            setNewEvents(content.events)
+            setNewText(res.data.communityBoard.text)
+            setNewLinks(res.data.communityBoard.links)
+            setNewEvents(res.data.communityBoard.events)
             setLoading(false)
           }
         })
@@ -100,10 +101,10 @@ export const CommunityBoard = (props) => {
   }
 
   function formatDate(date) {
-    //console.log(date)
-    //const dateObj = new Date(Date.parse(date))
+    console.log(date)
+    // const dateObj = new Date(Date.parse(date))
     //return dateObj.getDay() + ', ' + dateObj.getMonth() + ' ' + dateObj.getDay()
-    return date
+    return format(new Date(date), 'EEEE, MMMM d yyyy')
   }
 
   // GENERAL FUNCTIONS -------------------------------
