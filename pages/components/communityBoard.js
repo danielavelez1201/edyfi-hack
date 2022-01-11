@@ -24,12 +24,14 @@ export const CommunityBoard = (props) => {
           headers: { communityId: communityId }
         })
         .then((res) => {
-          setContent(res.data.communityBoard)
-          console.log('NEW CONTENT', content)
-          setNewText(content.text)
-          setNewLinks(content.links)
-          setNewEvents(content.events)
-          setLoading(false)
+          if (res.data.communityBoard) {
+            setContent(res.data.communityBoard)
+            console.log('NEW CONTENT', content)
+            setNewText(content.text)
+            setNewLinks(content.links)
+            setNewEvents(content.events)
+            setLoading(false)
+          }
         })
         .catch((error) => {
           console.log(error)
@@ -37,8 +39,7 @@ export const CommunityBoard = (props) => {
         })
     }
     getCommunityBoard()
-    console.log(content)
-  }, [communityId, setContent])
+  }, [])
 
   // LINKS -------------------------------
   const linkEmojis = ['☕️', '📅', '🏡', '🎉', '📄', '🔗']
@@ -112,10 +113,12 @@ export const CommunityBoard = (props) => {
     resetLinkInput()
     setNewEventInfo(emptyEvent(newEvents.length + 1))
 
+    console.log({ content })
+
     await axios
       .post('/api/saveCommunityBoard', {
-        data: content,
-        headers: { communityId: communityId }
+        board: { text: newText, links: newLinks, events: newEvents },
+        communityId: communityId
       })
       .then((res) => {
         console.log(res)
