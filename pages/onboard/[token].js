@@ -96,7 +96,7 @@ export default function Onboarding() {
   const charError = 'Must be 40 characters or less'
 
   return (
-    <div className='h-fit min-h-full py-14 flex flex-col bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+    <div className='h-fit min-h-screen py-14 flex flex-col bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       {communityId === 'demo' && (
         <div className='top-5 ml-10 mt-10 mb-3 w-max max-w-8xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
           <div className='flex'>
