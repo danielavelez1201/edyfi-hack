@@ -54,7 +54,7 @@ export default function NewCommunity() {
             </h1>
           </div>
           <button className='ml-6 hover:underline'>
-            <Link href='/newCommunity' passHref>
+            <Link href='/home?communityId=demo-starter&token=81dc9bdb52d03dc28036dbd8313ed055&demo=true' passHref>
               <h3 className='text-md font-light text-primary mt-1 mb-1'>Prefer using a sample starter community?</h3>
             </Link>
           </button>

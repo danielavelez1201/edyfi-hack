@@ -27,10 +27,9 @@ export const CommunityBoard = (props) => {
           console.log(res.data)
           if (res.data.communityBoard) {
             setContent(res.data.communityBoard)
-            console.log('NEW CONTENT', content)
-            setNewText(content.text)
-            setNewLinks(content.links)
-            setNewEvents(content.events)
+            setNewText(res.data.communityBoard.text)
+            setNewLinks(res.data.communityBoard.links)
+            setNewEvents(res.data.communityBoard.events)
             setLoading(false)
           }
         })
@@ -276,7 +275,7 @@ export const CommunityBoard = (props) => {
       <div className='flex'>
         {!loading && (
           <>
-            <div className='w-1/2'>
+            <div className='w-2/3'>
               <input
                 className='rounded font-bold bg-white p-5 focus:rounded focus:bg-gray-100 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                 disabled={!editing}
