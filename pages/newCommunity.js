@@ -87,7 +87,7 @@ export default function NewCommunity() {
           />
           <br></br>
           <button
-            className='focus:outline-none flex items-center  h-9 justify-left  rounded-xl p-5 border-black border border-cyan'
+            className='focus:outline-none flex items-center  h-9 justify-left  rounded-xl p-5 border border-cyan'
             onClick={signInWithGoogle}
           >
             <Image alt='dont be evil' height={24} width={24} src={Google} />

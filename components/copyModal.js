@@ -13,7 +13,7 @@ export function CopyModal(props) {
   return (
     <div onClick={copy} className='border-solid w-max flex bg-white rounded-lg text-cyan'>
       <div className='px-5 border-r-2 border-r-gray justify-center flex items-center '>
-        <Image src='/link.png' width='23px' height='20px' />
+        <Image src='/link.png' width='23px' height='20px' alt='Link' />
       </div>
       <div className='px-3 justify-center flex items-center'>{props.onboardLink}</div>
       <div className='px-2 py-2'>

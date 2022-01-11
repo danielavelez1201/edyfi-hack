@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { hashcode } from './api/helpers'
-import { GoogleSignIn } from './components/googleSignIn'
+import { GoogleSignIn } from '../components/components/googleSignIn'
 import { useUser } from '../firebase/useUser'
 import axios from 'axios'
 import { signInWithGoogle } from '../firebase/clientApp'
@@ -60,7 +60,7 @@ export default function UserLogin() {
           className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
         ></input>
         <button
-          className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
+          className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border border-cyan'
           onClick={signInWithGoogle}
           type='button'
         >

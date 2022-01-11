@@ -6,11 +6,8 @@ import 'regenerator-runtime/runtime'
 import React from 'react'
 import Table, { AvatarCell, OfferState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
 import { useUser } from '../firebase/useUser'
-import { CopyModal } from './components/copyModal'
-import { Navbar } from './components/navbar'
-import { classNames } from '../components/shared/Utils'
-import { HelpLabelKey } from '../components/NewTable'
-import { CommunityBoard } from './components/communityBoard'
+import { CopyModal } from '../components/copyModal'
+import { CommunityBoard } from '../components/communityBoard'
 import Link from 'next/link'
 
 const fakeUser = {
@@ -146,7 +143,17 @@ export default function Home() {
         })
     }
     fetchData()
-  }, [location])
+  }, [
+    communityId,
+    location,
+    router.query.bypassAuth,
+    router.query.communityId,
+    router.query.token,
+    setCommunityId,
+    setToken,
+    token,
+    user
+  ])
 
   return (
     <div>

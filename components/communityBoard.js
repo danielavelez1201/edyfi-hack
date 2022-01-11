@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { classNames } from '../../components/shared/Utils'
+import { classNames } from './shared/Utils'
 import url from 'url'
 import Image from 'next/image'
 import axios from 'axios'
@@ -39,7 +39,7 @@ export const CommunityBoard = (props) => {
         })
     }
     getCommunityBoard()
-  }, [communityId, loading])
+  }, [communityId, loading, setContent])
 
   // LINKS -------------------------------
   const linkEmojis = ['☕️', '📅', '🏡', '🎉', '📄', '🔗']

@@ -8,7 +8,7 @@ import { TextInput } from '../../components/TextInput'
 import { ProjectInput } from '../../components/ProjectInput'
 import { TextArea } from '../../components/TextArea'
 import { hashcode } from '../api/helpers'
-import { GoogleSignIn } from '../components/googleSignIn'
+import { GoogleSignIn } from '../../components/googleSignIn'
 import Image from 'next/image'
 import { signInWithGoogle } from '../../firebase/clientApp'
 import { useUser } from '../../firebase/useUser'
@@ -167,7 +167,7 @@ export default function Onboarding() {
                     ></input>
 
                     <button
-                      className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
+                      className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border border-cyan'
                       onClick={signInWithGoogle}
                       type='button'
                     >
