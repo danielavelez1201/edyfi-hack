@@ -7,7 +7,8 @@ async function handler(req, res) {
       communityId: req.body.formData.communityId,
       communityToken: req.body.formData.communityToken,
       userId: req.headers.userid,
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
+      users: []
     })
 
     console.log('Document written with ID: ', docRef.id)

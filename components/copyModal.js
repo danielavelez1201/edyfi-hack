@@ -6,13 +6,14 @@ export function CopyModal(props) {
 
   function copy(e) {
     setCopied(true)
+    navigator.clipboard.writeText(props.onboardLink)
     setTimeout(() => setCopied(false), 1500)
   }
 
   return (
-    <div onClick={copy} className='-ml-2 border-solid flex flex-grow bg-white rounded-lg text-cyan'>
+    <div onClick={copy} className='border-solid w-max flex bg-white rounded-lg text-cyan'>
       <div className='px-5 border-r-2 border-r-gray justify-center flex items-center '>
-        <Image src='/link.png' width='23px' height='20px' />
+        <Image src='/link.png' width='23px' height='20px' alt='Link' />
       </div>
       <div className='px-3 justify-center flex items-center'>{props.onboardLink}</div>
       <div className='px-2 py-2'>

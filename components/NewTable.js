@@ -74,20 +74,53 @@ export function SelectColumnFilter({ column: { filterValue, setFilter, preFilter
   )
 }
 
-export function ReferState({ value }) {
-  const status = value ? 'Yes' : 'No'
+export const HelpOffers = [
+  { value: 'investors', text: 'Intro to investors', emoji: '🤑', color: 'bg-green-100' },
+  { value: 'cofounders', text: 'Intro to potential co-founders', emoji: '👯', color: 'bg-yellow-100' },
+  { value: 'refer', text: 'Refer to company', emoji: '➡️', color: 'bg-purple-100' },
+  { value: 'hiring', text: 'Relay hiring message', emoji: '📣', color: 'bg-blue-100' }
+]
 
+export const HelpLabelKey = () => {
   return (
-    <span
-      className={classNames(
-        'px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm',
-        status.startsWith('Yes') ? 'bg-green-100 text-green-800' : null,
-        //status.startsWith('inactive') ? 'bg-yellow-100 text-yellow-800' : null,
-        status.startsWith('No') ? 'bg-red-100 text-red-800' : null
-      )}
-    >
-      {status}
-    </span>
+    <div className='flex'>
+      {HelpOffers.map((offer) => {
+        return (
+          <div
+            className={classNames(
+              'my-0.5 mx-0.5 px-3 py-1 w-max uppercase leading-wide font-bold text-xs rounded-full shadow-sm ',
+              offer.color
+            )}
+          >
+            {offer.emoji} = {offer.text}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+export function OfferState({ value }) {
+  return (
+    <div className='flex flex-wrap'>
+      {value &&
+        value.map((value) => {
+          const item = HelpOffers.filter((x) => x.value === value)[0]
+          const body = 'Hi from Loop! Heard you could help out with ' + `"` + item.text + `"...`
+          console.log(item)
+          return (
+            <a
+              href={`mailto:` + 'dvelez@mit.edu' + `?subject=Loop ask&body=` + body}
+              className={classNames(
+                'my-0.5 mx-0.5 px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm hover:bg-gray-100',
+                item.color
+              )}
+            >
+              {item.emoji}
+            </a>
+          )
+        })}
+    </div>
   )
 }
 
@@ -118,21 +151,6 @@ export function ProjectList({ value }) {
             <a className={'hover:underline'} rel='noreferrer' target='_blank' href={value}>
               {value}
             </a>
-            <br></br>
-          </>
-        )
-      })}
-    </span>
-  )
-}
-
-export function AsksList({ value }) {
-  return (
-    <span className={'text-sm font-medium text-gray-500'}>
-      {value.map((value) => {
-        return (
-          <>
-            {value}
             <br></br>
           </>
         )
@@ -179,7 +197,6 @@ function Table({ columns, data }) {
   // Render the UI for your table
   return (
     <>
-      {user && <div>you are logged in as admin?</div>}
       <div className='sm:flex sm:gap-x-2'>
         <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}
@@ -196,6 +213,8 @@ function Table({ columns, data }) {
           )
         )}
       </div>
+      <br></br>
+      <HelpLabelKey></HelpLabelKey>
       {/* table */}
       <div className='mt-4 flex flex-col'>
         <div className='-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8'>
@@ -233,6 +252,7 @@ function Table({ columns, data }) {
                     </tr>
                   ))}
                 </thead>
+
                 <tbody {...getTableBodyProps()} className='bg-white divide-y divide-gray-200'>
                   {page.map((row, i) => {
                     // new

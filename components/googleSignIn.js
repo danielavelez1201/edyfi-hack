@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import { signInWithGoogle } from '../../firebase/clientApp'
-import { useUser } from '../../firebase/useUser'
-import Google from '../../img/Google.png'
+import { signInWithGoogle } from '../firebase/clientApp'
+import { useUser } from '../firebase/useUser'
+import Google from '../img/Google.png'
 
 export function GoogleSignIn() {
   const { user } = useUser()
@@ -11,7 +11,7 @@ export function GoogleSignIn() {
   return (
     <div>
       <button
-        className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border-black border border-cyan'
+        className='focus:outline-none flex items-center h-9 justify-left rounded-xl p-5 border border-cyan'
         onClick={signInWithGoogle}
       >
         <Image alt="don't be evil" height={24} width={24} src={Google} />
