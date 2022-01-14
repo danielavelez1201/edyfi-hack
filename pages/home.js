@@ -38,7 +38,7 @@ export default function Home() {
   }
 
   async function sendBumps() {
-    await fetch('api/textBumps').then((res) => res.json())
+    await fetch('api/textBump').then((res) => res.json())
   }
 
   const columns = React.useMemo(

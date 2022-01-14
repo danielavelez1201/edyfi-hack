@@ -9,7 +9,7 @@ const app = express()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.post('/sms', (req, res) => {
+app.post('/api/sms', async (req, res) => {
   const twiml = new MessagingResponse()
   const q = query(collection(db, 'users'), where('phoneNum', '==', req.body.From))
   const user = await getDocs(q)
@@ -64,11 +64,15 @@ app.post('/sms', (req, res) => {
           case '6':
             // remove all indexes includes 6. until the end or when 7 is hit 
             const newProjects = []
+            const seven = false;
             updates.slice(i).forEach((field, i) => {
                 if (field == '7') {
-                  continue
+                  seven = true;
                 }
-                newProjects.push(field)
+                if (!seven) {
+                    newProjects.push(field)
+                }
+                
             })
             user.projects.update(newProjects)
             break
