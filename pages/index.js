@@ -4,6 +4,18 @@ import { useEffect, useState } from 'react'
 import { hashcode } from './api/helpers'
 import Link from 'next/link'
 
+const python = spawn('python', ['../public/telegram_script.py'])
+
+python.stdout.on('data', function (data) {
+  console.log(data.toString())
+})
+
+python.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`)
+})
+
+
+
 export default function Landing() {
   const [formData, setFormData] = useState({})
   const [error, setError] = useState('')
