@@ -47,7 +47,7 @@ export default function Home() {
   const onboardLink = `keeploop.io/onboard/${communityId}`
 
   async function sendBumps() {
-    await fetch('api/textBumps').then((res) => res.json())
+    await fetch('api/textBump').then((res) => res.json())
   }
 
   function switchCommunity(community) {
