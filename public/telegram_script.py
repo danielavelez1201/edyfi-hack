@@ -1,5 +1,6 @@
 import logging
 import os
+import random
 import firebase_admin 
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -108,14 +109,26 @@ print("API_KEY", api_key)
 
 def communityUpdate(context) -> None:
     """Send community update."""
-    context.bot.send_message(chat_id=1911324427, text='update!')
-    communities_ref = db.collection(u'communities')
-    for community in communities_ref.stream():
-        for user_id in community.reference.get().to_dict()['users']:
-            chat_id = db.collection(u'users').document(user_id).get().to_dict()['telegram_id']
-            if chat_id:
-                context.bot.send_message(chat_id=chat_id, text='update!')
-        
+    return
+
+def formatUpdate(communityId, location_update, project_update):
+    text = communityId + ' weekly nugget: '
+
+    if not (project_update or location_update):
+        return "Hey! No weekly nugget this week. Brb when there's a cool update to share!"
+
+    if project_update:
+        formatted_project_update = project_update['name'] + ' is working on a project, ' + project_update['project'] + ', check it out! '
+        text += formatted_project_update
+        connector = 'And, l' # if there's two updates, we want an And in between
+    else:
+        connector = 'L' # if it's just one, we don't need an And
+
+    if location_update:
+        formatted_location_update = connector + 'ooks like you and ' + location_update['name'] + ' are both in '  + location_update['location'].capitalize() + '.'
+        text += formatted_location_update
+    
+    return text   
 
 def main() -> None:
     """Run the bot."""
@@ -123,17 +136,85 @@ def main() -> None:
     # Create the Updater and pass it your bot's token.
     updater = Updater(token=api_key)
 
+    
+
+    communities_ref = db.collection(u'communities')
+    for community in communities_ref.stream():
+        # start updates for this community 
+
+        telegram_users = [] # [{chat_id: chat_id, name: name, location: location}]
+
+        locations = dict() # {location: [names]}
+        projects = [] # [{name: name, project: project},]
+        
+        communityDict = community.reference.get().to_dict()
+        # loop through community users and gather locations, projects, and telegram info
+        if 'users' in communityDict:
+            for user_id in communityDict['users']:
+
+                doc_dict = db.collection(u'users').document(user_id).get().to_dict()
+                if doc_dict: 
+                    user_full_name = doc_dict['firstName'] + ' ' + doc_dict['lastName']
+                    user_location = doc_dict['location'].lower()
+
+                    # add to locations grouping
+                    locations.setdefault(user_location, []).append(user_full_name)
+
+                    # add to project list
+                    if 'projects' in doc_dict and len(doc_dict['projects']) > 0:
+                        projects.append({'name': user_full_name, 'projects': doc_dict['projects']})
+
+                    # add to telegram info and name / location references
+                    if 'telegram_id' in doc_dict: 
+                        chat_id = doc_dict['telegram_id']
+                        if chat_id:
+                            telegram_users.append({'chat_id': chat_id, 'name': user_full_name, 'location': user_location})
+
+        for user in telegram_users:
+            nearby_users = list(filter(lambda x: x != user['name'], locations[user['location']])) # get other users in same location
+            
+            # LOCATION UPDATE
+            include_location_update = True
+            if (len(nearby_users) > 0):
+                if (len(nearby_users) < 4): # if there are few nearby users, we only want to include a location update sometimes
+                    include_location_update = False
+                    if (random.randint(0, 3) < len(nearby_users)): # chance that update is included is proportional to # of nearby users
+                        include_location_update = True
+
+                random_i = random.randint(0, len(nearby_users) - 1) # randomly pick user index
+                nearby_user = nearby_users[random_i] 
+                location_update = {'name': nearby_user, 'location': user['location']} if include_location_update else None
+            else: 
+                location_update = None
+
+            # PROJECT UPDATE
+            include_project_update = True
+            if (len(projects) < 4): # if there are few projects, we only want to include a project update sometimes
+                include_project_update = False
+                if (random.randint(0, 3) < len(projects)): # chance that update is included is proportional to # of projects
+                    include_project_update = True
+            
+            random_i = random.randint(0, len(projects) - 1) # randomly pick user index
+            user_projects = projects[random_i]['projects']
+            print(user_projects)
+            project_i = random.randint(0, len(user_projects) - 1) # randomly pick from user's projects
+            project_update = {'name': projects[random_i]['name'], 'project': user_projects[project_i]} if include_project_update else None
+
+            formatted_update = formatUpdate(communityDict['communityId'], location_update, project_update)
+
+            updater.bot.send_message(chat_id=chat_id, text=formatted_update)
+
     j = updater.job_queue
     utc = pytz.utc
     utc.zone
     eastern = timezone('US/Eastern')
 
-    job_daily = j.run_daily(communityUpdate, days=(0, 1, 2, 3, 4, 5, 6), time=datetime.time(hour=17, minute=17, second=00, tzinfo=eastern))
+    job_daily = j.run_daily(communityUpdate, days=(0, 1, 2, 3, 4, 5, 6), time=datetime.time(hour=10, minute=25, second=00, tzinfo=eastern))
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
 
-    # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
+    # Add conversation handler with states
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
