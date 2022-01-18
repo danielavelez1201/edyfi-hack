@@ -62,24 +62,21 @@ app.post('/api/sms', async (req, res) => {
             user.work.update(updates[i + 1])
             break
           case '6':
-            // remove all indexes includes 6. until the end or when 7 is hit 
+            // remove all indexes includes 6. until the end or when 7 is hit
             const newProjects = []
-            const seven = false;
+            const seven = false
             updates.slice(i).forEach((field, i) => {
-                if (field == '7') {
-                  seven = true;
-                }
-                if (!seven) {
-                    newProjects.push(field)
-                }
-                
+              if (field == '7') {
+                seven = true
+              }
+              if (!seven) {
+                newProjects.push(field)
+              }
             })
             user.projects.update(newProjects)
             break
           case '7':
-            twiml.message(
-                `To update the offers you can help with, please visit keeploop.io/update`
-            )
+            twiml.message(`To update the offers you can help with, please visit keeploop.io/update`)
             break
           default:
             break
