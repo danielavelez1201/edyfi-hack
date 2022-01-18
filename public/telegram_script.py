@@ -106,10 +106,50 @@ def cancel(update: Update, context: CallbackContext) -> int:
 
 api_key = config('TELEGRAM_BOT_API_KEY')
 
+def sendUpdateInfoBump(updater) -> None:
+    communities_ref = db.collection(u'communities')
+    for community in communities_ref.stream():
+        # start updates for this community 
+        communityDict = community.reference.get().to_dict()
+
+        # send update to each user
+        if 'users' in communityDict:
+            for user_id in communityDict['users']:
+                user_ref = db.collection(u'users').document(user_id)
+                user_data = user_ref.get().to_dict()
+
+                # format for projects based on if they have projects or not
+                no_projects = len(user_data['projects']) == 0
+                user_projects_1 = "aren't" if no_projects else ''
+                user_projects_2 = 'projects' if no_projects else ''
+                user_projects_3 = '' if no_projects else map(lambda x: f'{x}', user_data['projects'])
+
+                # format for offers
+                formatted_offers = ''
+                offer_formats = {'investors': 'can intro to investors', 'cofounders': 'are searching for cofounders', 'refer': 'can refer to a job', 'hiring': 'are hiring'}
+                offers = user_data['offers']
+                for i in range(len(offers)):
+                    if i == len(offers) - 1: # last in list
+                        formatted_offers += 'and ' + offer_formats[offers[i]]
+                    else:
+                        formatted_offers += offer_formats[offers[i]] + ','
+
+                if 'telegram_id' in user_data:
+                    if user_data['lastUpdated'] <= datetime.date.today - 7889400000 and user_data['lastSent'] <= datetime.date.today - 5259600000:
+                        user_ref.update({'lastSent': datetime.date.today}) # TODO: merge = true?
+                        updater.bot.send_message(chat_id=user_data['telegram_id'], text=f"Hey, {user_data['firstName']}! It's been a few months since you updated your information \
+                        for {communityDict['communityId']}: 1) {user_data['firstName']}  {user_data['lastName']}, 2)  {user_data['email']}, in 3)  {user_data['location']}, \
+                        4) {user_data['role']} at 5) {user_data['work']}, 6) {user_projects_1} working on {user_projects_2} 'projects' {user_projects_3} and you \
+                        7) {formatted_offers}. Want to update any fields (yes/no)?" )
+
+
+def updateInfo(update: Update, context: CallbackContext) -> int:
+    """Starts update info flow."""
+
 def getCommunityInfo(communityDict):
     """Get community telegram users, locations, and projects."""
 
-    telegram_users = [] # [{chat_id: chat_id, name: name, location: location}]
+    telegram_users = [] # [{chat_id: chat_id, name: name, location: location, last_updated: last_updated}]
     locations = dict() # {location: [names]}
     projects = [] # [{name: name, project: project},]
     
@@ -121,6 +161,7 @@ def getCommunityInfo(communityDict):
             if doc_dict: 
                 user_full_name = doc_dict['firstName'] + ' ' + doc_dict['lastName']
                 user_location = doc_dict['location'].lower()
+                user_last_updated = doc_dict['lastUpdated']
 
                 # add to locations grouping
                 locations.setdefault(user_location, []).append(user_full_name)
@@ -133,7 +174,7 @@ def getCommunityInfo(communityDict):
                 if 'telegram_id' in doc_dict: 
                     chat_id = doc_dict['telegram_id']
                     if chat_id:
-                        telegram_users.append({'chat_id': chat_id, 'name': user_full_name, 'location': user_location})
+                        telegram_users.append({'chat_id': chat_id, 'name': user_full_name, 'location': user_location, 'last_updated': user_last_updated})
 
     return {'telegram_users': telegram_users, 'locations': locations, 'projects': projects}
 
@@ -196,14 +237,9 @@ def formatUpdate(communityId, location_update, project_update):
         formatted_location_update = connector + 'ooks like you and ' + location_update['name'] + ' are both in '  + location_update['location'].capitalize() + '.'
         text += formatted_location_update
     
-    return text   
+    return text  
 
-def main() -> None:
-    """Run the bot."""
-
-    # Create the Updater and pass it your bot's token.
-    updater = Updater(token=api_key)
-
+def sendCommunityUpdate(updater) -> None:
     communities_ref = db.collection(u'communities')
     for community in communities_ref.stream():
         # start updates for this community 
@@ -214,6 +250,16 @@ def main() -> None:
         for user in communityInfo['telegram_users']:
             formatted_update = getCommunityUpdateForUser(user, communityInfo, communityDict['communityId'])
             updater.bot.send_message(chat_id=user['chat_id'], text=formatted_update)
+
+
+def main() -> None:
+    """Run the bot."""
+
+    # Create the Updater and pass it your bot's token.
+    updater = Updater(token=api_key)
+
+    sendCommunityUpdate(updater)
+    sendUpdateInfoBump(updater)
 
     j = updater.job_queue
     utc = pytz.utc
@@ -232,6 +278,14 @@ def main() -> None:
             PHONE: [MessageHandler(Filters.regex('[0-9]+'), phone)],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
+    )
+
+    # Update info conversation handler
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('update', updateInfo)],
+        states={
+
+        }
     )
 
     dispatcher.add_handler(conv_handler)
