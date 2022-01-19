@@ -14,8 +14,6 @@ python.stderr.on('data', (data) => {
   console.error(`stderr: ${data}`)
 })
 
-
-
 export default function Landing() {
   const [formData, setFormData] = useState({})
   const [error, setError] = useState('')
