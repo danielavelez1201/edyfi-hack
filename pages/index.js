@@ -60,6 +60,20 @@ export default function Landing() {
 
   return (
     <div className='flex items-center flex-col h-screen bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+      <div
+        className={classNames(
+          'transition-all duration-700 w-max max-w-md bg-white rounded-lg border border-gray-50 drop-shadow py-5 px-5 flex',
+          { 'mt-14': showDemoPopup, visible: showDemoPopup, invisible: !showDemoPopup }
+        )}
+      >
+        <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
+        <h1 className='text-xl font-light text-primary mt-1 mb-1'>Check out our product demo!</h1>
+        <Link href='/newCommunity?demo=true' passHref>
+          <button className='bg-cyan-dark py-2 px-4 ml-3 text-sm text-white rounded  focus:outline-none hover:bg-gray-med '>
+            Start
+          </button>
+        </Link>
+      </div>
       <div className='w-full max-w-md m-auto bg-white rounded-lg drop-shadow py-10 px-16'>
         <div className='flex flex-col items-center mb-4'>
           <h1 className='text-2xl font-medium text-primary mt-4 mb-1 text-center'>Welcome to Loop. </h1>
@@ -109,20 +123,6 @@ export default function Landing() {
             <a className='text-blue hover:underline ml-3'>Log in as user </a>
           </Link>
         </h2>
-      </div>
-      <div
-        className={classNames(
-          'transition-all delay-2850 w-max max-w-md bg-white rounded-lg border border-gray-50 drop-shadow py-5 px-5 flex',
-          { 'mb-10': showDemoPopup, visible: showDemoPopup, invisible: !showDemoPopup }
-        )}
-      >
-        <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
-        <h1 className='text-xl font-light text-primary mt-1 mb-1'>Check out our product demo!</h1>
-        <Link href='/newCommunity?demo=true' passHref>
-          <button className='bg-cyan-dark py-2 px-4 ml-3 text-sm text-white rounded  focus:outline-none hover:bg-gray-med '>
-            Start
-          </button>
-        </Link>
       </div>
     </div>
   )
