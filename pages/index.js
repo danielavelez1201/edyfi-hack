@@ -59,7 +59,7 @@ export default function Landing() {
   }
 
   return (
-    <div className='flex items-center flex-col h-screen bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+    <div className='flex items-center flex-col h-screen w-full bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       <div
         className={classNames(
           'transition-all duration-700 w-max max-w-md bg-white rounded-lg border border-gray-50 drop-shadow py-5 px-5 flex',

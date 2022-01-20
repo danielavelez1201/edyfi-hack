@@ -160,7 +160,7 @@ export default function Home() {
     <div>
       <div className='h-fit min-h-screen justify-center items-center w-full min-w-min py-14 bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
         {router.query.demo === 'true' && (
-          <div className='top-5 ml-10 mt-10 w-max max-w-8xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
+          <div className='ml-10 mt-10 w-max max-w-8xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
             <div className='flex'>
               <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
               <h1 className='text-xl font-light text-primary mt-1 mb-1 '>Here's your new community!</h1>
