@@ -16,11 +16,10 @@ async function textBump(req, res) {
     userCommunities.push(userData)
   })
   let today = new Date().getTime()
-  console.log
 
   userCommunities.forEach(async (user) => {
     if (user.lastUpdated <= today - 7889400000 && user.lastSent <= today - 5259600000) {
-      user.set({ lastSent: today }, { merge: true })
+      user.set({ lastSent: today }, { merge: true }) // not sure this actually changes in the firebase db
       await Twilio.messages
         .create({
           body: `Hey, ${user.firstName}! It's been a few months since you updated your information for ${
