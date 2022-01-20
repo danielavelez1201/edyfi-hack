@@ -11,11 +11,6 @@ from telegram.ext import (
     CallbackContext,
 )
 
-# initializations 
-cred = credentials.Certificate('firebase-key.json')
-firebase_admin.initialize_app(cred)
-db = firestore.client()
-
 # Enable logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -35,8 +30,9 @@ def start(update: Update, context: CallbackContext) -> int:
 
     return 0
 
-def phone(update: Update, context: CallbackContext) -> int:
+def phone(update: Update, context: CallbackContext, db) -> int:
     """Stores the phone number."""
+
     user = update.message.from_user
 
     # get user by phone num and add telegram id 

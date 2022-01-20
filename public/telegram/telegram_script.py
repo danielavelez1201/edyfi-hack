@@ -5,6 +5,8 @@ from firebase_admin import firestore
 from decouple import config
 from pytz import timezone
 import pytz
+import sys
+sys.path.append('/telegram') 
 
 from telegram.ext import (
     Updater,
@@ -13,15 +15,10 @@ from telegram.ext import (
     Filters,
     ConversationHandler,
 )
-from public.telegram.community_updates import sendCommunityUpdate
-from public.telegram.intro import cancel, phone, start
+from community_updates import sendCommunityUpdate
+from intro import cancel, phone, start
 
-from public.telegram.update_profile import UPDATE_QUERIES, askForNewValue, sendUpdateInfoBump, updateWithNewValue
-
-# initializations 
-cred = credentials.Certificate('firebase-key.json')
-firebase_admin.initialize_app(cred)
-db = firestore.client()
+from update_profile import UPDATE_QUERIES, askForNewValue, sendUpdateInfoBump, updateWithNewValue
 
 # Enable logging
 logging.basicConfig(
@@ -34,11 +31,16 @@ api_key = config('TELEGRAM_BOT_API_KEY')
 def main() -> None:
     """Run the bot."""
 
+    # initializations 
+    cred = credentials.Certificate('firebase-key.json')
+    firebase_admin.initialize_app(cred)
+    db = firestore.client()
+
     # Create the Updater and pass it your bot's token.
     updater = Updater(token=api_key)
 
-    sendCommunityUpdate(updater)
-    sendUpdateInfoBump(updater)
+    sendCommunityUpdate(updater, db)
+    sendUpdateInfoBump(updater, db)
 
     j = updater.job_queue
     utc = pytz.utc
@@ -53,7 +55,7 @@ def main() -> None:
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
-            0: [MessageHandler(Filters.regex('[0-9]+'), phone)],
+            0: [MessageHandler(Filters.regex('[0-9]+'), lambda x, y : phone(x, y, db))],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )

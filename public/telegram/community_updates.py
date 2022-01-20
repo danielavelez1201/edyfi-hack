@@ -4,12 +4,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from decouple import config
 
-# initializations 
-cred = credentials.Certificate('firebase-key.json')
-firebase_admin.initialize_app(cred)
-db = firestore.client()
-
-def getCommunityInfo(communityDict):
+def getCommunityInfo(communityDict, db):
     """Get community telegram users, locations, and projects."""
 
     telegram_users = [] # [{chat_id: chat_id, name: name, location: location, last_updated: last_updated}]
@@ -46,7 +41,7 @@ def getCommunityUpdateForUser(user, communityInfo, communityId):
 
     locations = communityInfo['locations']
     projects = communityInfo['projects']
-
+    
     nearby_users = list(filter(lambda x: x != user['name'], locations[user['location']])) # get other users in same location
             
     # LOCATION UPDATE
@@ -97,12 +92,12 @@ def formatUpdate(communityId, location_update, project_update):
     return text  
 
 
-def sendCommunityUpdate(updater) -> None:
+def sendCommunityUpdate(updater, db) -> None:
     communities_ref = db.collection(u'communities')
     for community in communities_ref.stream():
         # start updates for this community 
         communityDict = community.reference.get().to_dict()
-        communityInfo = getCommunityInfo(communityDict)
+        communityInfo = getCommunityInfo(communityDict, db)
 
         # send update to each user
         for user in communityInfo['telegram_users']:

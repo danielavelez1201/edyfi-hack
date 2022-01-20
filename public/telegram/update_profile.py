@@ -9,19 +9,14 @@ from telegram.ext import (
     CallbackContext,
 )
 
-from public.telegram.helpers import convertTodayToJSDate
-
-# initializations 
-cred = credentials.Certificate('firebase-key.json')
-firebase_admin.initialize_app(cred)
-db = firestore.client()
+from helpers import convertTodayToJSDate
 
 PROFILE_FIELDS = {'1 First name': 'firstName', '2 Last name': 'lastName', '3 Location': 'location', '4 Role': 'role', '5 Work': 'work', '6 Projects': 'projects', '7 Offers': 'offers'}
 UPDATE_PROFILE_KEYBOARD = [['1 First name'], ['2 Last name'], ['3 Location'], ['4 Role'], ['5 Work'], ['6 Projects'], ['7 Offers']]
 UPDATE_QUERIES = '^(1 First name|2 Last name|3 Location|4 Role|5 Work|6 Projects|7 Offers)$'
 
 
-def sendUpdateInfoBump(updater) -> None:
+def sendUpdateInfoBump(updater, db) -> None:
     communities_ref = db.collection(u'communities')
     for community in communities_ref.stream():
         # start updates for this community 
