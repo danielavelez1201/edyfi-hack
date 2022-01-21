@@ -48,75 +48,75 @@ async function randomBump(req, res) {
           offers: ['investors', 'cofounders', 'refer', 'hiring'],
           asks: ['investors', 'cofounders', 'refer', 'hiring'],
           role: 'Founder',
-          phoneNum: '385310667',
-          industry: 'creator economy',
+          phoneNum: '13853106667',
+          industry: 'community',
           interests: ['creative', 'entrepreneurship', 'technology', 'design', 'art'],
           targetedBump: true
         },
         345345
       ],
+      //   [
+      //     {
+      //       lastUpdated: 1642182572284,
+      //       location: 'SF',
+      //       projects: ['home.joinimpress.com', 'metaphrasenft.com', 'keeploop.io'],
+      //       headers: { token: '1234', communityId: 'odc', phoneNum: '3853106667' },
+      //       work: 'Google',
+      //       lastName: 'Naihin',
+      //       communityIds: ['odc'],
+      //       updated: '1/13/2022',
+      //       email: 'silen.naihin@gmail.com',
+      //       firstName: 'Silen',
+      //       offers: ['investors'],
+      //       asks: ['hiring'],
+      //       role: 'Founder',
+      //       phoneNum: '385310667',
+      //       industry: 'Web3',
+      //       interests: ['entrepreneurship'],
+      //       targetedBump: true
+      //     },
+      //     345345324
+      //   ],
+      //   [
+      //     {
+      //       lastUpdated: 1642182572284,
+      //       location: 'SF',
+      //       projects: ['home.joinimpress.com', 'metaphrasenft.com', 'keeploop.io'],
+      //       headers: { token: '1234', communityId: 'odc', phoneNum: '3853106667' },
+      //       work: 'Facebook',
+      //       lastName: 'Naihin',
+      //       communityIds: ['odc'],
+      //       updated: '1/13/2022',
+      //       email: 'silen.naihin@gmail.com',
+      //       firstName: 'Silen',
+      //       offers: ['investors', 'cofounders'],
+      //       asks: ['investors', 'cofounders'],
+      //       role: 'Engineer',
+      //       phoneNum: '385310667',
+      //       industry: 'Web3',
+      //       interests: ['creative', 'entrepreneurship'],
+      //       targetedBump: true
+      //     },
+      //     345345123
+      //   ],
       [
         {
           lastUpdated: 1642182572284,
-          location: 'SF',
+          location: 'Boston',
           projects: ['home.joinimpress.com', 'metaphrasenft.com', 'keeploop.io'],
           headers: { token: '1234', communityId: 'odc', phoneNum: '3853106667' },
-          work: 'Google',
-          lastName: 'Naihin',
+          work: 'Loop',
+          lastName: 'Velez',
           communityIds: ['odc'],
           updated: '1/13/2022',
           email: 'silen.naihin@gmail.com',
-          firstName: 'Silen',
-          offers: ['investors'],
-          asks: ['hiring'],
-          role: 'Founder',
-          phoneNum: '385310667',
-          industry: 'Web3',
-          interests: ['entrepreneurship'],
-          targetedBump: true
-        },
-        345345324
-      ],
-      [
-        {
-          lastUpdated: 1642182572284,
-          location: 'SF',
-          projects: ['home.joinimpress.com', 'metaphrasenft.com', 'keeploop.io'],
-          headers: { token: '1234', communityId: 'odc', phoneNum: '3853106667' },
-          work: 'Facebook',
-          lastName: 'Naihin',
-          communityIds: ['odc'],
-          updated: '1/13/2022',
-          email: 'silen.naihin@gmail.com',
-          firstName: 'Silen',
-          offers: ['investors', 'cofounders'],
-          asks: ['investors', 'cofounders'],
-          role: 'Engineer',
-          phoneNum: '385310667',
-          industry: 'Web3',
-          interests: ['creative', 'entrepreneurship'],
-          targetedBump: true
-        },
-        345345123
-      ],
-      [
-        {
-          lastUpdated: 1642182572284,
-          location: 'Toronto',
-          projects: ['home.joinimpress.com', 'metaphrasenft.com', 'keeploop.io'],
-          headers: { token: '1234', communityId: 'odc', phoneNum: '3853106667' },
-          work: 'Impress',
-          lastName: 'Naihin',
-          communityIds: ['odc'],
-          updated: '1/13/2022',
-          email: 'silen.naihin@gmail.com',
-          firstName: 'Silen',
+          firstName: 'Daniela',
           offers: ['investors', 'cofounders', 'refer', 'hiring'],
           asks: ['investors', 'cofounders', 'refer', 'hiring'],
           role: 'Founder',
-          phoneNum: '385310667',
-          industry: 'creator economy',
-          interests: ['creative', 'entrepreneurship', 'technology', 'design', 'art'],
+          phoneNum: '19549559235',
+          industry: 'community',
+          interests: ['entrepreneurship', 'technology'],
           targetedBump: true
         },
         345340
@@ -285,56 +285,77 @@ async function randomBump(req, res) {
       const person1 = match[0][0]
       const person2 = match[1][0]
       const common = match[2]
+      let conversationSID = ''
       //   person1.set({ lastSent: today }, { merge: true })
       //   person2.set({ lastSent: today }, { merge: true })
 
-      await Twilio.conversations
-        .conversations('CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+      await Twilio.conversations.conversations
         .create({ friendlyName: `${person1.communityId} Connection` })
+        .then((conversation) => {
+          conversationSID = conversation.sid
+        })
+
+      await Twilio.conversations
+        .conversations(conversationSID)
         .participants.create({
           identity: 'Loop Bot',
-          'messagingBinding.projectedAddress': '+15593541895',
-          'messagingBinding.address': '+3853106667',
-          'messagingBinding.address': '+9549559235'
+          'messagingBinding.projectedAddress': '+15593541895'
         })
+        .then((conversation) => console.log(conversation.sid))
+
+      await Twilio.conversations
+        .conversations(conversationSID)
+        .participants.create({ 'messagingBinding.address': `+${person1.phoneNum}` })
+        .then((participant) => console.log(participant.sid))
+
+      await Twilio.conversations
+        .conversations(conversationSID)
+        .participants.create({ 'messagingBinding.address': `+${person2.phoneNum}` })
+        .then((participant) => console.log(participant.sid))
+
+      await Twilio.conversations
+        .conversations(conversationSID)
         .messages.create({
           body: `Hi, Loop Bot here! ${person1.firstName} meet ${person2.firstName}! We're connecting you because${
             common.asksUser1 !== undefined
               ? ` ${person2.firstName} can help with${common.asksUser1.map(
                   (ask) =>
                     `${
-                      ask == 'investors'
+                      ask == 'investors' && common.asksUser1.length === 1
+                        ? ` finding investors.`
+                        : ask == 'investors'
                         ? ` finding investors`
                         : ask == 'cofounders'
                         ? `${
                             common.asksUser1[common.asksUser1.length - 1] === 'cofounders' &&
                             common.asksUser1.length !== 1
-                              ? ' and '
-                              : ' '
-                          }finding a co-founder`
+                              ? ' and finding a co-founder.'
+                              : ' finding a co-founder'
+                          }`
                         : ask == 'refer'
                         ? `${
                             common.asksUser1[common.asksUser1.length - 1] === 'refer' && common.asksUser1.length !== 1
-                              ? ' and '
-                              : ' '
-                          }job referrals`
+                              ? ' and job referrals.'
+                              : ' job referrals'
+                          }`
                         : ask == 'hiring'
                         ? `${
                             common.asksUser1[common.asksUser1.length - 1] === 'hiring' && common.asksUser1.length !== 1
-                              ? ' and '
-                              : ' '
-                          }hiring`
+                              ? ' and hiring.'
+                              : ' hiring'
+                          }`
                         : ''
                     }`
-                )}.`
+                )}`
               : ''
-          }  
-          ${
+          }${
             common.asksUser2 !== undefined
               ? ` ${person1.firstName} can help with${common.asksUser2.map(
                   (ask) =>
                     `${
-                      ask == 'investors'
+                      ask == 'investors' && common.asksUser1.length === 1
+                        ? ` finding investors.`
+                        : ask == 'investors'
                         ? ` finding investors`
                         : ask == 'cofounders'
                         ? `${
@@ -359,9 +380,7 @@ async function randomBump(req, res) {
                     }`
                 )}.`
               : ''
-          }
-          ${common.location !== undefined ? `You are both located in ${common.location}` : ''}
-          ${
+          }${common.location !== undefined ? `You are both located in ${common.location}` : ''}${
             common.industry !== undefined && common.location !== undefined && common.role !== undefined
               ? `, operate in ${common.industry},`
               : common.industry !== undefined && common.location !== undefined && common.role === undefined
@@ -369,22 +388,22 @@ async function randomBump(req, res) {
               : common.industry !== undefined && common.location === undefined && common.role === undefined
               ? `You both operate in ${common.industry}.`
               : ''
-          }
-          ${
+          }${
             common.role !== undefined && common.industry !== undefined
-              ? ` and are ${common.role}s.`
+              ? ` and are ${common.role}s`
               : common.role !== undefined && common.industry === undefined && common.location === undefined
-              ? `You are both a ${common.role}.`
+              ? `You are both a ${common.role}`
               : ''
-          } 
-          ${
+          }. ${
             common.interests !== undefined
               ? `You also have a shared interest in${common.interests.map((interest) => ` ${interest}`)}`
               : ''
-          }. I worked hard to finally make this happen so I hope it'll be useful 😊`,
+          }I worked hard to finally make this happen so I hope it'll be useful 😊`,
           author: 'Loop Bot'
         })
-        .then((conversation) => console.log(conversation.sid))
+        .then((message) => console.log(message.sid))
+
+      await Twilio.conversations.conversations(conversationSID).remove()
     })
   })
 }
