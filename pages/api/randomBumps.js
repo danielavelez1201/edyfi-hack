@@ -20,9 +20,7 @@ async function randomBump(req, res) {
   const userCommunities = []
   const uniqueCommunityIds = new Set(communityIds)
 
-  let uniqueCommunityIdssss = ['odc']
-
-  uniqueCommunityIdssss.forEach(async (community) => {
+  uniqueCommunityIds.forEach(async (community) => {
     const q = query(collection(db, 'users'), where('communityIds', 'array-contains', community))
     const users = await getDocs(q)
 
@@ -32,102 +30,10 @@ async function randomBump(req, res) {
       userCommunities.push([userData, userId])
     })
 
-    let userCommunitiesss = [
-      [
-        {
-          lastUpdated: 1642182572284,
-          location: 'Toronto',
-          projects: ['home.joinimpress.com', 'metaphrasenft.com', 'keeploop.io'],
-          headers: { token: '1234', communityId: 'odc', phoneNum: '3853106667' },
-          work: 'Impress',
-          lastName: 'Naihin',
-          communityIds: ['odc'],
-          updated: '1/13/2022',
-          email: 'silen.naihin@gmail.com',
-          firstName: 'Silen',
-          offers: ['investors', 'cofounders', 'refer', 'hiring'],
-          asks: ['investors', 'cofounders', 'refer', 'hiring'],
-          role: 'Founder',
-          phoneNum: '13853106667',
-          industry: 'community',
-          interests: ['creative', 'entrepreneurship', 'technology', 'design', 'art'],
-          targetedBump: true
-        },
-        345345
-      ],
-      //   [
-      //     {
-      //       lastUpdated: 1642182572284,
-      //       location: 'SF',
-      //       projects: ['home.joinimpress.com', 'metaphrasenft.com', 'keeploop.io'],
-      //       headers: { token: '1234', communityId: 'odc', phoneNum: '3853106667' },
-      //       work: 'Google',
-      //       lastName: 'Naihin',
-      //       communityIds: ['odc'],
-      //       updated: '1/13/2022',
-      //       email: 'silen.naihin@gmail.com',
-      //       firstName: 'Silen',
-      //       offers: ['investors'],
-      //       asks: ['hiring'],
-      //       role: 'Founder',
-      //       phoneNum: '385310667',
-      //       industry: 'Web3',
-      //       interests: ['entrepreneurship'],
-      //       targetedBump: true
-      //     },
-      //     345345324
-      //   ],
-      //   [
-      //     {
-      //       lastUpdated: 1642182572284,
-      //       location: 'SF',
-      //       projects: ['home.joinimpress.com', 'metaphrasenft.com', 'keeploop.io'],
-      //       headers: { token: '1234', communityId: 'odc', phoneNum: '3853106667' },
-      //       work: 'Facebook',
-      //       lastName: 'Naihin',
-      //       communityIds: ['odc'],
-      //       updated: '1/13/2022',
-      //       email: 'silen.naihin@gmail.com',
-      //       firstName: 'Silen',
-      //       offers: ['investors', 'cofounders'],
-      //       asks: ['investors', 'cofounders'],
-      //       role: 'Engineer',
-      //       phoneNum: '385310667',
-      //       industry: 'Web3',
-      //       interests: ['creative', 'entrepreneurship'],
-      //       targetedBump: true
-      //     },
-      //     345345123
-      //   ],
-      [
-        {
-          lastUpdated: 1642182572284,
-          location: 'Boston',
-          projects: ['home.joinimpress.com', 'metaphrasenft.com', 'keeploop.io'],
-          headers: { token: '1234', communityId: 'odc', phoneNum: '3853106667' },
-          work: 'Loop',
-          lastName: 'Velez',
-          communityIds: ['odc'],
-          updated: '1/13/2022',
-          email: 'silen.naihin@gmail.com',
-          firstName: 'Daniela',
-          offers: ['investors', 'cofounders', 'refer', 'hiring'],
-          asks: ['investors', 'cofounders', 'refer', 'hiring'],
-          role: 'Founder',
-          phoneNum: '19549559235',
-          industry: 'community',
-          interests: ['entrepreneurship', 'technology'],
-          targetedBump: true
-        },
-        345340
-      ]
-    ]
-
     const matchedUsers = [] // [[user1,id],[user2,id2],{match criteria}]
-    userCommunitiesss.forEach(async (user, upperIndex) => {
-      console.log('user ______________', upperIndex)
+    userCommunities.forEach(async (user, upperIndex) => {
+    //   console.log('user ______________', upperIndex)
       if (user[0].targetedBump === true) {
-        // ALTERNATE EVERY 2 WEEKS
 
         if (matchedUsers.length === 0 || matchedUsers.filter(([a, b, c]) => b === null).length === 0) {
           // checks if array is empty or all matched up
@@ -135,7 +41,7 @@ async function randomBump(req, res) {
         } else {
           // match based on ask/offer and industry
           matchedUsers.forEach((possible, i) => {
-            console.log('possible ______________', i, possible[0][1])
+            // console.log('possible ______________', i, possible[0][1])
             let allPossiblesPushed = false
             if (possible[1] === null) {
               const possibleMatches = []
@@ -163,25 +69,21 @@ async function randomBump(req, res) {
                   // offer/ask & industry & location and matches them
                   matchedUsers[i][1] = user
                   matched = true
-                  //   if (i === matchedUsers.length - 1 && matchedUsers.length < userCommunitiesss.length / 2) {
-                  //       // only need to splice if we
-                  //     userCommunitiesss.splice(upperIndex, 1)
-                  //   }
 
-                  // user[0].set(
-                  //   {
-                  //     prevMatches:
-                  //       user[0].prevMatches !== undefined ? [...user[0].prevMatches, possible[0][1]] : [possible[0][1]]
-                  //   },
-                  //   { merge: true }
-                  // ) // CHECK FIREBASE DB IF IT CHANGES
-                  // possible[0][0].set(
-                  //   {
-                  //     prevMatches:
-                  //       possible[0][0].prevMatches !== undefined ? [...possible[0][0].prevMatches, user[1]] : [user[1]]
-                  //   },
-                  //   { merge: true }
-                  // ) // CHECK FIREBASE DB IF IT CHANGES
+                  user[0].set(
+                    {
+                      prevMatches:
+                        user[0].prevMatches !== undefined ? [...user[0].prevMatches, possible[0][1]] : [possible[0][1]]
+                    },
+                    { merge: true }
+                  ) // CHECK FIREBASE DB IF IT CHANGES
+                  possible[0][0].set(
+                    {
+                      prevMatches:
+                        possible[0][0].prevMatches !== undefined ? [...possible[0][0].prevMatches, user[1]] : [user[1]]
+                    },
+                    { merge: true }
+                  ) // CHECK FIREBASE DB IF IT CHANGES
                   checkMatches.forEach((field, x) => {
                     if (field && x === 0) {
                       // if offers/asks match
@@ -214,7 +116,7 @@ async function randomBump(req, res) {
                   possibleMatches.push([score, user, checkMatches])
                   if (
                     matchedUsers.length === i ||
-                    (i === matchedUsers.length - 1 && matchedUsers.length < userCommunitiesss.length / 2)
+                    (i === matchedUsers.length - 1 && matchedUsers.length < userCommunities.length / 2)
                   ) {
                     // make sure all scores are compared, unless it's the end and there's more room (or the above if statement was true for any of the possibles)
                     allPossiblesPushed = true
@@ -226,7 +128,7 @@ async function randomBump(req, res) {
                 !matched &&
                 allPossiblesPushed &&
                 i === matchedUsers.length - 1 &&
-                matchedUsers.length < userCommunitiesss.length / 2
+                matchedUsers.length < userCommunities.length / 2
               ) {
                 // if we reach the end but there's more room
                 matchedUsers.push([user, null, {}])
@@ -234,7 +136,7 @@ async function randomBump(req, res) {
                 allPossiblesPushed &&
                 !matched &&
                 i === matchedUsers.length - 1 &&
-                matchedUsers.length >= userCommunitiesss.length / 2
+                matchedUsers.length >= userCommunities.length / 2
               ) {
                 // if we reach the end but no more room
                 possibleMatches.sort((a, b) => {
@@ -286,8 +188,8 @@ async function randomBump(req, res) {
       const person2 = match[1][0]
       const common = match[2]
       let conversationSID = ''
-      //   person1.set({ lastSent: today }, { merge: true })
-      //   person2.set({ lastSent: today }, { merge: true })
+      person1.set({ lastSent: today }, { merge: true })
+      person2.set({ lastSent: today }, { merge: true })
 
       await Twilio.conversations.conversations
         .create({ friendlyName: `${person1.communityId} Connection` })
@@ -385,8 +287,8 @@ async function randomBump(req, res) {
               ? `, operate in ${common.industry},`
               : common.industry !== undefined && common.location !== undefined && common.role === undefined
               ? ` and operate in ${common.industry}.`
-              : common.industry !== undefined && common.location === undefined && common.role === undefined
-              ? `You both operate in ${common.industry}.`
+              : common.industry !== undefined && common.location === undefined
+              ? `You both operate in ${common.industry}`
               : ''
           }${
             common.role !== undefined && common.industry !== undefined
@@ -396,9 +298,16 @@ async function randomBump(req, res) {
               : ''
           }. ${
             common.interests !== undefined
-              ? `You also have a shared interest in${common.interests.map((interest) => ` ${interest}`)}`
+              ? `You also have a shared interest in${common.interests.map(
+                  (interest) =>
+                    `${
+                      interest === common.interests[common.interests.length - 1] &&
+                      common.interests.length !== 1 &&
+                      ' and'
+                    } ${interest}`
+                )}`
               : ''
-          }I worked hard to finally make this happen so I hope it'll be useful 😊`,
+          }. I worked hard to make this happen - I hope it'll be useful 😊`,
           author: 'Loop Bot'
         })
         .then((message) => console.log(message.sid))
