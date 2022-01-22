@@ -34,7 +34,6 @@ const client = require('twilio')(accountSid, authToken)
  * => Open up other form inputs
  */
 async function handler(req, res) {
-  console.log('in api')
   // Get community
   console.log(req.body)
   const communityId = req.body.headers.communityId
@@ -66,9 +65,10 @@ async function handler(req, res) {
 
   // User query with google info
   let googleAccExists = googleUser !== undefined
+  let userQueryByGoogleDocs = null
   if (googleAccExists) {
     const userQueryByGoogle = query(collection(db, 'users'), where('googleUser', '==', googleUser))
-    const userQueryByGoogleDocs = await getDocs(userQueryByGoogle)
+    userQueryByGoogleDocs = await getDocs(userQueryByGoogle)
     googleAccExists = !userQueryByGoogleDocs.empty
   }
 
@@ -104,7 +104,7 @@ async function handler(req, res) {
   if (googleAccExists) {
     const userByGoogleDoc = userQueryByGoogleDocs.docs[0]
     const userByGoogle = userByGoogleDoc.data()
-    const googleAccId = userByGoogle.ref.id
+    const googleAccId = userByGoogleDoc.ref.id
     isGoogleAccInCommunity = community.users.includes(googleAccId)
 
     // User existed with different phone number
