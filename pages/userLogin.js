@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useUser } from '../firebase/useUser'
 import axios from 'axios'
 import { signInWithGoogle } from '../firebase/clientApp'
-import Google from '../img/Google.png'
+import Google from '../public/Google.png'
 
 export default function UserLogin() {
   const router = useRouter()
