@@ -32,9 +32,8 @@ async function randomBump(req, res) {
 
     const matchedUsers = [] // [[user1,id],[user2,id2],{match criteria}]
     userCommunities.forEach(async (user, upperIndex) => {
-    //   console.log('user ______________', upperIndex)
+      //   console.log('user ______________', upperIndex)
       if (user[0].targetedBump === true) {
-
         if (matchedUsers.length === 0 || matchedUsers.filter(([a, b, c]) => b === null).length === 0) {
           // checks if array is empty or all matched up
           matchedUsers.push([user, null, {}])
