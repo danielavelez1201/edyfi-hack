@@ -1,9 +1,10 @@
-import sha256 from 'crypto-js/sha256'
+import md5 from 'crypto-js/sha256'
 
 export function hashcode(input) {
-  console.log(input)
+  console.log('hashcode of', input)
   if (input === null || input === undefined) {
     return ''
   }
-  return sha256(input)
+  console.log('is', md5(input).toString())
+  return md5(input).toString()
 }
