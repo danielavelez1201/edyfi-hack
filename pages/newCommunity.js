@@ -6,6 +6,7 @@ import Google from '../img/Google.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import { hashcode } from './api/helpers'
+import classNames from 'classNames'
 
 export default function NewCommunity() {
   const router = useRouter()
@@ -44,16 +45,21 @@ export default function NewCommunity() {
   }
 
   return (
-    <div className='h-screen flex bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+    <div className='h-screen flex items-center flex-col bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
       {demo && (
-        <div className='absolute top-5 ml-10 mt-10 w-max max-w-5xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
+        <div
+          className={classNames(
+            'transition-all items-start duration-700 w-max max-w-md bg-white rounded-lg border border-gray-50 drop-shadow py-5 px-5 flex flex-col',
+            { 'mt-14': demo, visible: demo, invisible: !demo }
+          )}
+        >
           <div className='flex'>
             <h1 className='text-xl animate-bounce pr-2'>👋 </h1>
             <h1 className='text-xl font-light text-primary mt-1 mb-1 '>
               Let's create a sample community of your choosing, and connect your google account. Click create community.
             </h1>
           </div>
-          <button className='ml-6 hover:underline'>
+          <button className='ml-7 hover:underline'>
             <Link href='/home?communityId=demo-starter&token=81dc9bdb52d03dc28036dbd8313ed055&demo=true' passHref>
               <h3 className='text-md font-light text-primary mt-1 mb-1'>Prefer using a sample starter community?</h3>
             </Link>
