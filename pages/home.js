@@ -50,6 +50,10 @@ export default function Home() {
     await fetch('api/textBump').then((res) => res.json())
   }
 
+  async function sendRandBumps() {
+    await fetch('api/randomBumps').then((res) => res.json())
+  }
+
   function switchCommunity(community) {
     setCommunityId(community)
     setToken('')
@@ -217,6 +221,16 @@ export default function Home() {
                   </button>
                 )}
               </div> */}
+              <div className='flex items-center'>
+                {userList.length !== 0 && (
+                  <button
+                    onClick={() => sendRandBumps()}
+                    className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+                  >
+                    Send matching text
+                  </button>
+                )}
+              </div>
               {userList.length > 0 && (
                 <main className='max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
                   <div className=''></div>
