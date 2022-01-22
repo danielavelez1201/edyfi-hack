@@ -18,7 +18,9 @@
     "babel": "^6.23.0",
     "body-parser": "^1.18.3",
     "classnames": "^2.3.1",
-    "crypto": "^1.0.1",
+    "crypto-hash": "^2.0.1",
+    "crypto-js": "^4.1.1",
+    "crypto-md5": "^1.0.0",
     "date-fns": "^2.28.0",
     "dateformat": "^5.0.2",
     "express": "^4.16.4",
@@ -51,6 +53,7 @@
     "tls": "^0.0.1",
     "twilio": "^3.70.0",
     "uuid": "^8.3.2",
+    "webpack": "^4.43.0",
     "yup": "^0.32.11",
     "yup-phone": "^1.2.19"
   },

@@ -1,6 +1,10 @@
 module.exports = {
-  reactStrictMode: true
-  // webpack5: true,
+  resolve: {
+    fallback: {
+      crypto: require.resolve('crypto-browserify')
+    }
+  },
+  webpack5: false
   // webpack: (config) => {
   //   config.resolve.fallback = { fs: false, crypto: false }
   //   //   config.experiments = { topLevelAwait: true }
