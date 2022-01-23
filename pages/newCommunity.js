@@ -6,7 +6,7 @@ import Google from '../public/Google.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import { hashcode } from './api/helpers'
-import classNames from 'classNames'
+import classNames from 'classnames'
 
 export default function NewCommunity() {
   const router = useRouter()
