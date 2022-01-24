@@ -33,6 +33,7 @@ export default function Home() {
   const [communities, setCommunities] = useState([])
   const [communityBoardContent, setCommunityBoardContent] = useState({ text: '', links: [], events: [] })
   const [editingCommunityBoard, setEditingCommunityBoard] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const communityBoardProps = {
     content: communityBoardContent,
@@ -121,6 +122,12 @@ export default function Home() {
       }
     }
 
+    function checkAdmin(adminGoogleUserId) {
+      console.log('in check')
+      console.log(adminGoogleUserId)
+      return user && user.id === adminGoogleUserId
+    }
+
     setCommunityId(router.query.communityId)
     setToken(router.query.token)
 
@@ -129,7 +136,10 @@ export default function Home() {
       // setUserList([fakeUser])
       // setOriginalData([fakeUser])
       setLoading(false)
-      await fetch('api/getData', { method: 'POST', headers: { communityId: communityId, googleUser: user } })
+      await fetch('api/getData', {
+        method: 'POST',
+        headers: { communityId: communityId, googleUserId: user ? user.id : undefined }
+      })
         .then((res) => res.json())
         .then((result) => {
           if (result.length === 0) {
@@ -137,6 +147,7 @@ export default function Home() {
           } else {
             console.log('API RESULT', result)
             console.log('token', result.communityToken)
+            setIsAdmin(checkAdmin(result.adminGoogleUserId))
             const auth = checkAuth(result.communityToken)
             if (auth) {
               setUserList(result.users)
@@ -222,7 +233,7 @@ export default function Home() {
                 )}
               </div> */}
               <div className='flex items-center'>
-                {userList.length !== 0 && (
+                {userList.length !== 0 && isAdmin && (
                   <button
                     onClick={() => sendRandBumps()}
                     className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '

@@ -3,11 +3,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { hashcode } from './api/helpers'
 import { GoogleSignIn } from '../components/googleSignIn'
+import { useUser } from '../firebase/useUser'
 
 export default function AdminLogin() {
   const router = useRouter()
   const [formData, setFormData] = useState({})
   const [error, setError] = useState('')
+  const user = useUser()
 
   function updateFormData(e) {
     setFormData({

@@ -29,7 +29,7 @@ export default function NewCommunity() {
     if (user) {
       await fetch('api/createCommunity', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', userId: user.uid },
+        headers: { 'Content-Type': 'application/json', googleUser: user },
         body: JSON.stringify({ formData })
       }).then((res) => {
         if (res.ok) {

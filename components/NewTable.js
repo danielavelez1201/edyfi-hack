@@ -107,7 +107,6 @@ export function OfferState({ value }) {
         value.map((value) => {
           const item = HelpOffers.filter((x) => x.value === value)[0]
           const body = 'Hi from Loop! Heard you could help out with ' + `"` + item.text + `"...`
-          console.log(item)
           return (
             <a
               href={`mailto:` + 'dvelez@mit.edu' + `?subject=Loop ask&body=` + body}
