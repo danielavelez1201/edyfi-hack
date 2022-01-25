@@ -3,7 +3,7 @@ import db from '../../firebase/clientApp'
 
 async function handler(req, res) {
   const communities = [req.headers.communityId]
-  console.log(req.headers.googleuser)
+  console.log(req.headers.googleuserid)
 
   // We're not returning all communities for now to focus on other features first
 
@@ -45,10 +45,19 @@ async function handler(req, res) {
       communityWithAddedUsers.push(userId)
     }
   }
-  console.log('W ADDED USERS', communityWithAddedUsers)
-  updateDoc(communityDocs.docs[0].ref, { users: communityWithAddedUsers })
 
-  res.status(200).json({ communityToken: communityDoc.communityToken, users: userData })
+  console.log(req.headers)
+  console.log('google user in api', req.headers.googleuserid)
+  // can remove once community admins are updated
+  if (req.headers.googleuserid !== undefined) {
+    updateDoc(communityDocs.docs[0].ref, { adminGoogleUserId: req.headers.googleuserid })
+  }
+
+  res.status(200).json({
+    communityToken: communityDoc.communityToken,
+    users: userData,
+    adminGoogleUserId: req.headers.googleuserid
+  })
 }
 
 export default handler
