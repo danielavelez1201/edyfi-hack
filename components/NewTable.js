@@ -74,10 +74,17 @@ export function SelectColumnFilter({ column: { filterValue, setFilter, preFilter
   )
 }
 
+export const HelpAsks = [
+  { value: 'investors', text: 'Looking for investors', emoji: '🤑', color: 'bg-green-100' },
+  { value: 'cofounders', text: 'Searching for co-founders', emoji: '👯', color: 'bg-yellow-100' },
+  { value: 'refer', text: 'Job hunting', emoji: '➡️', color: 'bg-purple-100' },
+  { value: 'hiring', text: 'Hiring', emoji: '👀', color: 'bg-blue-100' }
+]
+
 export const HelpOffers = [
-  { value: 'investors', text: 'Intro to investors', emoji: '🤑', color: 'bg-green-100' },
-  { value: 'cofounders', text: 'Intro to potential co-founders', emoji: '👯', color: 'bg-yellow-100' },
-  { value: 'refer', text: 'Refer to company', emoji: '➡️', color: 'bg-purple-100' },
+  { value: 'investors', text: 'Connect to investors', emoji: '💸', color: 'bg-green-100' },
+  { value: 'cofounders', text: 'Connect potential co-founders', emoji: '💞', color: 'bg-yellow-100' },
+  { value: 'refer', text: 'Refer to company', emoji: '✅', color: 'bg-purple-100' },
   { value: 'hiring', text: 'Relay hiring message', emoji: '📣', color: 'bg-blue-100' }
 ]
 

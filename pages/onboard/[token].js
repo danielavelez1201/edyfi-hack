@@ -13,9 +13,13 @@ import Image from 'next/image'
 import { signInWithGoogle } from '../../firebase/clientApp'
 import { useUser } from '../../firebase/useUser'
 import Google from '../../public/Google.png'
+import filledTriangle from '../../public/filled-triangle.png'
 import Link from 'next/link'
 import { HelpOffers } from '../../components/NewTable'
+import { HelpAsks } from '../../components/NewTable'
 import { classNames } from '../../components/shared/Utils'
+import { Collapse } from 'react-collapse'
+import Autosuggest from 'react-autosuggest'
 
 export default function Onboarding() {
   const router = useRouter()
@@ -28,7 +32,14 @@ export default function Onboarding() {
   const [error, setError] = useState('')
   const [phoneNum, setPhoneNum] = useState(null)
   const [token, setToken] = useState(null)
+
   const [offers, setOffers] = useState([])
+  const [asks, setAsks] = useState([])
+  const [offersDropdown, setOffersDropdown] = useState(false)
+  const [asksDropdown, setAsksDropdown] = useState(false)
+
+  const [industries, setIndustries] = useState([])
+  const [interests, setInterests] = useState([])
 
   const [showForm, setShowForm] = useState(false)
 
@@ -36,11 +47,67 @@ export default function Onboarding() {
 
   const googleTextStyle = user ? 'text-center ml-5 text-cyan' : 'text-center ml-5'
 
+  useEffect(async () => {
+    await fetch('/api/autocomplete/getIndustries', {
+      method: 'POST',
+      headers: { communityId: communityId }
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setIndustries(result)
+      })
+
+    await fetch('/api/autocomplete/getInterests', {
+      method: 'POST',
+      headers: { communityId: communityId }
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setInterests(result)
+      })
+  }, [])
+
+  const interestsUpdate = () => {
+    await axios
+      .post('/api/autocomplete/industries', {
+        industry: industry
+      })
+      .then((res) => {
+        setError('')
+        if (res.status === 200) {
+          console.log('res status 200')
+          console.log(token)
+          console.log(hashcode(token))
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.data) {
+          console.log(error.response.data)
+          setError(error.response.data)
+        }
+      })
+  }
+
+  const validateLink = () => {
+    let pattern = (pattern = new RegExp(
+      '^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', // fragment locator
+      'i'
+    ))
+    return !pattern.test(newProject)
+  }
+
   function projectAdd() {
     if (projects.includes(newProject)) {
       setButtonElement('Project already exists!')
     } else if (newProject === '') {
       setButtonElement('Enter a project')
+    } else if (validateLink()) {
+      setButtonElement('Not a valid link')
     } else {
       setProjects([...projects, newProject])
       setButtonElement('')
@@ -66,6 +133,7 @@ export default function Onboarding() {
         ...values,
         headers: { communityId: communityId, googleUser: user, phoneNum: phoneNum, token: token },
         offers: offers,
+        asks: asks,
         projects: projects,
         updated: new Date().toLocaleString().split(',')[0]
       })
@@ -90,6 +158,24 @@ export default function Onboarding() {
           setError(error.response.data)
         }
       })
+  }
+
+  const offerClick = (e, offer) => {
+    if (offers.includes(offer.value)) {
+      setOffers(offers.filter((item) => item !== offer.value))
+    } else {
+      setOffers([...offers, offer.value])
+    }
+  }
+
+  const asksClick = (e, ask) => {
+    if (asks.includes(ask.value)) {
+      setAsks(asks.filter((item) => item !== ask.value))
+      console.log(asks.filter((item) => item !== ask.value))
+    } else {
+      setAsks([...asks, ask.value])
+      console.log([...asks, ask.value])
+    }
   }
 
   const requiredError = 'Required'
@@ -120,8 +206,11 @@ export default function Onboarding() {
               location: '',
               work: '',
               role: '',
+              industry: '',
               projects: [],
-              offers: []
+              offers: [],
+              asks: [],
+              interests: []
             }}
             validationSchema={Yup.object({
               firstName: Yup.string().max(40, charError).required(requiredError),
@@ -130,7 +219,8 @@ export default function Onboarding() {
               //phone: Yup.string().phone('Enter a valid phone including +country code').required(requiredError),
               location: Yup.string().max(40, charError).required(requiredError),
               work: Yup.string().max(40, charError).required(requiredError),
-              role: Yup.string().max(40, charError).required(requiredError)
+              role: Yup.string().max(40, charError).required(requiredError),
+              industry: Yup.string().max(40, charError).required(requiredError)
             })}
             onSubmit={async (values, { setSubmitting }) => {
               console.log('in onSubmit')
@@ -246,7 +336,13 @@ export default function Onboarding() {
                       placeholder='Role'
                       className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
                     />
-
+                    <TextInput
+                      label='Industry'
+                      name='industry'
+                      type='text'
+                      placeholder='Industry'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
                     <div className='mr-auto'>
                       {projects.map((project) => (
                         <a key={project} href={project} className='underline'>
@@ -265,7 +361,7 @@ export default function Onboarding() {
                     {addProject ? (
                       <button
                         style={{ border: '1px solid #1d4ed8' }}
-                        className='py-1 mb-3 mr-auto px-2 text-sm rounded focus:outline-none focus:border-green-dark hover:bg-blue-hover'
+                        className='py-1 font-bold mb-3 mr-auto px-2 text-sm rounded focus:outline-none focus:border-green-dark hover:bg-blue-hover'
                         onClick={addCard}
                       >
                         Add a project <span style={{ fontSize: '18px' }}>+</span>
@@ -281,31 +377,65 @@ export default function Onboarding() {
                       />
                     )}
                     <div className='py-3'>
-                      {HelpOffers.map((offer) => {
-                        return (
-                          <button
-                            key={offer.text}
-                            onClick={() => {
-                              if (offers.includes(offer.value)) {
-                                setOffers(offers.filter((item) => item !== offer.value))
-                              } else {
-                                setOffers([...offers, offer.value])
-                              }
-                            }}
-                          >
+                      <div
+                        onClick={() => setOffersDropdown(!offersDropdown)}
+                        className='cursor-pointer flex items-center'
+                      >
+                        <div className='font-bold ml-1 mr-2'>Offers</div>
+                        <div style={{ transform: offersDropdown ? 'rotate(180deg)' : '' }}>
+                          <div className={`${offersDropdown && 'hidden'} w-1 h-1`} />
+                          <Image src={filledTriangle} alt='triangle' height={14} width={14} />
+                        </div>
+                      </div>
+                      <Collapse isOpened={offersDropdown}>
+                        {HelpOffers.map((offer) => {
+                          return (
+                            <button type='button' key={offer.text} onClick={(e) => offerClick(e, offer)}>
+                              <div
+                                className={classNames(
+                                  'my-1 mx-0.5 px-3 py-1 w-max uppercase leading-wide font-bold text-xs rounded-full shadow-sm ',
+                                  'hover:' + offer.color,
+                                  offers.includes(offer.value) ? offer.color + ' border-2 border-blue' : 'bg-gray-100'
+                                )}
+                              >
+                                {offer.emoji} {offer.text}
+                              </div>
+                            </button>
+                          )
+                        })}
+                      </Collapse>
+                    </div>
+                    <div className='pb-3'>
+                      <div onClick={() => setAsksDropdown(!asksDropdown)} className='cursor-pointer flex items-center'>
+                        <div className='font-bold ml-1 mr-2'>Asks</div>
+                        <div style={{ transform: asksDropdown ? 'rotate(180deg)' : '' }}>
+                          <div className={`${asksDropdown && 'hidden'} w-1 h-1`} />
+                          <Image src={filledTriangle} alt='triangle' height={14} width={14} />
+                        </div>
+                      </div>
+                      <Collapse isOpened={asksDropdown}>
+                        {HelpAsks.map((ask) => (
+                          <button type='button' key={ask.text} onClick={(e) => asksClick(e, ask)}>
                             <div
                               className={classNames(
                                 'my-1 mx-0.5 px-3 py-1 w-max uppercase leading-wide font-bold text-xs rounded-full shadow-sm ',
-                                'hover:' + offer.color,
-                                offers.includes(offer.value) ? offer.color + ' border-2 border-blue' : 'bg-gray-100'
+                                'hover:' + ask.color,
+                                asks.includes(ask.value) ? ask.color + ' border-2 border-blue' : 'bg-gray-100'
                               )}
                             >
-                              {offer.emoji} {offer.text}
+                              {ask.emoji} {ask.text}
                             </div>
                           </button>
-                        )
-                      })}
+                        ))}
+                      </Collapse>
                     </div>
+                    <TextInput
+                      label='Interests'
+                      name='interests'
+                      type='text'
+                      placeholder='Interests'
+                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    />
                   </div>
                 )}
                 <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>
