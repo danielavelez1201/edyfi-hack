@@ -7,6 +7,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { hashcode } from './api/helpers'
 import classNames from 'classnames'
+import ReactTooltip from 'react-tooltip'
+import questionIcon from '../public/questionIcon.svg'
 
 export default function NewCommunity() {
   const router = useRouter()
@@ -91,6 +93,23 @@ export default function NewCommunity() {
             placeholder='Token'
             onChange={updateFormData}
           />
+          <br></br>
+          <div className='flex items-center'>
+            <input
+              className='mr-2 p-2 bg-gray-light rounded-md outline-none'
+              type='checkbox'
+              name='communityBumps'
+              placeholder='Matching'
+              onChange={updateFormData}
+            />
+            <p className='mr-1'>Targeted matching</p>
+            <Image data-tip data-for='matchedBumps' src={questionIcon} />
+            <ReactTooltip style={{ width: '100px' }} id='matchedBumps' type='dark' effect='solid'>
+              <div style={{ width: '150px' }} className='whitespace-normal'>
+                People get matched based on their needs, location, interests, industry, etc.
+              </div>
+            </ReactTooltip>
+          </div>
           <br></br>
           <button
             className='focus:outline-none flex items-center  h-9 justify-left  rounded-xl p-5 border border-cyan'

@@ -45,6 +45,7 @@
     "react-router-dom": "^6.2.1",
     "react-select": "^5.1.0",
     "react-table": "^7.7.0",
+    "react-tooltip": "^4.2.21",
     "react-use": "^17.3.1",
     "regenerator-runtime": "^0.13.9",
     "stream": "^0.0.2",

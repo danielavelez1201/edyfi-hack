@@ -222,7 +222,7 @@ export default function Home() {
                 )}
               </div> */}
               <div className='flex items-center'>
-                {userList.length !== 0 && (
+                {userList.length >= 2 && (
                   <button
                     onClick={() => sendRandBumps()}
                     className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
