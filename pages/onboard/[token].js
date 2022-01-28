@@ -19,7 +19,10 @@ import { HelpOffers } from '../../components/NewTable'
 import { HelpAsks } from '../../components/NewTable'
 import { classNames } from '../../components/shared/Utils'
 import { Collapse } from 'react-collapse'
-import Autosuggest from 'react-autosuggest'
+import TextField from '@mui/material/TextField'
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
+import { styled } from '@mui/material/styles'
+const filter = createFilterOptions()
 
 export default function Onboarding() {
   const router = useRouter()
@@ -40,6 +43,7 @@ export default function Onboarding() {
 
   const [industries, setIndustries] = useState([])
   const [interests, setInterests] = useState([])
+  const [interestValue, setInterestValue] = useState(null)
 
   const [showForm, setShowForm] = useState(false)
 
@@ -48,29 +52,33 @@ export default function Onboarding() {
   const googleTextStyle = user ? 'text-center ml-5 text-cyan' : 'text-center ml-5'
 
   useEffect(async () => {
-    await fetch('/api/autocomplete/getIndustries', {
-      method: 'POST',
-      headers: { communityId: communityId }
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setIndustries(result)
+    if (communityId) {
+      await fetch('/api/autocomplete/getIndustries', {
+        method: 'POST',
+        headers: { communityId: communityId }
       })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result)
+          setIndustries(result.industries)
+        })
 
-    await fetch('/api/autocomplete/getInterests', {
-      method: 'POST',
-      headers: { communityId: communityId }
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setInterests(result)
+      await fetch('/api/autocomplete/getInterests', {
+        method: 'POST',
+        headers: { communityId: communityId }
       })
-  }, [])
+        .then((res) => res.json())
+        .then((result) => {
+          setInterests(result.interests)
+          console.log(result)
+        })
+    }
+  }, [communityId])
 
-  const interestsUpdate = () => {
+  const interestsUpdate = async (interest) => {
     await axios
       .post('/api/autocomplete/industries', {
-        industry: industry
+        interest: interest
       })
       .then((res) => {
         setError('')
@@ -180,6 +188,21 @@ export default function Onboarding() {
 
   const requiredError = 'Required'
   const charError = 'Must be 40 characters or less'
+
+  const StyledAutocomplete = styled(Autocomplete)({
+    '& .MuiAutocomplete-inputRoot': {
+      color: 'black',
+      '& .MuiOutlinedInput-notchedOutline': {
+        border: '1px solid #e2e8f0',
+        borderRadius: '7px'
+      },
+      '& .MuiOutlinedInput-root': {
+        '&.Mui-focused fieldset': {
+          border: '2px solid red'
+        }
+      }
+    }
+  })
 
   return (
     <div className='h-fit min-h-screen py-14 flex flex-col bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
@@ -336,13 +359,6 @@ export default function Onboarding() {
                       placeholder='Role'
                       className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
                     />
-                    <TextInput
-                      label='Industry'
-                      name='industry'
-                      type='text'
-                      placeholder='Industry'
-                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
-                    />
                     <div className='mr-auto'>
                       {projects.map((project) => (
                         <a key={project} href={project} className='underline'>
@@ -429,12 +445,23 @@ export default function Onboarding() {
                         ))}
                       </Collapse>
                     </div>
-                    <TextInput
-                      label='Interests'
-                      name='interests'
-                      type='text'
-                      placeholder='Interests'
-                      className='w-full p-2 bg-gray-light text-primary rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4'
+                    <StyledAutocomplete
+                      disablePortal
+                      size='small'
+                      options={industries.map((option) => option)}
+                      renderInput={(params) => (
+                        <TextField size='small' {...params} placeholder='Industry' label='Industry' />
+                      )}
+                    />
+                    <StyledAutocomplete
+                      multiple
+                      className='mt-4'
+                      disablePortal
+                      size='small'
+                      options={industries.map((option) => option)}
+                      renderInput={(params) => (
+                        <TextField size='small' {...params} placeholder='Interests' label='Interests' />
+                      )}
                     />
                   </div>
                 )}

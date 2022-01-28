@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.16.4",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
     "@heroicons/react": "^1.0.5",
+    "@mui/material": "^5.3.1",
     "@tailwindcss/forms": "^0.3.4",
     "anser": "^2.1.0",
     "axios": "^0.23.0",
@@ -39,7 +42,6 @@
     "node-telegram-bot-api": "^0.56.0",
     "prettier": "^2.4.1",
     "react": "17.0.2",
-    "react-autosuggest": "^10.1.0",
     "react-collapse": "^5.1.1",
     "react-dom": "17.0.2",
     "react-firebase-hooks": "^3.0.4",

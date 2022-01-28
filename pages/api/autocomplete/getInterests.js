@@ -9,7 +9,7 @@ async function handler(req, res) {
 
   res.status(200).json({
     communityToken: communityDoc.communityToken,
-    industries: communityDoc.interests
+    interests: communityDoc.interests
   })
 }
 

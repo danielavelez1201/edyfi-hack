@@ -121,7 +121,7 @@ export default function NewCommunity() {
           </button>
           <br></br>
           {user && (
-            <button className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '>
+            <button type="submit" className='bg-blue py-2 px-4 text-sm text-white rounded  focus:outline-none focus:border-green-dark hover:bg-blue-hover '>
               Create community
             </button>
           )}
