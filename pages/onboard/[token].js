@@ -19,13 +19,13 @@ import { HelpOffers } from '../../components/NewTable'
 import { HelpAsks } from '../../components/NewTable'
 import { classNames } from '../../components/shared/Utils'
 import { Collapse } from 'react-collapse'
-import TextField from '@mui/material/TextField'
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
+import Autocomplete from '@mui/material/Autocomplete'
 import ReactTooltip from 'react-tooltip'
 import questionIcon from '../../public/questionIcon.svg'
 import { styled } from '@mui/material/styles'
 import { boolean } from 'yup/lib/locale'
-const filter = createFilterOptions()
+import { FormCheckbox } from '../../components/FormCheckbox'
+import { AutocompleteField } from '../../components/AutocompleteField'
 
 export default function Onboarding() {
   const router = useRouter()
@@ -81,15 +81,14 @@ export default function Onboarding() {
 
   const interestsUpdate = async (interest) => {
     await axios
-      .post('/api/autocomplete/industries', {
-        interest: interest
+      .post('/api/autocomplete/interests', {
+        newInterest: interest,
+        headers: { communityId: communityId }
       })
       .then((res) => {
         setError('')
         if (res.status === 200) {
           console.log('res status 200')
-          console.log(token)
-          console.log(hashcode(token))
         }
       })
       .catch((error) => {
@@ -236,10 +235,10 @@ export default function Onboarding() {
               projects: [],
               offers: [],
               asks: [],
-              industry: industryValue,
-              interests: value,
+              industry: 'Accounting',
+              interests: ['Acrobatics', 'Acting'],
               targetedBump: true,
-              randomBump: true
+              randomBump: false
             }}
             validationSchema={Yup.object({
               firstName: Yup.string().max(40, charError).required(requiredError),
@@ -450,49 +449,61 @@ export default function Onboarding() {
                         ))}
                       </Collapse>
                     </div>
-                    <StyledAutocomplete
-                      disablePortal
-                      value={industryValue}
-                      onChange={(event, newValue) => {
-                        setIndustryValue(newValue)
-                      }}
-                      size='small'
-                      options={industries.map((option) => option)}
-                      renderInput={(params) => (
-                        <TextField
-                          onClick={(options) => console.log('options')}
-                          size='small'
-                          {...params}
-                          placeholder='Industry'
-                          label='Industry'
-                        />
-                      )}
-                    />
-                    <StyledAutocomplete
-                      multiple
-                      className='mt-4'
-                      disablePortal
-                      freeSolo
-                      size='small'
-                      options={interests.map((option) => option.title)}
-                      value={value}
-                      onChange={(event, newValue) => {
-                        setValue(newValue)
-                      }}
-                      selectOnFocus
-                      clearOnBlur
-                      handleHomeEndKeys
-                      renderOption={(props, option) => <li {...props}>{option}</li>}
-                      renderInput={(params) => (
-                        <TextField size='small' {...params} placeholder='Interests' label='Interests' />
-                      )}
-                    />
-                    <div className='flex items-center'>
-                      <input
+                    <div className='mt-4'>
+                      <StyledAutocomplete
+                        disablePortal
+                        value={industryValue}
+                        onChange={(event, newValue) => {
+                          setIndustryValue(newValue)
+                        }}
+                        size='small'
+                        options={industries.map((option) => option)}
+                        renderInput={(params) => (
+                          <AutocompleteField
+                            size='small'
+                            params={params}
+                            placeholder='Industry'
+                            label='Industry'
+                            type='text'
+                            name='industry'
+                          />
+                        )}
+                      />
+                    </div>
+                    <div className='mt-4'>
+                      <StyledAutocomplete
+                        multiple
+                        disablePortal
+                        freeSolo
+                        size='small'
+                        options={interests.map((option) => option)}
+                        value={value}
+                        onChange={(event, newValue) => {
+                          setValue(newValue)
+                        }}
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        renderOption={(props, option) => <li {...props}>{option}</li>}
+                        renderInput={(params) => (
+                          <AutocompleteField
+                            size='small'
+                            params={params}
+                            placeholder='Interests'
+                            label='Interests'
+                            type='text'
+                            name='interests'
+                          />
+                        )}
+                      />
+                    </div>
+                    <div className='flex items-center mt-4'>
+                      <FormCheckbox
                         className='mr-2 p-2 bg-gray-light rounded-md outline-none'
                         type='checkbox'
+                        label='Targeted Bump'
+                        placeholder='Targeted Bump'
                         name='targetedBump'
-                        placeholder='Matching'
                       />
                       <p className='mr-1'>Targeted matching</p>
                       <Image data-tip data-for='matchedBumps' src={questionIcon} />
@@ -504,11 +515,12 @@ export default function Onboarding() {
                       </ReactTooltip>
                     </div>
                     <div className='flex items-center'>
-                      <input
+                      <FormCheckbox
                         className='mr-2 p-2 bg-gray-light rounded-md outline-none'
                         type='checkbox'
                         name='randomBump'
-                        placeholder='Matching'
+                        label='Random Bump'
+                        placeholder='Random Bump'
                       />
                       <p className='mr-1'>Random matching</p>
                       <Image data-tip data-for='randomBumps' src={questionIcon} />
@@ -520,7 +532,7 @@ export default function Onboarding() {
                     </div>
                   </div>
                 )}
-                <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>
+                <div onClick={() => interestsUpdate(value)} style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>
                   {showForm && (
                     <button
                       className='bg-blue py-2 px-4 text-white rounded-full font-medium mt-4  focus:outline-none focus:border-green-dark hover:bg-blue-hover '

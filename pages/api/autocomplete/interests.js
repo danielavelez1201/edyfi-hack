@@ -10,12 +10,17 @@ async function handler(req, res) {
 
   const interests = communityDoc.interests
 
-  q.update({interests: [...interests, req.body]})
+  console.log(req.body, req.newInterests)
 
-  res.status(200).json({
-    communityToken: communityDoc.communityToken,
-    industries: communityDoc.interests
+  req.newInterests.forEach((interest) => {
+      const firstCapitalizedInterest = interest.charAt(0).toUpperCase() + interest.slice(1).toLowerCase()
+    if (!interests.includes(firstCapitalizedInterest)) {
+      console.log(firstCapitalizedInterest)
+      q.update({ interests: [...interests, firstCapitalizedInterest] })
+    }
   })
+
+  res.status(200).json({})
 }
 
 export default handler

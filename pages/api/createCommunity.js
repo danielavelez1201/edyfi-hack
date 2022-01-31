@@ -2629,6 +2629,12 @@ async function handler(req, res) {
     }
   ]
 
+  const interestsArray = []
+  defaultInterests.forEach((interest) => {
+    const firstCapitalizedInterest = interest.title.charAt(0).toUpperCase() + interest.title.slice(1).toLowerCase()
+    interestsArray.push(firstCapitalizedInterest)
+  })
+
   try {
     const docRef = await addDoc(collection(db, 'communities'), {
       communityId: req.body.formData.communityId,
@@ -2638,7 +2644,7 @@ async function handler(req, res) {
       targetedMatching: req.body.formData.communityBumps,
       users: [],
       industries: industries,
-      interests: defaultInterests
+      interests: interestsArray
     })
 
     console.log('Document written with ID: ', docRef.id)
