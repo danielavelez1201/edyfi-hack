@@ -2635,6 +2635,7 @@ async function handler(req, res) {
       communityToken: req.body.formData.communityToken,
       adminGoogleUser: req.headers.googleuser,
       lastUpdated: Date.now(),
+      targetedMatching: req.body.formData.communityBumps,
       users: [],
       industries: industries,
       interests: defaultInterests

@@ -21,7 +21,10 @@ import { classNames } from '../../components/shared/Utils'
 import { Collapse } from 'react-collapse'
 import TextField from '@mui/material/TextField'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
+import ReactTooltip from 'react-tooltip'
+import questionIcon from '../../public/questionIcon.svg'
 import { styled } from '@mui/material/styles'
+import { boolean } from 'yup/lib/locale'
 const filter = createFilterOptions()
 
 export default function Onboarding() {
@@ -43,7 +46,8 @@ export default function Onboarding() {
 
   const [industries, setIndustries] = useState([])
   const [interests, setInterests] = useState([])
-  const [interestValue, setInterestValue] = useState(null)
+  const [value, setValue] = useState([])
+  const [industryValue, setIndustryValue] = useState()
 
   const [showForm, setShowForm] = useState(false)
 
@@ -229,11 +233,13 @@ export default function Onboarding() {
               location: '',
               work: '',
               role: '',
-              industry: '',
               projects: [],
               offers: [],
               asks: [],
-              interests: []
+              industry: industryValue,
+              interests: value,
+              targetedBump: true,
+              randomBump: true
             }}
             validationSchema={Yup.object({
               firstName: Yup.string().max(40, charError).required(requiredError),
@@ -242,8 +248,7 @@ export default function Onboarding() {
               //phone: Yup.string().phone('Enter a valid phone including +country code').required(requiredError),
               location: Yup.string().max(40, charError).required(requiredError),
               work: Yup.string().max(40, charError).required(requiredError),
-              role: Yup.string().max(40, charError).required(requiredError),
-              industry: Yup.string().max(40, charError).required(requiredError)
+              role: Yup.string().max(40, charError).required(requiredError)
             })}
             onSubmit={async (values, { setSubmitting }) => {
               console.log('in onSubmit')
@@ -447,22 +452,72 @@ export default function Onboarding() {
                     </div>
                     <StyledAutocomplete
                       disablePortal
+                      value={industryValue}
+                      onChange={(event, newValue) => {
+                        setIndustryValue(newValue)
+                      }}
                       size='small'
                       options={industries.map((option) => option)}
                       renderInput={(params) => (
-                        <TextField size='small' {...params} placeholder='Industry' label='Industry' />
+                        <TextField
+                          onClick={(options) => console.log('options')}
+                          size='small'
+                          {...params}
+                          placeholder='Industry'
+                          label='Industry'
+                        />
                       )}
                     />
                     <StyledAutocomplete
                       multiple
                       className='mt-4'
                       disablePortal
+                      freeSolo
                       size='small'
-                      options={industries.map((option) => option)}
+                      options={interests.map((option) => option.title)}
+                      value={value}
+                      onChange={(event, newValue) => {
+                        setValue(newValue)
+                      }}
+                      selectOnFocus
+                      clearOnBlur
+                      handleHomeEndKeys
+                      renderOption={(props, option) => <li {...props}>{option}</li>}
                       renderInput={(params) => (
                         <TextField size='small' {...params} placeholder='Interests' label='Interests' />
                       )}
                     />
+                    <div className='flex items-center'>
+                      <input
+                        className='mr-2 p-2 bg-gray-light rounded-md outline-none'
+                        type='checkbox'
+                        name='targetedBump'
+                        placeholder='Matching'
+                      />
+                      <p className='mr-1'>Targeted matching</p>
+                      <Image data-tip data-for='matchedBumps' src={questionIcon} />
+                      <ReactTooltip style={{ width: '100px' }} id='matchedBumps' type='dark' effect='solid'>
+                        <div style={{ width: '150px' }} className='whitespace-normal'>
+                          You get matched with others within the community based on your needs, location, interests,
+                          industry, etc.
+                        </div>
+                      </ReactTooltip>
+                    </div>
+                    <div className='flex items-center'>
+                      <input
+                        className='mr-2 p-2 bg-gray-light rounded-md outline-none'
+                        type='checkbox'
+                        name='randomBump'
+                        placeholder='Matching'
+                      />
+                      <p className='mr-1'>Random matching</p>
+                      <Image data-tip data-for='randomBumps' src={questionIcon} />
+                      <ReactTooltip style={{ width: '100px' }} id='randomBumps' type='dark' effect='solid'>
+                        <div style={{ width: '150px' }} className='whitespace-normal'>
+                          You'll get matched with people within the community at random.
+                        </div>
+                      </ReactTooltip>
+                    </div>
                   </div>
                 )}
                 <div style={{ margin: '0 20px 20px 20px', textAlign: 'center' }}>

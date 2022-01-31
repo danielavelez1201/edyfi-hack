@@ -21,14 +21,16 @@ async function randomBump(req, res) {
   const uniqueCommunityIds = new Set(communityIds)
 
   uniqueCommunityIds.forEach(async (community) => {
-    if (community.communityBumps === true) {
+    if (community.targetedMatching === "on") {
       const q = query(collection(db, 'users'), where('communityIds', 'array-contains', community))
       const users = await getDocs(q)
 
       users.forEach((user) => {
-        let userData = user.data()
-        let userId = user.id
-        userCommunities.push([userData, userId])
+        if (user.targetedBump) {
+          let userData = user.data()
+          let userId = user.id
+          userCommunities.push([userData, userId])
+        }
       })
 
       const matchedUsers = [] // [[user1,id],[user2,id2],{match criteria}]
