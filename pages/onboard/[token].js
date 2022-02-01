@@ -47,7 +47,7 @@ export default function Onboarding() {
   const [industries, setIndustries] = useState([])
   const [interests, setInterests] = useState([])
   const [value, setValue] = useState([])
-  const [industryValue, setIndustryValue] = useState()
+  const [industryValue, setIndustryValue] = useState('')
 
   const [showForm, setShowForm] = useState(false)
 
@@ -80,10 +80,11 @@ export default function Onboarding() {
   }, [communityId])
 
   const interestsUpdate = async (interest) => {
+    console.log(communityId)
     await axios
       .post('/api/autocomplete/interests', {
         newInterest: interest,
-        headers: { communityId: communityId }
+        communityId: communityId 
       })
       .then((res) => {
         setError('')
@@ -146,6 +147,8 @@ export default function Onboarding() {
         offers: offers,
         asks: asks,
         projects: projects,
+        industry: industryValue,
+        interests: value,
         updated: new Date().toLocaleString().split(',')[0]
       })
       .then((res) => {
@@ -235,8 +238,8 @@ export default function Onboarding() {
               projects: [],
               offers: [],
               asks: [],
-              industry: 'Accounting',
-              interests: ['Acrobatics', 'Acting'],
+              industry: '',
+              interests: [],
               targetedBump: true,
               randomBump: false
             }}
