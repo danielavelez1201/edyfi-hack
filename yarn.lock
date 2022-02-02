@@ -2777,6 +2777,11 @@
     "ansi-styles" "^4.1.0"
     "supports-color" "^7.1.0"
 
+"child_process@^1.0.2":
+  "integrity" "sha1-sffn/HPSXn/R1FWtyU4UODAYK1o="
+  "resolved" "https://registry.npmjs.org/child_process/-/child_process-1.0.2.tgz"
+  "version" "1.0.2"
+
 "chokidar@^2.1.8":
   "integrity" "sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg=="
   "resolved" "https://registry.npmjs.org/chokidar/-/chokidar-2.1.8.tgz"
