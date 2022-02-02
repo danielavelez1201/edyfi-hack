@@ -1,7 +1,7 @@
 import cookies from 'js-cookie'
 
 export const getUserFromCookie = () => {
-  const cookie = cookies.get('auth')
+  const cookie = cookies.get()
   if (!cookie) {
     return
   }
