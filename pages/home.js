@@ -4,7 +4,14 @@ import { useLocalStorage, useLocation } from 'react-use'
 import { hashcode } from './api/helpers'
 import 'regenerator-runtime/runtime'
 import React from 'react'
-import Table, { AvatarCell, OfferState, WorkCell, InterestsState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
+import Table, {
+  AvatarCell,
+  OfferState,
+  WorkCell,
+  InterestsState,
+  SelectColumnFilter,
+  ProjectList
+} from '../components/NewTable' // new
 import { useUser } from '../firebase/useUser'
 import { CopyModal } from '../components/copyModal'
 import { CommunityBoard } from '../components/communityBoard'
