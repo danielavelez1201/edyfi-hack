@@ -130,6 +130,30 @@ export function OfferState({ value }) {
   )
 }
 
+export function InterestsState({ value }) {
+  function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5)
+  }
+
+  return (
+    <span className={'text-sm font-medium text-gray-500 no-underline'}>
+      {shuffle(value)
+        .slice(0, 3)
+        .map((interest) => {
+          return (
+            <>
+              <p
+                className={classNames('my-0.5 leading-wide font-bold text-xs rounded-full shadow-sm hover:bg-gray-100')}
+              >
+                {interest}
+              </p>
+            </>
+          )
+        })}
+    </span>
+  )
+}
+
 export function AvatarCell({ value, column, row }) {
   return (
     <div className='flex items-center'>
@@ -143,6 +167,19 @@ export function AvatarCell({ value, column, row }) {
         </div>
         <div className='text-sm text-gray-500'>{row.original[column.emailAccessor]}</div>
         <div className='text-sm text-gray-500'>{row.original[column.phoneAccessor]}</div>
+      </div>
+    </div>
+  )
+}
+
+export function WorkCell({ value, column, row }) {
+  return (
+    <div className='flex text-xs text-gray-500 flex flex-col'>
+      {row.original[column.industryAccessor]}
+      <div className='flex text-sm'>
+        <div className='font-medium mr-0.5'>{value}</div>
+        at
+        <div className='font-medium  ml-0.5'>{row.original[column.workAccessor]}</div>
       </div>
     </div>
   )
@@ -222,11 +259,14 @@ function Table({ columns, data }) {
       <br></br>
       <HelpLabelKey></HelpLabelKey>
       {/* table */}
-      <div className='mt-4 flex flex-col'>
-        <div className='-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8'>
-          <div className='py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8'>
+      <div className='mt-4 flex flex-col '>
+        <div className='w-full overflow-x-auto'>
+          <div className='align-middle inline-block'>
             <div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg'>
-              <table {...getTableProps()} className='min-w-full divide-y divide-gray-200'>
+              <table
+                {...getTableProps()}
+                className='min-w-full whitespace-nowrap overflow-x-auto divide-y divide-gray-200'
+              >
                 <thead className='bg-gray-50'>
                   {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
