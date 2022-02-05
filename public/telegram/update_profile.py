@@ -56,7 +56,7 @@ def sendUpdateInfoBump(updater, db) -> None:
          ))
 
 
-def askForNewValue(update: Update, context: CallbackContext) -> int:
+def askForNewValue(update: Update, context: CallbackContext, db) -> int:
     """Gets the value that the user wants to update with."""
     profile_field = PROFILE_FIELDS[update.message.text]
     users_ref = db.collection(u'users')

@@ -4,7 +4,14 @@ import { useLocalStorage, useLocation } from 'react-use'
 import { hashcode } from './api/helpers'
 import 'regenerator-runtime/runtime'
 import React from 'react'
-import Table, { AvatarCell, OfferState, SelectColumnFilter, ProjectList } from '../components/NewTable' // new
+import Table, {
+  AvatarCell,
+  OfferState,
+  WorkCell,
+  InterestsState,
+  SelectColumnFilter,
+  ProjectList
+} from '../components/NewTable' // new
 import { useUser } from '../firebase/useUser'
 import { CopyModal } from '../components/copyModal'
 import { CommunityBoard } from '../components/communityBoard'
@@ -93,17 +100,25 @@ export default function Home() {
         Header: 'Role',
         accessor: 'role',
         Filter: SelectColumnFilter, // new
-        filter: 'includes'
+        Cell: WorkCell,
+        filter: 'includes',
+        workAccessor: 'work',
+        industryAccessor: 'industry'
       },
       {
-        Header: 'Last Updated',
-        accessor: 'updated',
-        filter: 'includes'
+        Header: 'Interests',
+        accessor: 'interests',
+        Cell: InterestsState
       },
       {
         Header: 'Can help with...',
         accessor: 'offers',
         Cell: OfferState
+      },
+      {
+        Header: 'Last Updated',
+        accessor: 'updated',
+        filter: 'includes'
       }
     ],
     []
