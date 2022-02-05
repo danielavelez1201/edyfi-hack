@@ -84,7 +84,7 @@ export default function Onboarding() {
     await axios
       .post('/api/autocomplete/interests', {
         newInterest: interest,
-        communityId: communityId 
+        communityId: communityId
       })
       .then((res) => {
         setError('')
@@ -148,7 +148,7 @@ export default function Onboarding() {
         asks: asks,
         projects: projects,
         industry: industryValue,
-        interests: value.map((string)=>(string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())),
+        interests: value.map((string) => string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()),
         updated: new Date().toLocaleString().split(',')[0]
       })
       .then((res) => {
