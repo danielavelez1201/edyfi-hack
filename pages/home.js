@@ -40,7 +40,7 @@ export default function Home() {
   const [communities, setCommunities] = useState([])
   const [communityBoardContent, setCommunityBoardContent] = useState({ text: '', links: [], events: [] })
   const [editingCommunityBoard, setEditingCommunityBoard] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(true)
 
   const communityBoardProps = {
     content: communityBoardContent,
@@ -166,7 +166,7 @@ export default function Home() {
           } else {
             console.log('API RESULT', result)
             console.log('token', result.communityToken)
-            setIsAdmin(checkAdmin(result.adminGoogleUserId))
+            //setIsAdmin(checkAdmin(result.adminGoogleUserId))
             const auth = checkAuth(result.communityToken)
             if (auth) {
               setUserList(result.users)
