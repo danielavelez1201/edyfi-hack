@@ -34,7 +34,6 @@ export const signInWithGoogle = () =>
 
       setUserCookie(mapUserData(user))
       // ...
-      console.log({ credential, token, user })
     })
     .catch((error) => {
       // Handle Errors here.
@@ -45,7 +44,6 @@ export const signInWithGoogle = () =>
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error)
       // ...
-      console.log({ errorCode, errorMessage, email, credential })
     })
 
 export const user = auth.currentUser

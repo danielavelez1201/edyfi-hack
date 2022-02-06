@@ -9,12 +9,10 @@ async function handler(req, res) {
 
     const updateRequestsDocs = []
     docs.forEach((doc) => updateRequestsDocs.push(doc.data()))
-    console.log({ updateRequestsDocs })
     if (updateRequestsDocs.length === 0) {
       res.status(500)
     }
 
-    // console.log('Document written with ID: ', docRef.id)
     res.status(200).json({ msg: 'success', user: updateRequestsDocs[0] })
   } catch (e) {
     console.error('Error adding document: ', e)

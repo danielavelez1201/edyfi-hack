@@ -9,7 +9,6 @@ async function handler(req, res) {
     const queryUser = query(collection(db, 'users'), where('email', '==', req.body.email))
 
     const userDoc = await getDocs(queryUser)
-    // console.log({ userDoc: userDoc.data() })
 
     const userDocs = []
     userDoc.forEach((doc) => userDocs.push(doc.data()))
@@ -24,9 +23,7 @@ async function handler(req, res) {
     })
 
     // TODO: send email or text message
-    console.log({ updateRequestToken: token })
 
-    console.log('Document written with ID: ', docRef.id)
     res.status(200).json({ msg: 'success' })
   } catch (e) {
     console.error('Error adding document: ', e)

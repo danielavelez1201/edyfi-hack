@@ -39,8 +39,6 @@ export default function NewCommunity() {
             pathname: '/home',
             query: { communityId: formData.communityId, token: hashcode(formData.communityToken), demo: demo }
           })
-        } else {
-          console.log('Error')
         }
       })
     }

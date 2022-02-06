@@ -14,8 +14,6 @@ app.post('/api/sms', async (req, res) => {
   const q = query(collection(db, 'users'), where('phoneNum', '==', req.body.From))
   const user = await getDocs(q)
 
-  console.log(req, res)
-
   const body = req.body.Body ? req.body.Body.toLowerCase() : null
   const regex = /[0-9],/gm
 

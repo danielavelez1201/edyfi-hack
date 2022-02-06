@@ -35,7 +35,6 @@ async function randomBump(req, res) {
 
       const matchedUsers = [] // [[user1,id],[user2,id2],{match criteria}]
       userCommunities.forEach(async (user, upperIndex) => {
-        //   console.log('user ______________', upperIndex)
         if (user[0].targetedBump === true) {
           if (matchedUsers.length === 0 || matchedUsers.filter(([a, b, c]) => b === null).length === 0) {
             // checks if array is empty or all matched up
@@ -43,7 +42,6 @@ async function randomBump(req, res) {
           } else {
             // match based on ask/offer and industry
             matchedUsers.forEach((possible, i) => {
-              // console.log('possible ______________', i, possible[0][1])
               let allPossiblesPushed = false
               if (possible[1] === null) {
                 const possibleMatches = []
@@ -117,7 +115,6 @@ async function randomBump(req, res) {
                     })
                   } else {
                     // stores in possible
-                    //   console.log(user[1], 'matched', matchedUsers, 'possibleMatches', possibleMatches)
                     const score = checkMatches.filter(Boolean).length
                     possibleMatches.push([score, user, checkMatches])
                     if (
@@ -186,7 +183,6 @@ async function randomBump(req, res) {
           }
         }
       })
-      console.log(matchedUsers)
 
       let today = new Date().getTime()
       matchedUsers.forEach(async (match) => {
@@ -203,122 +199,112 @@ async function randomBump(req, res) {
             conversationSID = conversation.sid
           })
 
-        await Twilio.conversations
-          .conversations(conversationSID)
-          .participants.create({
-            identity: 'Loop Bot',
-            'messagingBinding.projectedAddress': '+15593541895'
-          })
-          .then((conversation) => console.log(conversation.sid))
+        await Twilio.conversations.conversations(conversationSID).participants.create({
+          identity: 'Loop Bot',
+          'messagingBinding.projectedAddress': '+15593541895'
+        })
 
         await Twilio.conversations
           .conversations(conversationSID)
           .participants.create({ 'messagingBinding.address': `+${person1.phoneNum}` })
-          .then((participant) => console.log(participant.sid))
 
         await Twilio.conversations
           .conversations(conversationSID)
           .participants.create({ 'messagingBinding.address': `+${person2.phoneNum}` })
-          .then((participant) => console.log(participant.sid))
 
-        await Twilio.conversations
-          .conversations(conversationSID)
-          .messages.create({
-            body: `Hi, Loop Bot here! ${person1.firstName} meet ${person2.firstName}! We're connecting you because${
-              common.asksUser1 !== undefined
-                ? ` ${person2.firstName} can help with${common.asksUser1.map(
-                    (ask) =>
-                      `${
-                        ask == 'investors' && common.asksUser1.length === 1
-                          ? ` finding investors.`
-                          : ask == 'investors'
-                          ? ` finding investors`
-                          : ask == 'cofounders'
-                          ? `${
-                              common.asksUser1[common.asksUser1.length - 1] === 'cofounders' &&
-                              common.asksUser1.length !== 1
-                                ? ' and finding a co-founder.'
-                                : ' finding a co-founder'
-                            }`
-                          : ask == 'refer'
-                          ? `${
-                              common.asksUser1[common.asksUser1.length - 1] === 'refer' && common.asksUser1.length !== 1
-                                ? ' and job referrals.'
-                                : ' job referrals'
-                            }`
-                          : ask == 'hiring'
-                          ? `${
-                              common.asksUser1[common.asksUser1.length - 1] === 'hiring' &&
-                              common.asksUser1.length !== 1
-                                ? ' and hiring.'
-                                : ' hiring'
-                            }`
-                          : ''
-                      }`
-                  )}`
-                : ''
-            }${
-              common.asksUser2 !== undefined
-                ? ` ${person1.firstName} can help with${common.asksUser2.map(
-                    (ask) =>
-                      `${
-                        ask == 'investors' && common.asksUser1.length === 1
-                          ? ` finding investors.`
-                          : ask == 'investors'
-                          ? ` finding investors`
-                          : ask == 'cofounders'
-                          ? `${
-                              common.asksUser2[common.asksUser2.length - 1] === 'cofounders' &&
-                              common.asksUser2.length !== 1
-                                ? ' and '
-                                : ' '
-                            }finding a co-founder`
-                          : ask == 'refer'
-                          ? `${
-                              common.asksUser2[common.asksUser2.length - 1] === 'refer' && common.asksUser2.length !== 1
-                                ? ' and '
-                                : ' '
-                            }job referrals`
-                          : ask == 'hiring'
-                          ? `${
-                              common.asksUser2[common.asksUser2.length - 1] === 'hiring' &&
-                              common.asksUser2.length !== 1
-                                ? ' and '
-                                : ' '
-                            }hiring`
-                          : ''
-                      }`
-                  )}.`
-                : ''
-            }${common.location !== undefined ? `You are both located in ${common.location}` : ''}${
-              common.industry !== undefined && common.location !== undefined && common.role !== undefined
-                ? `, operate in ${common.industry},`
-                : common.industry !== undefined && common.location !== undefined && common.role === undefined
-                ? ` and operate in ${common.industry}.`
-                : common.industry !== undefined && common.location === undefined
-                ? `You both operate in ${common.industry}`
-                : ''
-            }${
-              common.role !== undefined && common.industry !== undefined
-                ? ` and are ${common.role}s`
-                : common.role !== undefined && common.industry === undefined && common.location === undefined
-                ? `You are both a ${common.role}`
-                : ''
-            }. ${
-              common.interests !== undefined
-                ? `You also have a shared interest in${common.interests.map(
-                    (interest) =>
-                      `${
-                        interest === common.interests[common.interests.length - 1] &&
-                        common.interests.length !== 1 &&
-                        ' and'
-                      } ${interest}`
-                  )}`
-                : ''
-            }. I worked hard to make this happen - I hope it'll be useful 😊`,
-            author: 'Loop Bot'
-          })
-          .then((message) => console.log(message.sid))
+        await Twilio.conversations.conversations(conversationSID).messages.create({
+          body: `Hi, Loop Bot here! ${person1.firstName} meet ${person2.firstName}! We're connecting you because${
+            common.asksUser1 !== undefined
+              ? ` ${person2.firstName} can help with${common.asksUser1.map(
+                  (ask) =>
+                    `${
+                      ask == 'investors' && common.asksUser1.length === 1
+                        ? ` finding investors.`
+                        : ask == 'investors'
+                        ? ` finding investors`
+                        : ask == 'cofounders'
+                        ? `${
+                            common.asksUser1[common.asksUser1.length - 1] === 'cofounders' &&
+                            common.asksUser1.length !== 1
+                              ? ' and finding a co-founder.'
+                              : ' finding a co-founder'
+                          }`
+                        : ask == 'refer'
+                        ? `${
+                            common.asksUser1[common.asksUser1.length - 1] === 'refer' && common.asksUser1.length !== 1
+                              ? ' and job referrals.'
+                              : ' job referrals'
+                          }`
+                        : ask == 'hiring'
+                        ? `${
+                            common.asksUser1[common.asksUser1.length - 1] === 'hiring' && common.asksUser1.length !== 1
+                              ? ' and hiring.'
+                              : ' hiring'
+                          }`
+                        : ''
+                    }`
+                )}`
+              : ''
+          }${
+            common.asksUser2 !== undefined
+              ? ` ${person1.firstName} can help with${common.asksUser2.map(
+                  (ask) =>
+                    `${
+                      ask == 'investors' && common.asksUser1.length === 1
+                        ? ` finding investors.`
+                        : ask == 'investors'
+                        ? ` finding investors`
+                        : ask == 'cofounders'
+                        ? `${
+                            common.asksUser2[common.asksUser2.length - 1] === 'cofounders' &&
+                            common.asksUser2.length !== 1
+                              ? ' and '
+                              : ' '
+                          }finding a co-founder`
+                        : ask == 'refer'
+                        ? `${
+                            common.asksUser2[common.asksUser2.length - 1] === 'refer' && common.asksUser2.length !== 1
+                              ? ' and '
+                              : ' '
+                          }job referrals`
+                        : ask == 'hiring'
+                        ? `${
+                            common.asksUser2[common.asksUser2.length - 1] === 'hiring' && common.asksUser2.length !== 1
+                              ? ' and '
+                              : ' '
+                          }hiring`
+                        : ''
+                    }`
+                )}.`
+              : ''
+          }${common.location !== undefined ? `You are both located in ${common.location}` : ''}${
+            common.industry !== undefined && common.location !== undefined && common.role !== undefined
+              ? `, operate in ${common.industry},`
+              : common.industry !== undefined && common.location !== undefined && common.role === undefined
+              ? ` and operate in ${common.industry}.`
+              : common.industry !== undefined && common.location === undefined
+              ? `You both operate in ${common.industry}`
+              : ''
+          }${
+            common.role !== undefined && common.industry !== undefined
+              ? ` and are ${common.role}s`
+              : common.role !== undefined && common.industry === undefined && common.location === undefined
+              ? `You are both a ${common.role}`
+              : ''
+          }. ${
+            common.interests !== undefined
+              ? `You also have a shared interest in${common.interests.map(
+                  (interest) =>
+                    `${
+                      interest === common.interests[common.interests.length - 1] &&
+                      common.interests.length !== 1 &&
+                      ' and'
+                    } ${interest}`
+                )}`
+              : ''
+          }. I worked hard to make this happen - I hope it'll be useful 😊`,
+          author: 'Loop Bot'
+        })
 
         await Twilio.conversations.conversations(conversationSID).remove()
       })

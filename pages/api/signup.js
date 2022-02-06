@@ -35,7 +35,6 @@ const client = require('twilio')(accountSid, authToken)
  */
 async function handler(req, res) {
   // Get community
-  console.log(req.body)
   const communityId = req.body.headers.communityId
   const communityQuery = query(collection(db, 'communities'), where('communityId', '==', communityId))
   const communityDocs = await getDocs(communityQuery)
@@ -92,7 +91,6 @@ async function handler(req, res) {
     // The existing account does not have google account info yet, and we need to add the info
     if (googleUser !== undefined) {
       updateDoc(userByPhoneDoc.ref, { googleInfo: googleUser })
-      console.log('Google info updated')
     }
 
     // Add user to community user array
@@ -110,7 +108,6 @@ async function handler(req, res) {
     // User existed with different phone number
     if (userByGoogle && userByGoogle.phoneNum !== phoneNum) {
       updateDoc(userByGoogleDoc.ref, { phoneNum: phoneNum })
-      console.log('Phone number updated')
     }
     // Add user to community user array if not already added
     if (!communityWithAddedUser.includes(googleAccId)) {

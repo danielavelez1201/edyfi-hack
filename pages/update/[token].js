@@ -18,12 +18,9 @@ export default function Onboarding() {
   useEffect(() => {
     if (!router.isReady) return
     axios.post('/api/getUpdateRequest', { token: router.query.token }).then((res) => {
-      console.log({ res })
       setUser(res.data.user)
     })
   }, [router.query, router.isReady])
-
-  console.log(user)
 
   // const [addProject, setAddProject] = useState(true)
   // // const [projects, setProjects] = useState(user.projects)

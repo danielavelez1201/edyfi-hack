@@ -51,7 +51,6 @@ async function textBump(req, res) {
           from: '15593541895',
           to: `${user.phoneNum}`
         })
-        .then((message) => console.log(message.sid))
     }
   })
 }
