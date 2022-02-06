@@ -19,33 +19,41 @@ async function textBump(req, res) {
   let today = new Date().getTime()
 
   userCommunities.forEach(async (user) => {
-    const userData = user[0];
-    const userRef = user[1];
+    const userData = user[0]
+    const userRef = user[1]
     if (userData.lastUpdated <= today - 7889400000 && userData.lastSent <= today - 5259600000) {
       userRef.set({ lastSent: today }, { merge: true })
       await Twilio.messages.create({
         body: `Hey, ${userData.firstName}! It's been a few months since you updated your information for ${
           userData.communityIds[0]
-        }: 1) ${userData.firstName} ${userData.lastName}, 2) ${userData.email}, in 3) ${userData.location}, 4) ${userData.role} at 5) ${
-          userData.work
-        }, 6) ${userData.projects.length === 0 ? "aren't" : ''} working on ${
+        }: 1) ${userData.firstName} ${userData.lastName}, 2) ${userData.email}, in 3) ${userData.location}, 4) ${
+          userData.role
+        } at 5) ${userData.work}, 6) ${userData.projects.length === 0 ? "aren't" : ''} working on ${
           userData.projects.length === 0 ? 'projects' : ''
-        } projects ${userData.projects !== 0 ? userData.projects.map((p) => ` ${p}`) : ''} and you 7) ${userData.offers.map(
+        } projects ${
+          userData.projects !== 0 ? userData.projects.map((p) => ` ${p}`) : ''
+        } and you 7) ${userData.offers.map(
           (h) =>
             `${
               h == 'investors'
                 ? `can intro to investors`
                 : h == 'cofounders'
                 ? `${
-                    userData.offers[userData.offers.length - 1] === 'cofounders' && userData.offers.length !== 1 ? ' and ' : ' '
+                    userData.offers[userData.offers.length - 1] === 'cofounders' && userData.offers.length !== 1
+                      ? ' and '
+                      : ' '
                   }are searching for cofounders`
                 : h == 'refer'
                 ? `${
-                    userData.offers[userData.offers.length - 1] === 'refer' && userData.offers.length !== 1 ? ' and ' : ' '
+                    userData.offers[userData.offers.length - 1] === 'refer' && userData.offers.length !== 1
+                      ? ' and '
+                      : ' '
                   }can refer to a job`
                 : h == 'hiring'
                 ? `${
-                    userData.offers[userData.offers.length - 1] === 'hiring' && userData.offers.length !== 1 ? ' and ' : ' '
+                    userData.offers[userData.offers.length - 1] === 'hiring' && userData.offers.length !== 1
+                      ? ' and '
+                      : ' '
                   }are hiring`
                 : null
             }`
