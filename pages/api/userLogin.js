@@ -28,7 +28,6 @@ import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore
  * => Error, sign up with a community onboarding link
  */
 async function handler(req, res) {
-
   const googleUser = req.body.headers.googleUser
 
   // User query with phone number
