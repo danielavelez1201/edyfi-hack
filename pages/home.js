@@ -54,12 +54,8 @@ export default function Home() {
 
   const onboardLink = `keeploop.io/onboard/${communityId}`
 
-  async function sendBumps() {
-    await fetch('api/textBump').then((res) => res.json())
-  }
-
   async function sendRandBumps() {
-    await fetch('api/randomBumps').then((res) => res.json())
+    await fetch('api/singleRandBump', { communityid: community }).then((res) => res.json())
   }
 
   async function sendTelegramUpdateBumps() {
