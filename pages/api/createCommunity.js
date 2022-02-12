@@ -2647,7 +2647,6 @@ async function handler(req, res) {
       interests: interestsArray
     })
 
-    console.log('Document written with ID: ', docRef.id)
     res.status(200).json({ msg: 'success' })
   } catch (e) {
     console.error('Error adding document: ', e)

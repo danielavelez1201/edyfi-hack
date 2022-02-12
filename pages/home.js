@@ -54,12 +54,8 @@ export default function Home() {
 
   const onboardLink = `keeploop.io/onboard/${communityId}`
 
-  async function sendBumps() {
-    await fetch('api/textBump').then((res) => res.json())
-  }
-
   async function sendRandBumps() {
-    await fetch('api/randomBumps').then((res) => res.json())
+    await fetch('api/singleRandBump', { communityid: community }).then((res) => res.json())
   }
 
   async function sendTelegramUpdateBumps() {
@@ -131,8 +127,6 @@ export default function Home() {
         return true
       }
       if (hashcode(dataToken) !== token) {
-        console.log('hash', hashcode(dataToken), 'original', token)
-        console.log('WRONG TOKEN')
         //router.push({
         //pathname: '/'
         //})
@@ -142,8 +136,6 @@ export default function Home() {
     }
 
     function checkAdmin(adminGoogleUserId) {
-      console.log('in check')
-      console.log(adminGoogleUserId)
       return user && user.id === adminGoogleUserId
     }
 
@@ -151,7 +143,6 @@ export default function Home() {
     setToken(router.query.token)
 
     const fetchData = async () => {
-      console.log('user', user)
       // setUserList([fakeUser])
       // setOriginalData([fakeUser])
       setLoading(false)
@@ -164,8 +155,6 @@ export default function Home() {
           if (result.length === 0) {
             setLoading(true)
           } else {
-            console.log('API RESULT', result)
-            console.log('token', result.communityToken)
             //setIsAdmin(checkAdmin(result.adminGoogleUserId))
             const auth = checkAuth(result.communityToken)
             if (auth) {

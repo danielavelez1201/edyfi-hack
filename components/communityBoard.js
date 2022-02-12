@@ -23,7 +23,6 @@ export const CommunityBoard = (props) => {
           headers: { communityId: communityId }
         })
         .then((res) => {
-          console.log(res.data)
           if (res.data.communityBoard) {
             setContent(res.data.communityBoard)
             setNewText(res.data.communityBoard.text)
@@ -33,7 +32,6 @@ export const CommunityBoard = (props) => {
           }
         })
         .catch((error) => {
-          console.log(error)
           setLoading(false)
         })
     }
@@ -99,7 +97,6 @@ export const CommunityBoard = (props) => {
   }
 
   function formatDate(date) {
-    console.log(date)
     // const dateObj = new Date(Date.parse(date))
     //return dateObj.getDay() + ', ' + dateObj.getMonth() + ' ' + dateObj.getDay()
     return format(new Date(date), 'EEEE, MMMM d yyyy')
@@ -112,19 +109,10 @@ export const CommunityBoard = (props) => {
     resetLinkInput()
     setNewEventInfo(emptyEvent(newEvents.length + 1))
 
-    console.log({ content })
-
-    await axios
-      .post('/api/saveCommunityBoard', {
-        board: { text: newText, links: newLinks, events: newEvents },
-        communityId: communityId
-      })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((error) => {
-        console.log('error')
-      })
+    await axios.post('/api/saveCommunityBoard', {
+      board: { text: newText, links: newLinks, events: newEvents },
+      communityId: communityId
+    })
   }
 
   function exit() {

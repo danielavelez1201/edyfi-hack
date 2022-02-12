@@ -13,7 +13,6 @@ async function handler(req, res) {
   req.body.newInterest.forEach(async (interest) => {
     const firstCapitalizedInterest = interest.charAt(0).toUpperCase() + interest.slice(1).toLowerCase()
     if (!interests.includes(firstCapitalizedInterest)) {
-      console.log(firstCapitalizedInterest)
       await updateDoc(communityDoc.ref, { interests: [...interests, firstCapitalizedInterest] })
     }
   })

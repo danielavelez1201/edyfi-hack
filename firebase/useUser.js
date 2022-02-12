@@ -51,7 +51,6 @@ const useUser = () => {
     }
   }, [])
 
-  console.log({ useUserUser: user })
   return { user, logout }
 }
 

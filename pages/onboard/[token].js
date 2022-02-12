@@ -63,7 +63,6 @@ export default function Onboarding() {
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result)
           setIndustries(result.industries)
         })
 
@@ -74,13 +73,11 @@ export default function Onboarding() {
         .then((res) => res.json())
         .then((result) => {
           setInterests(result.interests)
-          console.log(result)
         })
     }
   }, [communityId])
 
   const interestsUpdate = async (interest) => {
-    console.log(communityId)
     await axios
       .post('/api/autocomplete/interests', {
         newInterest: interest,
@@ -88,13 +85,9 @@ export default function Onboarding() {
       })
       .then((res) => {
         setError('')
-        if (res.status === 200) {
-          console.log('res status 200')
-        }
       })
       .catch((error) => {
         if (error.response && error.response.data) {
-          console.log(error.response.data)
           setError(error.response.data)
         }
       })
@@ -139,7 +132,6 @@ export default function Onboarding() {
       setError('Please input a valid phone number.')
       return
     }
-    console.log('clicked login')
     await axios
       .post('/api/signup', {
         ...values,
@@ -152,12 +144,8 @@ export default function Onboarding() {
         updated: new Date().toLocaleString().split(',')[0]
       })
       .then((res) => {
-        console.log(res)
         setError('')
         if (res.status === 200) {
-          console.log('res status 200')
-          console.log(token)
-          console.log(hashcode(token))
           router.push({
             pathname: '/home',
             query: { communityId: communityId, token: hashcode(token) }
@@ -168,7 +156,6 @@ export default function Onboarding() {
         if (error.response && error.response.data.msg === 'needs to make account') {
           setShowForm(true)
         } else if (error.response && error.response.data) {
-          console.log(error.response.data)
           setError(error.response.data)
         }
       })
@@ -185,10 +172,8 @@ export default function Onboarding() {
   const asksClick = (e, ask) => {
     if (asks.includes(ask.value)) {
       setAsks(asks.filter((item) => item !== ask.value))
-      console.log(asks.filter((item) => item !== ask.value))
     } else {
       setAsks([...asks, ask.value])
-      console.log([...asks, ask.value])
     }
   }
 
@@ -253,7 +238,6 @@ export default function Onboarding() {
               role: Yup.string().max(40, charError).required(requiredError)
             })}
             onSubmit={async (values, { setSubmitting }) => {
-              console.log('in onSubmit')
               setSubmitting(true)
               await login(values)
             }}

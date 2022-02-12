@@ -28,8 +28,6 @@ import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore
  * => Error, sign up with a community onboarding link
  */
 async function handler(req, res) {
-  console.log('in api')
-
   const googleUser = req.body.headers.googleUser
 
   // User query with phone number
@@ -71,7 +69,6 @@ async function handler(req, res) {
     // User existed with different phone number
     if (userByGoogle && userByGoogle.phoneNum !== phoneNum) {
       updateDoc(userByGoogleDoc.ref, { phoneNum: phoneNum })
-      console.log('Phone number updated')
     }
   }
 

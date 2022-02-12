@@ -19,10 +19,8 @@ export default function AdminLogin() {
   }
 
   async function onSubmit(e) {
-    console.log('onsubmit')
     e.preventDefault()
     if (user) {
-      console.log('SUBMIT')
       await fetch('api/adminLogin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', userId: user.uid },

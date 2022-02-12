@@ -16,13 +16,11 @@ export default function UserLogin() {
   const googleTextStyle = user ? 'text-center ml-5 text-cyan' : 'text-center ml-5'
 
   async function login() {
-    console.log('login')
     await axios
       .post('/api/userLogin', {
         headers: { googleUser: user, phoneNum: phoneNum }
       })
       .then((res) => {
-        console.log(res)
         setError('')
         if (res.status === 200) {
           router.push({
@@ -35,7 +33,6 @@ export default function UserLogin() {
         if (error.response && error.response.data.msg === 'needs to make account') {
           setError("Account doesn't exist. Make one with a community onboarding link!")
         } else if (error.response && error.response.data) {
-          console.log(error.response.data)
           setError(error.response.data)
         }
       })

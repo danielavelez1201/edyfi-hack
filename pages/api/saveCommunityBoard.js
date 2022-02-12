@@ -2,7 +2,6 @@ import db, { user } from '../../firebase/clientApp'
 import { collection, addDoc, query, where, getDocs, updateDoc } from 'firebase/firestore'
 
 async function handler(req, res) {
-  console.log('in api')
   // Get community
   const communityId = req.body.communityId
   const communityQuery = query(collection(db, 'communities'), where('communityId', '==', communityId))
@@ -13,7 +12,6 @@ async function handler(req, res) {
   }
 
   const communityDoc = communityDocs.docs[0]
-  console.log('saving as', req.body.board)
 
   // Set community board
   updateDoc(communityDoc.ref, { board: req.body.board })
