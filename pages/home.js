@@ -56,10 +56,11 @@ export default function Home() {
   const onboardLink = `keeploop.io/onboard/${communityId}`
 
   async function sendRandBumps() {
-    await axios.post('api/randomBumps').then((res) => console.log(res))
-    // await axios.post('/api/singleRandBump', {
-    //   headers: { communityId: communityId }
-    // }).then((res) => console.log(res))
+    await axios
+      .post('/api/singleRandBump', {
+        headers: { communityId: communityId }
+      })
+      .then((res) => console.log(res))
   }
 
   async function sendTelegramUpdateBumps() {
