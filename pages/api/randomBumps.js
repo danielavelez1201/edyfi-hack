@@ -5,7 +5,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const Twilio = require('twilio')(accountSid, authToken)
 
-async function randomBump(req, res) {
+async function handler(req, res) {
   const q = query(collection(db, 'communities'))
   const communities = await getDocs(q)
   const communityIds = []
@@ -19,6 +19,7 @@ async function randomBump(req, res) {
 
   const userCommunities = []
   const uniqueCommunityIds = new Set(communityIds)
+  const matchedUsers = [] // [[user1,id],[user2,id2],{match criteria}]
 
   uniqueCommunityIds.forEach(async (community) => {
     if (community.targetedMatching === 'on') {
@@ -26,14 +27,13 @@ async function randomBump(req, res) {
       const users = await getDocs(q)
 
       users.forEach((user) => {
-        if (user.targetedBump) {
-          const userData = user.data()
+        const userData = user.data()
+        if (userData.targetedBump && userData.lastSent <= new Date().getTime() - 1209600000) {
           const userRef = user.ref
           userCommunities.push([userData, userRef])
         }
       })
 
-      const matchedUsers = [] // [[user1,id],[user2,id2],{match criteria}]
       userCommunities.forEach(async (user, upperIndex) => {
         const userData = user[0]
         const userRef = user[1]
@@ -43,10 +43,10 @@ async function randomBump(req, res) {
             matchedUsers.push([user, null, {}])
           } else {
             // match based on ask/offer and industry
-            matchedUsers.forEach((possible, i) => {
+            matchedUsers.forEach(async (possible, i) => {
               const possibleUserData = possible[0][0]
               const possibleUserRef = possible[0][1]
-              const emptyPossibleMatch = matchedUsers[i][1]
+              let emptyPossibleMatch = matchedUsers[i][1]
               const reasonsForMatch = matchedUsers[i][2]
 
               let allPossiblesPushed = false
@@ -74,27 +74,25 @@ async function randomBump(req, res) {
 
                   if ((possibleOfferMatch || possibleUserMatch) && possibleIndustryMatch) {
                     // offer/ask & industry & location and matches them
-                    emptyPossibleMatch = user
+                    matchedUsers[i][1] = user
                     matched = true
 
-                    userRef.set(
+                    await setDoc(
+                      userRef,
                       {
-                        prevMatches:
-                          userData.prevMatches !== undefined
-                            ? [...userData.prevMatches, possibleUserRef]
-                            : [possibleUserRef]
+                        prevMatches: arrayUnion(possibleUserRef)
                       },
                       { merge: true }
                     )
-                    possibleUserRef.set(
+
+                    await setDoc(
+                      possibleUserRef,
                       {
-                        prevMatches:
-                          possibleUserData.prevMatches !== undefined
-                            ? [...possibleUserData.prevMatches, userRef]
-                            : [userRef]
+                        prevMatches: arrayUnion(userRef)
                       },
                       { merge: true }
                     )
+
                     checkMatches.forEach((field, x) => {
                       if (field && x === 0) {
                         // if offers/asks match
@@ -199,8 +197,22 @@ async function randomBump(req, res) {
         const person2 = person2Array[0]
         const common = match[2]
         let conversationSID = ''
-        person1Array[1].set({ lastSent: today }, { merge: true })
-        person2Array[1].set({ lastSent: today }, { merge: true })
+
+        await setDoc(
+          person1Array[1],
+          {
+            lastSent: today
+          },
+          { merge: true }
+        )
+
+        await setDoc(
+          person2Array[1],
+          {
+            lastSent: today
+          },
+          { merge: true }
+        )
 
         await Twilio.conversations.conversations
           .create({ friendlyName: `${person1.communityId} Connection` })
@@ -215,11 +227,11 @@ async function randomBump(req, res) {
 
         await Twilio.conversations
           .conversations(conversationSID)
-          .participants.create({ 'messagingBinding.address': `+${person1.phoneNum}` })
+          .participants.create({ 'messagingBinding.address': `+1${person1.phoneNum}` })
 
         await Twilio.conversations
           .conversations(conversationSID)
-          .participants.create({ 'messagingBinding.address': `+${person2.phoneNum}` })
+          .participants.create({ 'messagingBinding.address': `+1${person2.phoneNum}` })
 
         await Twilio.conversations.conversations(conversationSID).messages.create({
           body: `Hi, Loop Bot here! ${person1.firstName} meet ${person2.firstName}! We're connecting you because${
@@ -227,10 +239,13 @@ async function randomBump(req, res) {
               ? ` ${person2.firstName} can help with${common.asksUser1.map(
                   (ask) =>
                     `${
-                      ask == 'investors' && common.asksUser1.length === 1
-                        ? ` finding investors.`
-                        : ask == 'investors'
-                        ? ` finding investors`
+                      ask == 'investors'
+                        ? `${
+                            common.asksUser1[common.asksUser1.length - 1] === 'investors' &&
+                            common.asksUser1.length !== 1
+                              ? ' and finding investors.'
+                              : ' finding investors'
+                          }`
                         : ask == 'cofounders'
                         ? `${
                             common.asksUser1[common.asksUser1.length - 1] === 'cofounders' &&
@@ -259,10 +274,13 @@ async function randomBump(req, res) {
               ? ` ${person1.firstName} can help with${common.asksUser2.map(
                   (ask) =>
                     `${
-                      ask == 'investors' && common.asksUser1.length === 1
-                        ? ` finding investors.`
-                        : ask == 'investors'
-                        ? ` finding investors`
+                      ask == 'investors'
+                        ? `${
+                            common.asksUser2[common.asksUser2.length - 1] === 'investors' &&
+                            common.asksUser2.length !== 1
+                              ? ' and finding investors.'
+                              : ' finding investors'
+                          }`
                         : ask == 'cofounders'
                         ? `${
                             common.asksUser2[common.asksUser2.length - 1] === 'cofounders' &&
@@ -292,7 +310,7 @@ async function randomBump(req, res) {
               : common.industry !== undefined && common.location !== undefined && common.role === undefined
               ? ` and operate in ${common.industry}.`
               : common.industry !== undefined && common.location === undefined
-              ? `You both operate in ${common.industry}`
+              ? `You both operate in/with ${common.industry}`
               : ''
           }${
             common.role !== undefined && common.industry !== undefined
@@ -300,7 +318,7 @@ async function randomBump(req, res) {
               : common.role !== undefined && common.industry === undefined && common.location === undefined
               ? `You are both a ${common.role}`
               : ''
-          }. ${
+          }.${
             common.interests !== undefined
               ? `You also have a shared interest in${common.interests.map(
                   (interest) =>
@@ -309,9 +327,9 @@ async function randomBump(req, res) {
                       common.interests.length !== 1 &&
                       ' and'
                     } ${interest}`
-                )}`
+                )}.`
               : ''
-          }. I worked hard to make this happen - I hope it'll be useful 😊`,
+          } I worked hard to make this happen - I hope it'll be useful 😊`,
           author: 'Loop Bot'
         })
 
@@ -319,6 +337,7 @@ async function randomBump(req, res) {
       })
     }
   })
+  return res.status(200).json(matchedUsers)
 }
 
-randomBump()
+export default handler

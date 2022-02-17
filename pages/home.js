@@ -17,6 +17,7 @@ import { CopyModal } from '../components/copyModal'
 import { CommunityBoard } from '../components/communityBoard'
 import Link from 'next/link'
 import { SMSDemo } from '../components/smsDemo'
+import axios from 'axios'
 
 const fakeUser = {
   firstName: 'Daniela',
@@ -55,7 +56,10 @@ export default function Home() {
   const onboardLink = `keeploop.io/onboard/${communityId}`
 
   async function sendRandBumps() {
-    await fetch('api/singleRandBump', { communityid: community }).then((res) => res.json())
+    await axios.post('api/randomBumps').then((res) => console.log(res))
+    // await axios.post('/api/singleRandBump', {
+    //   headers: { communityId: communityId }
+    // }).then((res) => console.log(res))
   }
 
   async function sendTelegramUpdateBumps() {
