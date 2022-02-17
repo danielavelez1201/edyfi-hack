@@ -56,10 +56,9 @@ export default function Home() {
   const onboardLink = `keeploop.io/onboard/${communityId}`
 
   async function sendRandBumps() {
-    await axios
-      .post('/api/singleRandBump', {
-        headers: { communityId: communityId }
-      })
+    await axios.post('/api/singleRandBump', {
+      headers: { communityId: communityId }
+    })
   }
 
   function switchCommunity(community) {
