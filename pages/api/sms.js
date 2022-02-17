@@ -2,7 +2,7 @@ const http = require('http')
 const express = require('express')
 const MessagingResponse = require('twilio').twiml.MessagingResponse
 const bodyParser = require('body-parser')
-import { doc, getDoc, collection, query, getDocs, where } from 'firebase/firestore'
+import { doc, getDoc, collection, query, getDocs, where, updateDoc, arrayUnion } from 'firebase/firestore'
 import db from '../../firebase/clientApp'
 
 const app = express()
@@ -17,47 +17,87 @@ app.post('/api/sms', async (req, res) => {
   const body = req.body.Body ? req.body.Body.toLowerCase() : null
   const regex = /[0-9],/gm
 
+  const userRef = user[0].ref
+  const userData = user[0].data()
+
   switch (body) {
     case 'yes':
     case 'y':
       twiml.message('To update send one text with the following format: 2,newemail@gmail.com,3,NYC')
-      user.lastUpdated.update(today) // if they respond
-      user.updated.update(today)
+      updateDoc(
+        userRef,
+        {
+          lastUpdated: new Date().getTime()
+        },
+        { merge: true }
+      )
       break
     case 'no':
     case 'n':
       twiml.message(
-        `Great! Check out the community if you haven't in a while: https://keeploop.io/onboard/${user.communityId}`
+        `Great! Check out the community if you haven't in a while: https://keeploop.io/onboard/${userData.communityId}`
       )
-      user.lastUpdated.update(today) // if they respond
-      user.updated.update(today)
+      updateDoc(
+        userRef,
+        {
+          lastUpdated: new Date().getTime()
+        },
+        { merge: true }
+      )
       break
     case body.match(/[0-9],\S/g) !== null:
       twiml.message(
-        `Great! Check out the community if you haven't in a while: https://keeploop.io/onboard/${user.communityId}`
+        `Great! Check out the community if you haven't in a while: https://keeploop.io/onboard/${userData.communityId}`
       )
       let afterComma = 0
       const updates = body.split(',')
       updates.forEach((field, i) => {
         switch (field) {
           case '1':
-            user.firstName == updates[i + 1].split(' ')[0]
-              ? user.firstName.update(updates[i + 1].split(' ')[0])
-              : user.lastName == updates[i + 1].split(' ')[1]
-              ? user.lastName.update(updates[i + 1].split(' ')[1])
-              : null
+            updateDoc(
+              userRef,
+              {
+                firstName: updates[i + 1].split(' ')[0],
+                lastName: updates[i + 1].split(' ')[1]
+              },
+              { merge: true }
+            )
             break
           case '2':
-            user.email.update(updates[i + 1])
+            updateDoc(
+              userRef,
+              {
+                email: updates[i + 1]
+              },
+              { merge: true }
+            )
             break
           case '3':
-            user.location.update(updates[i + 1])
+            updateDoc(
+              userRef,
+              {
+                location: updates[i + 1]
+              },
+              { merge: true }
+            )
             break
           case '4':
-            user.role.update(updates[i + 1])
+            updateDoc(
+              userRef,
+              {
+                role: updates[i + 1]
+              },
+              { merge: true }
+            )
             break
           case '5':
-            user.work.update(updates[i + 1])
+            updateDoc(
+              userRef,
+              {
+                work: updates[i + 1]
+              },
+              { merge: true }
+            )
             break
           case '6':
             // remove all indexes includes 6. until the end or when 7 is hit
@@ -71,7 +111,13 @@ app.post('/api/sms', async (req, res) => {
                 newProjects.push(field)
               }
             })
-            user.projects.update(newProjects)
+            updateDoc(
+              userRef,
+              {
+                projects: arrayUnion(newProjects)
+              },
+              { merge: true }
+            )
             break
           case '7':
             twiml.message(`To update the offers you can help with, please visit keeploop.io/update`)
@@ -80,8 +126,6 @@ app.post('/api/sms', async (req, res) => {
             break
         }
       })
-      user.lastUpdated.update(today) // if they respond
-      user.updated.update(today)
     default:
       twiml.message('Sorry, I only understand yes, no, or a correct update response (format 2,email@gmail.com)')
       break

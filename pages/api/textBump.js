@@ -1,4 +1,5 @@
-import { doc, getDoc, updateDoc, collection, query, getDocs, where } from 'firebase/firestore'
+import { doc, getDoc, updateDoc, collection, query, getDocs, setDoc, arrayUnion } from 'firebase/firestore'
+import { constants } from 'fs'
 import db from '../../firebase/clientApp'
 
 const authToken = process.env.TWILIO_AUTH_TOKEN
@@ -16,13 +17,20 @@ async function textBump(req, res) {
     const userRef = user.ref
     userCommunities.push([userData, userRef])
   })
-  let today = new Date().getTime()
+  const today = new Date().getTime()
 
   userCommunities.forEach(async (user) => {
     const userData = user[0]
     const userRef = user[1]
-    if (userData.lastUpdated <= today - 7889400000 && userData.lastSent <= today - 5259600000) {
-      userRef.set({ lastSent: today }, { merge: true })
+    // if (userData.lastUpdated <= today - 7889400000 && userData.lastSent <= today - 5259600000) {
+    if (userData.lastSent === 1645126146035) {
+      // await setDoc(
+      //   userRef,
+      //   {
+      //     lastSent: today
+      //   },
+      //   { merge: true }
+      // )
       await Twilio.messages.create({
         body: `Hey, ${userData.firstName}! It's been a few months since you updated your information for ${
           userData.communityIds[0]
