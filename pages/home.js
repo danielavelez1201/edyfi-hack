@@ -61,6 +61,10 @@ export default function Home() {
     })
   }
 
+  async function sendSMSUpdateDeleteAfter() {
+    await axios.post('/api/textBump')
+  }
+
   function switchCommunity(community) {
     setCommunityId(community)
     setToken('')
@@ -229,16 +233,16 @@ export default function Home() {
             <div className='w-full h-full flex flex-col justify-center items-center'>
               <div className='mt-12 '></div>
               <CommunityBoard data={communityBoardProps}></CommunityBoard>
-              {/* <div className='flex items-center'>
-                {userList.length !== 0 && (
+              <div className='flex items-center'>
+                {userList.length !== 0 && isAdmin && (
                   <button
-                    onClick={() => sendBumps()}
+                    onClick={() => sendSMSUpdateDeleteAfter()}
                     className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
                   >
-                    Send text to all members
+                    Send update text
                   </button>
                 )}
-              </div> */}
+              </div>
               <div className='flex items-center'>
                 {userList.length !== 0 && isAdmin && (
                   <button

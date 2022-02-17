@@ -6,7 +6,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const Twilio = require('twilio')(accountSid, authToken)
 
-async function textBump(req, res) {
+async function handler(req, res) {
   const q = query(collection(db, 'users'))
 
   const users = await getDocs(q)
@@ -73,4 +73,4 @@ async function textBump(req, res) {
   })
 }
 
-textBump()
+export default handler
