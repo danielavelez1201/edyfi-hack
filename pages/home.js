@@ -63,10 +63,6 @@ export default function Home() {
       .then((res) => console.log(res))
   }
 
-  async function sendTelegramUpdateBumps() {
-    await fetch('api/telegramUpdateBumps').then((res) => res.json())
-  }
-
   function switchCommunity(community) {
     setCommunityId(community)
     setToken('')
@@ -252,16 +248,6 @@ export default function Home() {
                     className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
                   >
                     Send matching text
-                  </button>
-                )}
-              </div>
-              <div className='flex items-center'>
-                {userList.length !== 0 && isAdmin && (
-                  <button
-                    onClick={() => sendTelegramUpdateBumps()}
-                    className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-                  >
-                    Send update telegram
                   </button>
                 )}
               </div>

@@ -4,7 +4,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from decouple import config
 
-def getCommunityInfo(communityDict, db):
+def getCommunityInfo(communityDict, db, logger):
     """Get community telegram users, locations, and projects."""
 
     telegram_users = [] # [{chat_id: chat_id, name: name, location: location, last_updated: last_updated}]
@@ -36,7 +36,7 @@ def getCommunityInfo(communityDict, db):
 
     return {'telegram_users': telegram_users, 'locations': locations, 'projects': projects}
 
-def getCommunityUpdateForUser(user, communityInfo, communityId):
+def getCommunityUpdateForUser(user, communityInfo, communityId, logger):
     """Create community update to send to a user."""
 
     locations = communityInfo['locations']
@@ -72,7 +72,7 @@ def getCommunityUpdateForUser(user, communityInfo, communityId):
 
     return formatUpdate(communityId, location_update, project_update)
 
-def formatUpdate(communityId, location_update, project_update):
+def formatUpdate(communityId, location_update, project_update, logger):
     text = communityId + ' weekly nugget: '
 
     if not (project_update or location_update):
@@ -92,12 +92,13 @@ def formatUpdate(communityId, location_update, project_update):
     return text  
 
 
-def sendCommunityUpdate(updater, db) -> None:
+def sendCommunityUpdate(updater, db, logger) -> None:
+    logger.info("starting community updates")
     communities_ref = db.collection(u'communities')
     for community in communities_ref.stream():
         # start updates for this community 
         communityDict = community.reference.get().to_dict()
-        communityInfo = getCommunityInfo(communityDict, db)
+        communityInfo = getCommunityInfo(communityDict, db, logger)
 
         # send update to each user
         for user in communityInfo['telegram_users']:

@@ -6,6 +6,8 @@ from decouple import config
 from pytz import timezone
 import pytz
 import sys
+from setuptools import Command
+
 sys.path.append('/telegram') 
 
 from telegram.ext import (
@@ -18,7 +20,8 @@ from telegram.ext import (
 from community_updates import sendCommunityUpdate
 from intro import cancel, phone, start
 
-from update_profile import UPDATE_QUERIES, askForNewValue, sendUpdateInfoBump, updateWithNewValue
+from matching import sendCommunityMatches
+from update_profile import UPDATE_QUERIES, askForNewValue, sendUpdateInfoBumps, updateWithNewValue, startUpdateInfoConvo
 
 # Enable logging
 logging.basicConfig(
@@ -31,6 +34,7 @@ api_key = config('TELEGRAM_BOT_API_KEY')
 def main() -> None:
     """Run the bot."""
 
+    logger.info("starting")
     # initializations 
     cred = credentials.Certificate('firebase-key.json')
     firebase_admin.initialize_app(cred)
@@ -39,8 +43,9 @@ def main() -> None:
     # Create the Updater and pass it your bot's token.
     updater = Updater(token=api_key)
 
-    sendCommunityUpdate(updater, db)
-    sendUpdateInfoBump(updater, db)
+    #sendCommunityUpdate(updater, db, logger)
+    #sendUpdateInfoBumps(updater, db, logger)
+    sendCommunityMatches(updater, db, logger)
 
     j = updater.job_queue
     utc = pytz.utc
@@ -52,25 +57,39 @@ def main() -> None:
     dispatcher = updater.dispatcher
 
     # Add conversation handler with states
-    conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', start)],
+    intro_conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', lambda x, y: start(x, y, logger))],
         states={
-            0: [MessageHandler(Filters.regex('[0-9]+'), lambda x, y : phone(x, y, db))],
+            0: [MessageHandler(Filters.regex('[0-9]+'), lambda x, y : phone(x, y, db, logger))],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
+
+    dispatcher.add_handler(intro_conv_handler)
+
+    # Start update convo 
+    start_update_conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('update', lambda x, y: startUpdateInfoConvo(x, y, db, logger))],
+        states={
+            0: [MessageHandler(Filters.regex(UPDATE_QUERIES), lambda x, y: askForNewValue(x, y, db, logger))],
+            1: [MessageHandler(Filters.all, callback= lambda x, y: updateWithNewValue(x, y, db, logger))],
+        },
+        fallbacks=[CommandHandler('cancel', cancel)],
+    )
+
+    dispatcher.add_handler(start_update_conv_handler)
 
     # Update info conversation handler
-    conv_handler = ConversationHandler(
-        entry_points=[MessageHandler(Filters.regex(UPDATE_QUERIES), askForNewValue)],
+    update_conv_handler = ConversationHandler(
+        entry_points=[MessageHandler(Filters.regex(UPDATE_QUERIES), lambda x, y: askForNewValue(x, y, db, logger))],
         states={
-            0: [MessageHandler(Filters.all, callback= updateWithNewValue)],
-            1: [MessageHandler(Filters.regex(UPDATE_QUERIES), askForNewValue)],
+            1: [MessageHandler(Filters.all, callback= lambda x, y: updateWithNewValue(x, y, db, logger))],
+            0: [MessageHandler(Filters.regex(UPDATE_QUERIES), lambda x, y: askForNewValue(x, y, db, logger))],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
 
-    dispatcher.add_handler(conv_handler)
+    dispatcher.add_handler(update_conv_handler)
 
     # Start the Bot
     updater.start_polling()
