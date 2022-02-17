@@ -60,7 +60,6 @@ export default function Home() {
       .post('/api/singleRandBump', {
         headers: { communityId: communityId }
       })
-      .then((res) => console.log(res))
   }
 
   function switchCommunity(community) {

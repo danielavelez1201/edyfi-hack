@@ -4,8 +4,6 @@ import db from '../../firebase/clientApp'
 async function handler(req, res) {
   const communities = [req.headers.communityId]
 
-  console.log(req)
-
   // We're not returning all communities for now to focus on other features first
 
   // User is signed in with google so we need to also return all the communities
