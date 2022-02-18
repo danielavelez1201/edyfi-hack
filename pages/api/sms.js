@@ -1,15 +1,8 @@
-const http = require('http')
-const express = require('express')
 const MessagingResponse = require('twilio').twiml.MessagingResponse
-const bodyParser = require('body-parser')
 import { doc, getDoc, collection, query, getDocs, where, updateDoc, arrayUnion } from 'firebase/firestore'
 import db from '../../firebase/clientApp'
 
-const app = express()
-
-app.use(bodyParser.urlencoded({ extended: false }))
-
-app.post('/api/sms', async (req, res) => {
+async function handler(req, res) {
   const twiml = new MessagingResponse()
   const q = query(collection(db, 'users'), where('phoneNum', '==', req.body.From))
   const user = await getDocs(q)
@@ -35,7 +28,9 @@ app.post('/api/sms', async (req, res) => {
     case 'no':
     case 'n':
       twiml.message(
-        `Great! Check out the community if you haven't in a while: https://keeploop.io/onboard/${userData.communityId}`
+        `Great! Check out your ${
+          userData.communityIds.length === 1 ? 'community' : 'communities'
+        } if you haven't in a while at https://keeploop.io/onboard/${userData.communityIds.map((id)=>(` ${id}`))}.`
       )
       updateDoc(
         userRef,
@@ -47,7 +42,9 @@ app.post('/api/sms', async (req, res) => {
       break
     case body.match(/[0-9],\S/g) !== null:
       twiml.message(
-        `Great! Check out the community if you haven't in a while: https://keeploop.io/onboard/${userData.communityId}`
+        `Great! Check out your ${
+          userData.communityIds.length === 1 ? 'community' : 'communities'
+        } if you haven't in a while at https://keeploop.io/onboard/${userData.communityIds.map((id) => ` ${id}`)}.`
       )
       let afterComma = 0
       const updates = body.split(',')
@@ -133,8 +130,6 @@ app.post('/api/sms', async (req, res) => {
 
   res.writeHead(200, { 'Content-Type': 'text/xml' })
   res.end(twiml.toString())
-})
+}
 
-http.createServer(app).listen(1337, () => {
-  console.log('Express server listening on port 1337')
-})
+export default handler
