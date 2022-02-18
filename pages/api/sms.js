@@ -30,7 +30,7 @@ async function handler(req, res) {
       twiml.message(
         `Great! Check out your ${
           userData.communityIds.length === 1 ? 'community' : 'communities'
-        } if you haven't in a while at https://keeploop.io/onboard/${userData.communityIds.map((id)=>(` ${id}`))}.`
+        } if you haven't in a while at https://keeploop.io/onboard/${userData.communityIds.map((id) => ` ${id}`)}.`
       )
       updateDoc(
         userRef,
