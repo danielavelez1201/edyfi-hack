@@ -7,11 +7,15 @@ async function handler(req, res) {
   const q = query(collection(db, 'users'), where('phoneNum', '==', req.body.From))
   const user = await getDocs(q)
 
-  const body = req.body.Body ? req.body.Body.toLowerCase() : null
+  const body = req.parameters.Body ? req.parameters.Body.toLowerCase() : null
   const regex = /[0-9],/gm
 
   const userRef = user[0].ref
   const userData = user[0].data()
+
+  console.log(body)
+  console.log(req.body)
+  console.log(req.parameters)
 
   switch (body) {
     case 'yes':
@@ -124,7 +128,7 @@ async function handler(req, res) {
         }
       })
     default:
-      twiml.message('Sorry, I only understand yes, no, or a correct update response (format 2,email@gmail.com)')
+      twiml.message('Sorry, I only understand yes, no, or a correct update response (format: 2,email@gmail.com)')
       break
   }
 
