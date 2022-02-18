@@ -13,10 +13,6 @@ async function handler(req, res) {
   const userRef = user[0].ref
   const userData = user[0].data()
 
-  console.log(body)
-  console.log(req.body)
-  console.log(req.parameters)
-
   switch (body) {
     case 'yes':
     case 'y':
