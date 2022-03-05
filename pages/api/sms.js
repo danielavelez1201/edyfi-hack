@@ -1,11 +1,21 @@
 import { doc, getDoc, collection, query, getDocs, where, updateDoc, arrayUnion } from 'firebase/firestore'
 import db from '../../firebase/clientApp'
+const authToken = process.env.TWILIO_AUTH_TOKEN
+const accountSid = process.env.TWILIO_ACCOUNT_SID
+const Twilio = require('twilio')(accountSid, authToken)
 
 handler = function (context, event, callback) {
   // Create a new messaging response object
   const twiml = new Twilio.twiml.MessagingResponse()
   // Use any of the Node.js SDK methods, such as `message`, to compose a response
   console.log(context)
+  // Twilio.messages
+  //   .create({
+  //     body: 'McAvoy or Stewart? These timelines can get so confusing.',
+  //     from: '+15593541895',
+  //     to: '+13853106667'
+  //   })
+  //   .then((message) => console.log(message.sid))
   twiml.message('context')
   // Return the TwiML as the second argument to `callback`
   // This will render the response as XML in reply to the webhook request
