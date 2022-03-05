@@ -8,14 +8,14 @@ handler = function (context, event, callback) {
   // Create a new messaging response object
   const twiml = new Twilio.twiml.MessagingResponse()
   // Use any of the Node.js SDK methods, such as `message`, to compose a response
-  console.log(context)
-  // Twilio.messages
-  //   .create({
-  //     body: 'McAvoy or Stewart? These timelines can get so confusing.',
-  //     from: '+15593541895',
-  //     to: '+13853106667'
-  //   })
-  //   .then((message) => console.log(message.sid))
+  // console.log(context)
+  Twilio.messages
+    .create({
+      body: 'McAvoy or Stewart? These timelines can get so confusing.',
+      from: '+15593541895',
+      to: '+13853106667'
+    })
+    .then((message) => console.log(message.sid))
   twiml.message('context')
   // Return the TwiML as the second argument to `callback`
   // This will render the response as XML in reply to the webhook request
