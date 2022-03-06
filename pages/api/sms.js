@@ -4,17 +4,18 @@ const authToken = process.env.TWILIO_AUTH_TOKEN
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const Twilio = require('twilio')(accountSid, authToken)
 
-handler = function (req, res) {
+async function handler(req, res) {
   // Create a new messaging response object
   const twiml = new Twilio.twiml.MessagingResponse()
   // Use any of the Node.js SDK methods, such as `message`, to compose a response
   twiml.message('context')
   // Return the TwiML as the second argument to `callback`
   // This will render the response as XML in reply to the webhook request
-  res.writeHead(200, {
-    'Content-Type': 'text/xml'
-  })
-  res.end(twiml.toString())
+  // res.writeHead(200, {
+  //   'Content-Type': 'text/xml'
+  // })
+  res.status(200).end(twiml.toString())
+  // res.end(twiml.toString())
 }
 
 // async function handler(req, res) {
