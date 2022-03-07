@@ -153,7 +153,7 @@ export default function Onboarding() {
         setError('')
         if (res.status === 200) {
           router.push({
-            pathname: '/communities'
+            pathname: '/'
           })
         }
       })
