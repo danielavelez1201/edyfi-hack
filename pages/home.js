@@ -184,7 +184,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className='h-fit min-h-screen justify-center items-center w-full min-w-min py-14 bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
+      <div className='h-fit min-h-screen justify-center items-center w-full py-14 bg-gradient-to-r from-indigo-dark via-gray to-indigo-light'>
         {router.query.demo === 'true' && (
           <div className='ml-10 mt-10 w-max max-w-8xl m-auto bg-white rounded-lg drop-shadow py-5 px-5'>
             <div className='flex'>
@@ -225,7 +225,7 @@ export default function Home() {
           </div>
         )}
         <div className='mx-20 my-10'>
-          <div className='w-fit m-auto rounded-lg bg-gray-light drop-shadow py-10 px-16'>
+          <div className='rounded-lg bg-gray-light drop-shadow py-10 px-8'>
             <div className='flex justify-between border-b-2 border-gray-300 py-3'>
               <h1 className='text-3xl font-bold mb-2'>{communityId}</h1>
               {userList.length !== 0 && !loading && <CopyModal onboardLink={onboardLink}></CopyModal>}
@@ -233,7 +233,7 @@ export default function Home() {
             <div className='w-full h-full flex flex-col justify-center items-center'>
               <div className='mt-12 '></div>
               <CommunityBoard data={communityBoardProps}></CommunityBoard>
-              <div className='flex items-center'>
+              <div className='flex items-center '>
                 {userList.length !== 0 && isAdmin && (
                   <button
                     onClick={() => sendSMSUpdateDeleteAfter()}
@@ -254,7 +254,7 @@ export default function Home() {
                 )}
               </div>
               {userList.length > 0 && (
-                <main className='max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pt-4'>
+                <main className='mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4'>
                   <div className=''></div>
                   <div className='mt-6'>{userList.length > 0 && <Table columns={columns} data={userList} />}</div>
                 </main>
