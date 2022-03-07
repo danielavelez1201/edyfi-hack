@@ -17,7 +17,7 @@ async function handler(req, res) {
     offers: req.body.offers,
     phoneNum: req.body.phoneNum,
     email: req.body.email,
-    lastUpdated: req.body.updated,
+    lastUpdated: req.body.lastUpdated,
     location: req.body.location,
     projects: req.body.projects,
     randomBump: req.body.randomBump,

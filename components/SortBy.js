@@ -9,7 +9,7 @@ export default function SortBy({ onChange }) {
     { value: 'work', label: 'Work' },
     { value: 'role', label: 'Role' },
     { value: 'referral', label: 'Referral' },
-    { value: 'updated', label: 'Updated' }
+    { value: 'lastUpdated', label: 'Updated' }
   ]
   const [obj, setObj] = useState({ value: 'contact', label: 'Contact' })
 

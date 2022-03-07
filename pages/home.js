@@ -10,7 +10,8 @@ import Table, {
   WorkCell,
   InterestsState,
   SelectColumnFilter,
-  ProjectList
+  ProjectList,
+  UpdatedCell
 } from '../components/NewTable' // new
 import { useUser } from '../firebase/useUser'
 import { CopyModal } from '../components/copyModal'
@@ -116,7 +117,8 @@ export default function Home() {
       },
       {
         Header: 'Last Updated',
-        accessor: 'updated',
+        accessor: 'lastUpdated',
+        Cell: UpdatedCell,
         filter: 'includes'
       }
     ],

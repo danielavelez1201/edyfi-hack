@@ -185,6 +185,11 @@ export function WorkCell({ value, column, row }) {
   )
 }
 
+export function UpdatedCell({ value }) {
+  const date = new Date(value)
+  return <div>{date.toLocaleString().split(',')[0]}</div>
+}
+
 export function ProjectList({ value }) {
   return (
     <span className={'text-sm font-medium text-gray-500 no-underline'}>

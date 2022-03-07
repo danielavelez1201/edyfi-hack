@@ -141,7 +141,7 @@ export default function Onboarding() {
         projects: projects,
         industry: industryValue,
         interests: value.map((string) => string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()),
-        updated: new Date().toLocaleString().split(',')[0]
+        lastUpdated: new Date().getTime()
       })
       .then((res) => {
         setError('')
