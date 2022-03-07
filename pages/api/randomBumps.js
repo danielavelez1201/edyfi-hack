@@ -338,7 +338,7 @@ async function handler(req, res) {
     })
     matchedUsersAllCommunities.push(matchedUsers)
   })
-  return res.status(200).json(matchedUsersAllCommunities)
+  return res.status(200).json(matchedUsers)
 }
 
 export default handler

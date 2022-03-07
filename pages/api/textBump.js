@@ -19,11 +19,14 @@ async function handler(req, res) {
   })
   const today = new Date().getTime()
 
+  const sentUsers = []
+
   userCommunities.forEach(async (user) => {
     const userData = user[0]
     const userRef = user[1]
     // if (userData.lastUpdated <= today - 7889400000 && userData.lastSent <= today - 5259600000) {
-    if (userData.lastSent === 1644119270448) {
+    if (userData.lastSent === 1646632931494) {
+      sentUsers.push(userData)
       // await setDoc(
       //   userRef,
       //   {
@@ -31,7 +34,6 @@ async function handler(req, res) {
       //   },
       //   { merge: true }
       // )
-      console.log(userData)
       await Twilio.messages.create({
         body: `Hey, ${userData.firstName}! It's been a few months since you updated your information for ${
           userData.communityIds[0]
@@ -72,6 +74,7 @@ async function handler(req, res) {
       })
     }
   })
+  return res.status(200).json(sentUsers)
 }
 
 export default handler
