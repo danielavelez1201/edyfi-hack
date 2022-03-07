@@ -233,25 +233,27 @@ export default function Home() {
             <div className='w-full h-full flex flex-col justify-center items-center'>
               <div className='mt-12 '></div>
               <CommunityBoard data={communityBoardProps}></CommunityBoard>
-              <div className='flex items-center '>
-                {userList.length !== 0 && isAdmin && (
-                  <button
-                    onClick={() => sendSMSUpdateDeleteAfter()}
-                    className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-                  >
-                    Send update text
-                  </button>
-                )}
-              </div>
-              <div className='flex items-center'>
-                {userList.length !== 0 && isAdmin && (
-                  <button
-                    onClick={() => sendRandBumps()}
-                    className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
-                  >
-                    Send matching text
-                  </button>
-                )}
+              <div className='flex justify-evenly items-center mt-6'>
+                <div className='flex items-center '>
+                  {userList.length !== 0 && isAdmin && (
+                    <button
+                      onClick={() => sendSMSUpdateDeleteAfter()}
+                      className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+                    >
+                      Send update text
+                    </button>
+                  )}
+                </div>
+                <div className='flex items-center'>
+                  {userList.length !== 0 && isAdmin && (
+                    <button
+                      onClick={() => sendRandBumps()}
+                      className='bg-blue py-2 px-4 text-sm text-white rounded mr-2  focus:outline-none focus:border-green-dark hover:bg-blue-hover '
+                    >
+                      Send matching text
+                    </button>
+                  )}
+                </div>
               </div>
               {userList.length > 0 && (
                 <main className='mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4'>
