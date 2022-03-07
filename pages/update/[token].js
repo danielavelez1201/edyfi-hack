@@ -289,8 +289,8 @@ export default function Onboarding() {
                   />
                   <div className='mr-auto mb-2'>
                     {projects.map((project) => (
-                      <div className='flex justify-between'>
-                        <a key={project} href={project} className='underline'>
+                      <div key={project} className='flex justify-between'>
+                        <a href={project} className='underline'>
                           {project}
                           <br />
                         </a>
