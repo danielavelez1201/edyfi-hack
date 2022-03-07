@@ -59,7 +59,7 @@ export default function Onboarding() {
     if (communityId) {
       await fetch('/api/autocomplete/getIndustries', {
         method: 'POST',
-        headers: { communityId: communityId }
+        headers: { communityId: 'test' }
       })
         .then((res) => res.json())
         .then((result) => {
@@ -68,7 +68,7 @@ export default function Onboarding() {
 
       await fetch('/api/autocomplete/getInterests', {
         method: 'POST',
-        headers: { communityId: communityId }
+        headers: { communityId: 'test' }
       })
         .then((res) => res.json())
         .then((result) => {
@@ -81,7 +81,7 @@ export default function Onboarding() {
     await axios
       .post('/api/autocomplete/interests', {
         newInterest: interest,
-        communityId: communityId
+        communityId: 'test'
       })
       .then((res) => {
         setError('')
